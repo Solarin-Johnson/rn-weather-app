@@ -1,17 +1,16 @@
 import { View, Text, StyleSheet } from "react-native";
+import { ThemeText, ThemeView } from "../../components/ThemeComponents";
+import generalStyles from "../../styles/styles";
+import HomeHeader from "../../components/HomeHeader";
 
 export default function Tab() {
   return (
-    <View style={styles.container}>
-      <Text>Tab Home</Text>
-    </View>
+    <ThemeView style={[styles.container]}>
+      <HomeHeader />
+    </ThemeView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  container: {},
 });

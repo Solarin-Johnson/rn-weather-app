@@ -5,16 +5,19 @@ import React, {
   useContext,
   useLayoutEffect,
 } from "react";
-import { useColorScheme } from "react-native";
+import { useColorScheme, View } from "react-native";
 import { getData, storeData } from "../functions";
-import { colors } from "../colors";
+import { colors } from "../styles/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
+import useThemeChange from "../hooks/useTheme";
+import { StatusBar } from "expo-status-bar";
 
 const ThemeContext = createContext();
 
 const ThemeProvider = ({ children }) => {
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useState("auto");
-  const [themeColors, setThemeColors] = useState({});
+  const [themeColors, setThemeColors] = useState(false);
 
   useLayoutEffect(() => {
     const fetchTheme = async () => {
@@ -37,9 +40,19 @@ const ThemeProvider = ({ children }) => {
     setThemeColors(colors[theme]);
   }, [colorScheme, theme]);
 
+  console.log("themeColors", themeColors);
+
+  useThemeChange((colorScheme) => {
+    setTheme(colorScheme);
+    console.log("colorScheme", colorScheme);
+  });
+
+  if (!themeColors) return null;
+
   return (
     <ThemeContext.Provider value={{ theme, setTheme, themeColors }}>
-      {theme ? children : null}
+      <StatusBar />
+      {children}
     </ThemeContext.Provider>
   );
 };

@@ -7,47 +7,67 @@ import { useTheme } from "../../context/ThemeContext";
 export default function TabLayout() {
   const { themeColors } = useTheme();
   const config = {
-    size: 24,
-    // color: "red",
+    size: 28,
+    strokeWidth: 2.1,
   };
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: "green",
-        headerShown: false,
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "red",
       }}
-      tabBar={(props) => <MyTabBar {...props} />}
     >
-      <Tabs.Screen
-        name="index"
-        title="Home"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => <Home {...config} />,
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarPosition: "left",
         }}
-      />
-      <Tabs.Screen
-        name="search"
-        options={{
-          title: "Search",
-          tabBarIcon: ({ color }) => <Search {...config} />,
+        sceneContainerStyle={{
+          backgroundColor: themeColors?.bg,
+          alignContent: "start",
+          flex: 1,
         }}
-      />
-      <Tabs.Screen
-        name="suggestions"
-        options={{
-          title: "Suggestions",
-          tabBarIcon: ({ color }) => <Sparkles {...config} />,
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profile",
-          tabBarIcon: ({ color }) => <User2 {...config} />,
-          tabBarBadge: 3,
-        }}
-      />
-    </Tabs>
+        tabBar={(props) => <MyTabBar {...props} />}
+      >
+        <Tabs.Screen
+          name="index"
+          title="Home"
+          options={{
+            title: "Home",
+            tabBarIcon: ({ color, fill }) => (
+              <Home color={color} fill={fill} {...config} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="search"
+          options={{
+            title: "Search",
+            tabBarIcon: ({ color, fill }) => (
+              <Search color={color} fill={fill} {...config} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="suggestions"
+          options={{
+            title: "Suggestions",
+            tabBarIcon: ({ color, fill }) => (
+              <Sparkles color={color} fill={fill} {...config} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: "Profile",
+            tabBarIcon: ({ color, fill }) => (
+              <User2 color={color} fill={fill} {...config} />
+            ),
+            tabBarBadge: 3,
+          }}
+        />
+      </Tabs>
+    </View>
   );
 }

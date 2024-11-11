@@ -7,13 +7,35 @@ import {
   Pressable,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
+import { BlurView } from "expo-blur";
 
 export default function MyTabBar({ state, descriptors, navigation }) {
-  const { themeColors } = useTheme();
-  const { primary } = themeColors || {};
+  const { theme, themeColors } = useTheme();
 
   return (
-    <View style={styles.container}>
+    <BlurView
+      intensity={60}
+      tint={
+        theme === "dark"
+          ? "systemThickMaterialDark"
+          : "systemThickMaterialLight"
+      }
+      experimentalBlurMethod="dimezisBlurView"
+      style={[
+        styles.container,
+        {
+          backgroundColor: themeColors?.fg + "ab",
+          shadowColor: themeColors?.text + "90",
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 1,
+        },
+      ]}
+    >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -30,7 +52,7 @@ export default function MyTabBar({ state, descriptors, navigation }) {
             key={route.key}
             onPress={() => {
               const event = navigation.emit({
-                type: "tabPress",
+                // type: "tabPress",
                 target: route.key,
                 canPreventDefault: true,
               });
@@ -50,7 +72,8 @@ export default function MyTabBar({ state, descriptors, navigation }) {
           >
             {options.tabBarIcon ? (
               options.tabBarIcon({
-                color: isFocused ? "red" : "gray",
+                color: isFocused ? themeColors?.primary : themeColors?.textFade,
+                fill: isFocused ? themeColors?.primary : "transparent",
                 focused: isFocused,
               })
             ) : (
@@ -61,21 +84,23 @@ export default function MyTabBar({ state, descriptors, navigation }) {
           </Pressable>
         );
       })}
-    </View>
+    </BlurView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    position: "absolute",
     flexDirection: "row",
     width: "85%",
     maxWidth: 300,
     alignSelf: "center",
-    bottom: "9%",
+    bottom: "5%",
     borderRadius: 50,
     overflow: "hidden",
     padding: "3%",
-    backgroundColor: "white",
+    overflow: "hidden",
+    // backgroundColor: "white",
   },
 
   tabBarStyle: {
