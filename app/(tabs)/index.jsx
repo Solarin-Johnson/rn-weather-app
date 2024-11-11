@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
-import { ThemeText, ThemeView } from "../../components/ThemeComponents";
-import generalStyles from "../../styles/styles";
-import HomeHeader from "../../components/HomeHeader";
+import { ThemeText, ThemeView } from "../components/ThemeComponents";
+import generalStyles from "../styles/styles";
+import HomeHeader from "../components/HomeHeader";
 
 export default function Tab() {
   return (

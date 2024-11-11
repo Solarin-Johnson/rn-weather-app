@@ -1,8 +1,8 @@
 import { Tabs } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
-import MyTabBar from "../../components/TabBar";
+import MyTabBar from "../components/TabBar";
 import { Home, Search, Sparkles, User2 } from "lucide-react-native";
-import { useTheme } from "../../context/ThemeContext";
+import { useTheme } from "../context/ThemeContext";
 
 export default function TabLayout() {
   const { themeColors } = useTheme();
