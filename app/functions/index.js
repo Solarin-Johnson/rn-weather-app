@@ -84,3 +84,26 @@ export const getDate = () => {
 export const dpToPercentage = (dp, dimension) => {
   return dp / dimension;
 };
+
+const weatherGroups = {
+  clear: [1000], // Clear/Sunny - 'Sun icon'
+  cloudy: [1003, 1006, 1009], // Cloudy/Overcast - 'Partly Cloudy Day icon'
+  foggy: [1030, 1135, 1147], // Foggy/Mist - 'Cloud icon'
+  lightPrecipitation: [1150, 1153, 1180, 1183, 1240, 1204, 1210, 1213], // Light Precipitation - 'Umbrella icon'
+  moderateHeavyPrecipitation: [
+    1186, 1189, 1192, 1195, 1243, 1246, 1207, 1216, 1219, 1255, 1222, 1225,
+    1258,
+  ], // Moderate/Heavy Precipitation - 'Storm icon'
+  freezingConditions: [1168, 1171, 1198, 1201], // Freezing Conditions - 'Snow icon'
+  thunderstorms: [1087, 1273, 1276, 1279, 1282], // Thunderstorms - 'Lightning Bolt icon'
+  icePellets: [1237, 1249, 1261, 1264], // Ice Pellets/Sleet - 'Snowy Sunny Day icon'
+};
+
+function getWeatherGroup(code) {
+  for (const [group, codes] of Object.entries(weatherGroups)) {
+    if (codes.includes(code)) {
+      return group;
+    }
+  }
+  return "unknown"; // Fallback if code isn't matched
+}

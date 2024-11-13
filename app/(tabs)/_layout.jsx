@@ -6,7 +6,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useUser } from "../context/UserContext";
 import generalStyles from "../styles/styles";
 import { useLayoutEffect } from "react";
-import { ThemeText, ThemeView } from "../components/ThemeComponents";
+import { ThemeText, ThemeScreen } from "../components/ThemeComponents";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -66,7 +66,7 @@ export default function TabLayout() {
             tabBarPosition: "left",
           }}
           sceneContainerStyle={[
-            generalStyles.screen,
+            generalStyles.stack,
             {
               backgroundColor: "transparent",
               alignContent: "start",

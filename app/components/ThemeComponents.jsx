@@ -5,14 +5,12 @@ import generalStyles from "../styles/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Animated, {
   Easing,
-  FadeOut,
-  SlideInLeft,
   SlideInRight,
   SlideOutLeft,
 } from "react-native-reanimated";
 import { useFocusEffect, usePathname } from "expo-router";
 
-export function ThemeScreen({ children, styles }) {
+export function ThemeView({ children, styles }) {
   const { themeColors } = useTheme();
   return (
     <View
@@ -27,7 +25,7 @@ export function ThemeScreen({ children, styles }) {
   );
 }
 
-export function ThemeView({ children, styles }) {
+export function ThemeScreen({ children, styles }) {
   const { themeColors } = useTheme();
   const [key, setKey] = useState(0);
 
@@ -54,7 +52,7 @@ export function ThemeView({ children, styles }) {
         style={{ flex: 1 }}
         key={key}
       >
-        <SafeAreaView style={[generalStyles.container, styles]}>
+        <SafeAreaView style={[generalStyles.screen, styles]}>
           {children}
         </SafeAreaView>
       </Animated.View>

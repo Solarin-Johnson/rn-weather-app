@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet } from "react-native";
-import { ThemeText, ThemeView } from "../components/ThemeComponents";
+import { ThemeText, ThemeScreen } from "../components/ThemeComponents";
 
 export default function Tab() {
   return (
-    <ThemeView style={styles.container}>
+    <ThemeScreen style={styles.container}>
       <ThemeText>Tab Suggestions</ThemeText>
-    </ThemeView>
+    </ThemeScreen>
   );
 }
 

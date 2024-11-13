@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet } from "react-native";
-import { ThemeText, ThemeView } from "../components/ThemeComponents";
+import { ThemeText, ThemeScreen } from "../components/ThemeComponents";
 
 export default function Tab() {
   return (
-    <ThemeView
+    <ThemeScreen
       style={[
         styles.container,
         {
@@ -12,7 +12,7 @@ export default function Tab() {
       ]}
     >
       <ThemeText>Tab Search</ThemeText>
-    </ThemeView>
+    </ThemeScreen>
   );
 }
 

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Button } from "react-native";
-import { ThemeText, ThemeView } from "../components/ThemeComponents";
+import { ThemeText, ThemeScreen } from "../components/ThemeComponents";
 import generalStyles from "../styles/styles";
 import HomeHeader from "../components/HomeHeader";
 import Modal from "../components/Modal";
@@ -14,11 +14,11 @@ export default function Tab() {
   const { location } = useUser();
 
   return (
-    <ThemeView style={[styles.container]}>
+    <ThemeScreen style={[styles.container]}>
       <HomeHeader />
       <Modal modalVisible={modalVisible} setModalVisible={setModalVisible} />
       {/* <Box length={200} /> */}
-    </ThemeView>
+    </ThemeScreen>
   );
 }
 

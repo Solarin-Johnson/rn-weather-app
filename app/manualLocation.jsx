@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { View, Text, Button } from "react-native";
-import { ThemeScreen, ThemeView } from "./components/ThemeComponents";
+import { ThemeScreen } from "./components/ThemeComponents";
 import { useUser } from "./context/UserContext";
 import { Redirect, useNavigation, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -40,10 +40,10 @@ const Permission = () => {
 
   return (
     <>
-      <ThemeView>
+      <ThemeScreen>
         <Text>Permission Component</Text>
         <Button title="Request Location Permission" onPress={handleRedirect} />
-      </ThemeView>
+      </ThemeScreen>
     </>
   );
 };

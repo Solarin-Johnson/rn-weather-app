@@ -10,11 +10,12 @@ const generalStyles = StyleSheet.create({
   },
   screen: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
+  },
+  stack: {
+    flex: 1,
+    paddingHorizontal: 12,
     paddingVertical: 8,
-
-    // justifyContent: "center",
-    // alignItems: "center",
   },
   header: {
     fontSize: 24,
