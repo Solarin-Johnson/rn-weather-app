@@ -4,7 +4,7 @@ export const colors = {
     text: "#191919",
     bg: "#ffffff",
     fg: "#e3e3e3",
-    textFade: "#a2a2a2",
+    textFade: "#7b7b7b",
   },
 
   dark: {
@@ -12,6 +12,6 @@ export const colors = {
     text: "#ffffff",
     bg: "#000000",
     fg: "#1a1a1a",
-    textFade: "#7b7b7b",
+    textFade: "#a2a2a2",
   },
 };

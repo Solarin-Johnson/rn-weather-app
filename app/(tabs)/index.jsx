@@ -1,12 +1,23 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 import { ThemeText, ThemeView } from "../components/ThemeComponents";
 import generalStyles from "../styles/styles";
 import HomeHeader from "../components/HomeHeader";
+import Modal from "../components/Modal";
+import { useState } from "react";
+import { router, useFocusEffect, usePathname } from "expo-router";
+import { useUser } from "../context/UserContext";
+import Box from "../components/Box";
 
 export default function Tab() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const pathname = usePathname();
+  const { location } = useUser();
+
   return (
     <ThemeView style={[styles.container]}>
       <HomeHeader />
+      <Modal modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      {/* <Box length={200} /> */}
     </ThemeView>
   );
 }

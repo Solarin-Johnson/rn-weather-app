@@ -6,11 +6,15 @@ const generalStyles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
+    fontWeight: "500",
   },
   screen: {
     flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+
     // justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
   },
   header: {
     fontSize: 24,

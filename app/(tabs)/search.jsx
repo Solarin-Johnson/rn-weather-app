@@ -3,7 +3,14 @@ import { ThemeText, ThemeView } from "../components/ThemeComponents";
 
 export default function Tab() {
   return (
-    <ThemeView style={styles.container}>
+    <ThemeView
+      style={[
+        styles.container,
+        {
+          backgroundColor: "red",
+        },
+      ]}
+    >
       <ThemeText>Tab Search</ThemeText>
     </ThemeView>
   );
