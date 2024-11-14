@@ -27,7 +27,7 @@ export function ThemeView({ children, styles }) {
 
 export function ThemeScreen({ children, styles }) {
   const { themeColors } = useTheme();
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -39,25 +39,29 @@ export function ThemeScreen({ children, styles }) {
     }, [])
   );
 
-  if (key) {
-    return (
-      <Animated.View
-        entering={SlideInRight.duration(300)
-          .easing(Easing.bezier(0, 1, 0, 1))
-          .withInitialValues({
-            transform: [{ translateX: 10 ** 53 }],
-            opacity: 0,
-          })}
-        exiting={SlideOutLeft}
-        style={{ flex: 1 }}
-        key={key}
-      >
-        <SafeAreaView style={[generalStyles.screen, styles]}>
-          {children}
-        </SafeAreaView>
-      </Animated.View>
-    );
-  }
+  return (
+    <View
+      style={[generalStyles.stack, { backgroundColor: themeColors?.bg }]}
+      key={key}
+    >
+      {key ? (
+        <Animated.View
+          entering={SlideInRight.duration(200)
+            .easing(Easing.bezier(0, 1, 0, 1))
+            .withInitialValues({
+              transform: [{ translateX: 10 ** 53 }],
+              opacity: 0,
+            })}
+          exiting={SlideOutLeft}
+          style={{ flex: 1 }}
+        >
+          <View style={[{ flex: 1 }, styles]}>{children}</View>
+        </Animated.View>
+      ) : (
+        <></>
+      )}
+    </View>
+  );
 }
 
 export function ThemeText({ children, styles }) {

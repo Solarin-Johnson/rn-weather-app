@@ -6,6 +6,7 @@ import { MapPin, Moon, Sun } from "lucide-react-native";
 import { useUser } from "../context/UserContext";
 import Switch from "./Switch";
 import { useTheme } from "../context/ThemeContext";
+import generalStyles from "../styles/styles";
 
 const HomeHeader = () => {
   const { location } = useUser();
@@ -13,7 +14,7 @@ const HomeHeader = () => {
   const { city, country } = location || {};
 
   return (
-    <View style={styles.container}>
+    <View style={[generalStyles.paddedX, styles.container]}>
       <View style={styles.subContainer}>
         <ThemeText styles={{ fontSize: 17, opacity: 0.8 }}>
           {getDate()}
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    paddingTop: 4,
   },
   subContainer: {
     gap: 3,

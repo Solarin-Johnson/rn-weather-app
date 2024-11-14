@@ -35,7 +35,7 @@ export default function MyTabBar({ state, descriptors, navigation }) {
   return (
     <Animated.View
       key={theme}
-      entering={FadeIn.duration(500)}
+      entering={FadeIn.duration(200)}
       style={[styles.container, animatedStyle]}
     >
       <BlurView
@@ -120,12 +120,13 @@ export default function MyTabBar({ state, descriptors, navigation }) {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    width: "85%",
-    maxWidth: 300,
     bottom: "5%",
-    alignSelf: "center",
+    width: "100%",
   },
   tabBlur: {
+    alignSelf: "center",
+    maxWidth: 300,
+    width: "85%",
     flexDirection: "row",
     borderRadius: 50,
     overflow: "hidden",

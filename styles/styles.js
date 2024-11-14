@@ -10,12 +10,12 @@ const generalStyles = StyleSheet.create({
   },
   screen: {
     flex: 1,
-    paddingHorizontal: 8,
   },
   stack: {
     flex: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+  },
+  paddedX: {
+    paddingHorizontal: 16,
   },
   header: {
     fontSize: 24,

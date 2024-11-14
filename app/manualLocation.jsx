@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { View, Text, Button } from "react-native";
-import { ThemeScreen } from "./components/ThemeComponents";
-import { useUser } from "./context/UserContext";
+import { ThemeScreen } from "@/components/ThemeComponents";
+import { useUser } from "@/context/UserContext";
 import { Redirect, useNavigation, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { requestBackgroundPermissionsAsync } from "expo-location";

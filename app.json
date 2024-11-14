@@ -7,6 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "your-app-scheme",
+    "experiments": {
+      "reactCompiler": true
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

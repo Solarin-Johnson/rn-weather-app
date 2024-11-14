@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { ThemeText, ThemeScreen } from "../components/ThemeComponents";
+import { ThemeText, ThemeScreen } from "@/components/ThemeComponents";
 
 export default function Tab() {
   return (

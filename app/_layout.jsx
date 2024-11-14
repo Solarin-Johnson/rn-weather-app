@@ -1,8 +1,8 @@
 import { Stack, useRouter } from "expo-router/stack";
 import { useEffect, useState } from "react";
-import { ThemeProvider } from "./context/ThemeContext";
-import { UserProvider } from "./context/UserContext";
-import { getData } from "./functions";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { UserProvider } from "@/context/UserContext";
+import { getData } from "@/functions";
 import { View } from "lucide-react-native";
 
 export default function Layout() {
