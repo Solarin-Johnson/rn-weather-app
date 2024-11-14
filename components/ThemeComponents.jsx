@@ -53,7 +53,7 @@ export function ThemeScreen({ children, styles }) {
               opacity: 0,
             })}
           exiting={SlideOutLeft}
-          style={{ flex: 1 }}
+          style={{ flex: 1, width: "100vw", height: "100dvh" }}
         >
           <View style={[{ flex: 1 }, styles]}>{children}</View>
         </Animated.View>

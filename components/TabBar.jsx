@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 50,
     overflow: "hidden",
-    padding: "3%",
+    padding: 12,
   },
   tabBarStyle: {
     borderRadius: 50,

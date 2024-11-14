@@ -130,6 +130,7 @@ const customStyles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 1.5,
     width: 80,
+    justifyContent: "space-between",
   },
   switchNode: {
     aspectRatio: 1,

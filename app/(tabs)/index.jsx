@@ -15,7 +15,7 @@ export default function Tab() {
   const { location } = useUser();
 
   return (
-    <ThemeScreen style={[styles.container]}>
+    <ThemeScreen styles={styles.container}>
       <HomeHeader />
       <Modal modalVisible={modalVisible} setModalVisible={setModalVisible} />
       {/* <Box length={200} /> */}
@@ -25,5 +25,7 @@ export default function Tab() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    // backgroundColor: "red",
+  },
 });
