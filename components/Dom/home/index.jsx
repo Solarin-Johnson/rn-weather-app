@@ -1,12 +1,11 @@
 "use dom";
-import React from "react";
 
-export default function HomeComponent() {
+export default function IAmHere() {
   console.log("HomeComponent");
 
   return (
     <>
-      <div style={{ fontSize: "40px" }}>Pussy Nigga here</div>
+      <p style={{ fontSize: "40px" }}>I am here</p>
     </>
   );
 }

@@ -28,6 +28,10 @@ export function ThemeView({ children, styles }) {
 export function ThemeScreen({ children, styles }) {
   const { themeColors } = useTheme();
   const [key, setKey] = useState(false);
+  const [screenLayout, setScreenLayout] = useState({
+    width: 0,
+    height: 0,
+  });
 
   useFocusEffect(
     useCallback(() => {
@@ -39,10 +43,16 @@ export function ThemeScreen({ children, styles }) {
     }, [])
   );
 
+  const onLayout = (event) => {
+    const { width, height } = event.nativeEvent.layout;
+    setScreenLayout({ width, height });
+  };
+
   return (
     <View
       style={[generalStyles.stack, { backgroundColor: themeColors?.bg }]}
       key={key}
+      onLayout={onLayout}
     >
       {key ? (
         <Animated.View
@@ -53,7 +63,11 @@ export function ThemeScreen({ children, styles }) {
               opacity: 0,
             })}
           exiting={SlideOutLeft}
-          style={{ flex: 1, width: "100vw", height: "100dvh" }}
+          style={{
+            flex: 1,
+            width: screenLayout.width,
+            height: screenLayout.height,
+          }}
         >
           <View style={[{ flex: 1 }, styles]}>{children}</View>
         </Animated.View>

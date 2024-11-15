@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Dimensions } from "react-native";
 
 export const storeData = async (key, value) => {
   try {
@@ -27,35 +28,6 @@ export const removeData = async (key) => {
     await AsyncStorage.removeItem(key);
   } catch (e) {
     // remove error
-  }
-};
-
-export const getUserLocation = async () => {
-  try {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      console.log("Permission to access location was denied");
-      return;
-    }
-
-    // Get current position
-    const location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.High,
-    });
-    setLocation(location.coords);
-
-    // Reverse geocode to get address
-    const reverseGeocode = await Location.reverseGeocodeAsync({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
-
-    if (reverseGeocode.length > 0) {
-      const { city, region, country } = reverseGeocode[0];
-      setAddress(`${city}, ${country}`);
-    }
-  } catch (error) {
-    console.error("Error getting location or address:", error);
   }
 };
 
@@ -107,3 +79,39 @@ function getWeatherGroup(code) {
   }
   return "unknown"; // Fallback if code isn't matched
 }
+
+const { width } = Dimensions.get("window");
+
+export const clamp = (min, value, max) => {
+  const getValueInPx = (val) => {
+    if (typeof val === "string") {
+      if (val.includes("%")) {
+        // Convert percentage to px relative to screen width
+        return (parseFloat(val) / 100) * width;
+      } else if (val.includes("px")) {
+        // Direct px value
+        return parseFloat(val);
+      }
+    }
+    return val; // If it's already a number, assume it's in px
+  };
+
+  const minValue = getValueInPx(min);
+  const maxValue = getValueInPx(max);
+  const valueInPx = getValueInPx(value);
+
+  return Math.max(minValue, Math.min(valueInPx, maxValue));
+};
+
+export const getValueInPx = (val, width) => {
+  if (typeof val === "string") {
+    if (val.includes("%")) {
+      return (parseFloat(val) / 100) * width; // Convert percentage to px based on screen width
+    } else if (val.includes("px")) {
+      return parseFloat(val); // Return the pixel value directly
+    } else if (val.includes("vw")) {
+      return (parseFloat(val) / 100) * width; // Convert vw to px based on screen width
+    }
+  }
+  return val; // If it's already a number, assume it's in px
+};

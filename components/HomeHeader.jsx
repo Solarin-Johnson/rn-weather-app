@@ -7,6 +7,7 @@ import { useUser } from "../context/UserContext";
 import Switch from "./Switch";
 import { useTheme } from "../context/ThemeContext";
 import generalStyles from "../styles/styles";
+import { DynamicView } from "./Dynamics";
 
 const HomeHeader = () => {
   const { location } = useUser();
@@ -14,7 +15,7 @@ const HomeHeader = () => {
   const { city, country } = location || {};
 
   return (
-    <View style={[generalStyles.paddedX, styles.container]}>
+    <DynamicView style={styles.container} clamp={(100, 100, 100)}>
       <View style={styles.subContainer}>
         <ThemeText styles={{ fontSize: 17, opacity: 0.8 }}>
           {getDate()}
@@ -37,7 +38,7 @@ const HomeHeader = () => {
               textAlignVertical: "bottom",
             }}
           >
-            {city || "..."},{" "}
+            {city ? city + ", " : "..."}
           </ThemeText>
           <ThemeText
             styles={{
@@ -64,7 +65,7 @@ const HomeHeader = () => {
           }}
         />
       </View>
-    </View>
+    </DynamicView>
   );
 };
 
@@ -75,7 +76,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 4,
   },
   subContainer: {
     gap: 3,

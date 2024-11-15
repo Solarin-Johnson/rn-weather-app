@@ -8,9 +8,7 @@
     "userInterfaceStyle": "automatic",
     "scheme": "your-app-scheme",
     "newArchEnabled": true,
-    "experiments": {
-      "reactCompiler": true
-    },
+
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
