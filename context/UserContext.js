@@ -46,7 +46,6 @@ const UserProvider = ({ children }) => {
       const storedLocation = await getData("location");
       if (storedLocation) {
         setLocation(JSON.parse(storedLocation));
-        console.log("stored", storedLocation);
       } else {
         fetchLocation();
       }

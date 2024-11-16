@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { getValueInPx } from "../functions";
-import { Dimensions } from "react-native";
+import { Dimensions, useWindowDimensions } from "react-native";
 
-const calculateClamp = (min, preferred, max) => {
-  const { width } = Dimensions.get("window");
-
+export const calculateClamp = (width, min, preferred, max) => {
   const minValue = getValueInPx(min, width);
   const maxValue = getValueInPx(max, width);
   const preferredValue = getValueInPx(preferred, width);
@@ -14,6 +12,7 @@ const calculateClamp = (min, preferred, max) => {
 };
 
 const useClamp = (min, preferred, max) => {
+  const { width, height } = useWindowDimensions();
   const [clampedValue, setClampedValue] = useState(() =>
     calculateClamp(min, preferred, max)
   );

@@ -3,10 +3,16 @@ import { useEffect, useState } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { UserProvider } from "@/context/UserContext";
 import { getData } from "@/functions";
-import { View } from "lucide-react-native";
+import { Home } from "lucide-react-native";
+import HomeHeader from "../components/HomeHeader";
+import { useWindowDimensions, View } from "react-native";
+import { getPlatform } from "../functions";
+import WebBanner from "../components/webBanner";
 
 export default function Layout() {
   const [location, setLocation] = useState(null);
+  const platform = getPlatform();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     getData("location").then((location) => {
@@ -36,8 +42,8 @@ export default function Layout() {
             name="permission"
             options={{
               headerShown: false,
-            }}
-          /> */}
+              }}
+              /> */}
         </Stack>
       </UserProvider>
     </ThemeProvider>

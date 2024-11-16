@@ -1,5 +1,6 @@
 import useClamp from "@/hooks/useClamp";
-import { View } from "react-native";
+import { useWindowDimensions, View } from "react-native";
+import { calculateClamp } from "../hooks/useClamp";
 
 export const DynamicText = ({ min, preferred, max, children, style }) => {
   const clampedValue = useClamp(min, preferred, max);
@@ -20,13 +21,14 @@ export const DynamicText = ({ min, preferred, max, children, style }) => {
 };
 
 export const DynamicView = ({ clamp = [10, "5%", 50], children, style }) => {
-  const clampedValue = useClamp(...clamp);
-  console.log(clampedValue);
+  const { width } = useWindowDimensions();
+  const clampedValue = calculateClamp(width, ...clamp);
 
   return (
     <View
       style={[
         {
+          width: "100%",
           padding: clampedValue,
         },
         style,

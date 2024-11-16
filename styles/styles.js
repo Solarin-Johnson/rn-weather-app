@@ -14,6 +14,11 @@ const generalStyles = StyleSheet.create({
   },
   stack: {
     flex: 1,
+    flexdirection: "column",
+    justifyContent: "start",
+  },
+  paddedWideScrrenTop: {
+    paddingTop: 100,
   },
   paddedX: {
     paddingHorizontal: 16,

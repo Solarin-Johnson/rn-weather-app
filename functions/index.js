@@ -6,6 +6,7 @@ import { Dimensions } from "react-native";
 import Constants from "expo-constants";
 import { API_KEY as localAPIKey } from "@env";
 import axios from "axios";
+import { Platform } from "react-native";
 
 export const apiKey = localAPIKey || Constants.expoConfig.extra.API_KEY;
 
@@ -153,3 +154,9 @@ export const getLocation = async (cord) => {
     console.error("Error getting location or address:", error);
   }
 };
+
+export const getPlatform = () => {
+  return Platform.OS;
+};
+
+// Usage

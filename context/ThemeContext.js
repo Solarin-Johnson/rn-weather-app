@@ -40,10 +40,8 @@ const ThemeProvider = ({ children }) => {
     setThemeColors(colors[theme]);
   }, [colorScheme, theme]);
 
-
   useThemeChange((colorScheme) => {
     setTheme(colorScheme);
-    console.log("colorScheme", colorScheme);
   });
 
   if (!themeColors) return null;

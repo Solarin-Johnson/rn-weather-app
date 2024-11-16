@@ -9,13 +9,13 @@ import { useTheme } from "../context/ThemeContext";
 import generalStyles from "../styles/styles";
 import { DynamicView } from "./Dynamics";
 
-const HomeHeader = () => {
+const HomeHeader = ({ style }) => {
   const { location } = useUser();
   const { theme, setTheme } = useTheme();
   const { city, country } = location || {};
 
   return (
-    <DynamicView style={styles.container} clamp={[10, "3%", 60]}>
+    <DynamicView style={[styles.container, style]} clamp={[10, "3%", 60]}>
       <View style={styles.subContainer}>
         <ThemeText styles={{ fontSize: 17, opacity: 0.8 }}>
           {getDate()}
