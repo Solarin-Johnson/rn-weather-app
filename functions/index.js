@@ -3,6 +3,12 @@ import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dimensions } from "react-native";
 
+import Constants from "expo-constants";
+import { API_KEY as localAPIKey } from "@env";
+import axios from "axios";
+
+export const apiKey = localAPIKey || Constants.expoConfig.extra.API_KEY;
+
 export const storeData = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value);
@@ -114,4 +120,36 @@ export const getValueInPx = (val, width) => {
     }
   }
   return val; // If it's already a number, assume it's in px
+};
+
+export function extractCityAndCountry(response) {
+  // Initialize variables for city and country
+  let city = null;
+  let country = null;
+
+  // Loop through the address_components to find the city and country
+  for (let component of response.results[0].address_components) {
+    if (component.types.includes("locality")) {
+      city = component.long_name;
+    }
+    if (component.types.includes("country")) {
+      country = component.long_name;
+    }
+  }
+
+  // Return an object with city and country
+  return { city, country };
+}
+
+export const getLocation = async (cord) => {
+  try {
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${cord.latitude},${cord.longitude}&key=${apiKey}`
+    );
+    if (response.data.results.length > 0) {
+      return extractCityAndCountry(response.data);
+    }
+  } catch (error) {
+    console.error("Error getting location or address:", error);
+  }
 };

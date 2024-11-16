@@ -19,8 +19,8 @@ export default function Tab() {
     <ThemeScreen styles={styles.container}>
       <HomeHeader />
       <Modal modalVisible={modalVisible} setModalVisible={setModalVisible} />
-      <Box length={10} />
-      <IAmHere />
+      {/* <Box length={10} /> */}
+      {/* <IAmHere /> */}
     </ThemeScreen>
   );
 }

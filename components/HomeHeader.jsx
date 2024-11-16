@@ -15,7 +15,7 @@ const HomeHeader = () => {
   const { city, country } = location || {};
 
   return (
-    <DynamicView style={styles.container} clamp={(100, 100, 100)}>
+    <DynamicView style={styles.container} clamp={[10, "3%", 60]}>
       <View style={styles.subContainer}>
         <ThemeText styles={{ fontSize: 17, opacity: 0.8 }}>
           {getDate()}
@@ -25,7 +25,6 @@ const HomeHeader = () => {
             <MapPin
               size={20}
               style={{
-                marginTop: 3,
                 marginLeft: -2,
               }}
             />

@@ -19,8 +19,8 @@ export const DynamicText = ({ min, preferred, max, children, style }) => {
   );
 };
 
-export const DynamicView = ({ clamp, children, style }) => {
-  const clampedValue = useClamp(10, "5%", 50);
+export const DynamicView = ({ clamp = [10, "5%", 50], children, style }) => {
+  const clampedValue = useClamp(...clamp);
   console.log(clampedValue);
 
   return (
