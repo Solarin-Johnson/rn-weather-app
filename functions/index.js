@@ -64,7 +64,9 @@ export const dpToPercentage = (dp, dimension) => {
   return dp / dimension;
 };
 
-const weatherGroups = {
+// Mapping weather groups to icon resources
+
+export const weatherGroups = {
   clear: [1000], // Clear/Sunny - 'Sun icon'
   cloudy: [1003, 1006, 1009], // Cloudy/Overcast - 'Partly Cloudy Day icon'
   foggy: [1030, 1135, 1147], // Foggy/Mist - 'Cloud icon'
@@ -78,13 +80,13 @@ const weatherGroups = {
   icePellets: [1237, 1249, 1261, 1264], // Ice Pellets/Sleet - 'Snowy Sunny Day icon'
 };
 
-function getWeatherGroup(code) {
+export function getWeatherGroup(code) {
   for (const [group, codes] of Object.entries(weatherGroups)) {
     if (codes.includes(code)) {
       return group;
     }
   }
-  return "unknown"; // Fallback if code isn't matched
+  return "clear"; // Fallback if code isn't matched
 }
 
 const { width } = Dimensions.get("window");
@@ -130,11 +132,16 @@ export function extractCityAndCountry(response) {
 
   // Loop through the address_components to find the city and country
   for (let component of response.results[0].address_components) {
-    if (component.types.includes("locality")) {
-      city = component.long_name;
+    console.log(component);
+
+    if (!city && component.types.includes("political")) {
+      city = component.short_name;
     }
-    if (component.types.includes("country")) {
+    if (!country && component.types.includes("country")) {
       country = component.long_name;
+    }
+    if (city && country) {
+      break; // Exit loop early if both city and country are found
     }
   }
 
@@ -159,4 +166,6 @@ export const getPlatform = () => {
   return Platform.OS;
 };
 
-// Usage
+export const getWords = (str, len = 2) => {
+  return str.split(" ").slice(0, len).join(" ");
+};

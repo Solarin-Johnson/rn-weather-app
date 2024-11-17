@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getData, getLocation, removeData, storeData } from "../functions";
 import * as Location from "expo-location";
+// import { getLocation } from "../api";
 
 const UserContext = createContext();
 
@@ -27,9 +28,11 @@ const UserProvider = ({ children }) => {
       // Reverse geocode to get address
 
       const { city, country } = await getLocation(location.coords);
+      console.log(city, country);
+
       const locationWithAddress = {
         ...location.coords,
-        city,
+        name: city,
         country,
       };
       setLocation(locationWithAddress);
@@ -39,7 +42,7 @@ const UserProvider = ({ children }) => {
     }
   };
 
-  // console.log(location);
+  console.log(location);
 
   useEffect(() => {
     const loadLocation = async () => {

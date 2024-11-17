@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
 import { DynamicView } from "./Dynamics";
 import useClamp, { calculateClamp } from "../hooks/useClamp";
+import CloudBg from "./CloudBg";
 
 const WebBanner = () => {
   const { width, height } = useWindowDimensions();
@@ -9,9 +10,10 @@ const WebBanner = () => {
     <DynamicView
       style={[
         styles.banner,
-        { paddingTop: 60 + calculateClamp(width, 10, "5%", 50) * 2 },
+        { paddingTop: 60 + calculateClamp(width, 10, "3%", 60) * 2 },
       ]}
     >
+      {/* <CloudBg /> */}
       <Text style={styles.text}>Welcome to the Weather App</Text>
     </DynamicView>
   );

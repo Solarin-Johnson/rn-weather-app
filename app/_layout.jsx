@@ -8,6 +8,8 @@ import HomeHeader from "../components/HomeHeader";
 import { useWindowDimensions, View } from "react-native";
 import { getPlatform } from "../functions";
 import WebBanner from "../components/webBanner";
+import { WeatherProvider } from "../context/WeatherContext";
+import { BgCloud } from "../styles/icons";
 
 export default function Layout() {
   const [location, setLocation] = useState(null);
@@ -31,20 +33,22 @@ export default function Layout() {
   return (
     <ThemeProvider>
       <UserProvider>
-        <Stack
-          screenOptions={{
-            headerTitle: "",
-            headerTransparent: true,
-          }}
-        >
-          <Stack.Screen name="(tabs)" />
-          {/* <Stack.Screen
+        <WeatherProvider>
+          <Stack
+            screenOptions={{
+              headerTitle: "",
+              headerTransparent: true,
+            }}
+          >
+            <Stack.Screen name="(tabs)" />
+            {/* <Stack.Screen
             name="permission"
             options={{
               headerShown: false,
               }}
               /> */}
-        </Stack>
+          </Stack>
+        </WeatherProvider>
       </UserProvider>
     </ThemeProvider>
   );

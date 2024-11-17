@@ -3,12 +3,11 @@
     "name": "rn-weather-app",
     "slug": "rn-weather-app",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "automatic",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "your-app-scheme",
     "newArchEnabled": true,
-
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -38,7 +37,8 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "extra": {
       "router": {

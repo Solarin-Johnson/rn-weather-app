@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
-import { getDate } from "../functions";
+import { getDate, getWords } from "../functions";
 import { MapPin, Moon, Sun } from "lucide-react-native";
 import { useUser } from "../context/UserContext";
 import Switch from "./Switch";
@@ -12,7 +12,7 @@ import { DynamicView } from "./Dynamics";
 const HomeHeader = ({ style }) => {
   const { location } = useUser();
   const { theme, setTheme } = useTheme();
-  const { city, country } = location || {};
+  const { name, country } = location || {};
 
   return (
     <DynamicView style={[styles.container, style]} clamp={[10, "3%", 60]}>
@@ -37,7 +37,7 @@ const HomeHeader = ({ style }) => {
               textAlignVertical: "bottom",
             }}
           >
-            {city ? city + ", " : "..."}
+            {name ? getWords(name) + ", " : "..."}
           </ThemeText>
           <ThemeText
             styles={{
@@ -47,7 +47,7 @@ const HomeHeader = ({ style }) => {
               opacity: 0.8,
             }}
           >
-            {country}
+            {country && getWords(country)}
           </ThemeText>
         </View>
       </View>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   subContainer: {
-    gap: 3,
+    gap: 4,
   },
   locationSection: {
     flexDirection: "row",
