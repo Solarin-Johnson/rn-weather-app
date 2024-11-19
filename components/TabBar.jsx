@@ -51,10 +51,10 @@ export default function MyTabBar({ state, descriptors, navigation }) {
           styles.tabBlur,
           {
             backgroundColor: themeColors?.fg + "ab",
-            shadowColor: themeColors?.text + "50",
+            shadowColor: themeColors?.text + "70",
             shadowOffset: {
               width: 0,
-              height: 2,
+              height: 1.5,
             },
             shadowOpacity: 0.25,
             shadowRadius: 2,

@@ -44,11 +44,13 @@ const ThemeProvider = ({ children }) => {
     setTheme(colorScheme);
   });
 
+  const themeInv = theme === "dark" ? "light" : "dark";
+
   if (!themeColors) return null;
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, themeColors }}>
-      <StatusBar />
+      <StatusBar style={themeInv} />
       {children}
     </ThemeContext.Provider>
   );

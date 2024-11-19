@@ -77,7 +77,7 @@ const Switch = ({
         style={[
           customStyles.switch,
           {
-            borderColor: themeColors?.textFade + "90",
+            borderColor: themeColors?.textFade + "50",
           },
         ]}
         onPress={toggleSwitch}
@@ -117,7 +117,7 @@ const customStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: 10,
+    // marginVertical: 10,
   },
   label: {
     fontSize: 16,

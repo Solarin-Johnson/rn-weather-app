@@ -1,7 +1,8 @@
-import { View, Text } from "react-native";
+import { View, Text, useWindowDimensions } from "react-native";
 import React from "react";
 import { useTheme } from "../context/ThemeContext";
 import generalStyles from "../styles/styles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export function ThemeView({ children, styles }) {
   const { themeColors } = useTheme();
@@ -20,13 +21,15 @@ export function ThemeView({ children, styles }) {
 
 export function ThemeScreen({ children }) {
   const { themeColors } = useTheme();
+  const { width } = useWindowDimensions();
+  const wide = width > 720;
 
   return (
     <View
       style={[
         generalStyles.stack,
         {
-          backgroundColor: themeColors?.bg,
+          backgroundColor: wide ? themeColors?.bgFade : themeColors?.bg,
         },
       ]}
     >

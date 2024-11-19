@@ -15,7 +15,7 @@ const HomeHeader = ({ style }) => {
   const { name, country } = location || {};
 
   return (
-    <DynamicView style={[styles.container, style]} clamp={[10, "3%", 60]}>
+    <DynamicView style={[styles.container, style]} clamp={[10, "2.5%", 50]}>
       <View style={styles.subContainer}>
         <ThemeText styles={{ fontSize: 17, opacity: 0.8 }}>
           {getDate()}

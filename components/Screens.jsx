@@ -1,4 +1,4 @@
-import { View, Text, useWindowDimensions } from "react-native";
+import { View, Text, useWindowDimensions, ScrollView } from "react-native";
 import React, { useCallback, useLayoutEffect, useState } from "react";
 import Animated, {
   Easing,
@@ -14,6 +14,7 @@ import { useTheme } from "../context/ThemeContext";
 import { ThemeScreen } from "./ThemeComponents";
 import HomeHeader from "./HomeHeader";
 import CloudBg from "./CloudBg";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export function Screen({ children, header, styles }) {
   const { themeColors } = useTheme();
@@ -26,7 +27,7 @@ export function Screen({ children, header, styles }) {
     height: 0,
   });
 
-  const Wrapper = platform === "web" ? View : Animated.View;
+  const Wrapper = platform === "web" || wide ? View : Animated.View;
 
   const animatedProps =
     platform === "web"
@@ -58,51 +59,45 @@ export function Screen({ children, header, styles }) {
   return (
     <ThemeScreen>
       <View key={key} onLayout={onLayout} style={{ flex: 1 }}>
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          {wide && (
-            <>
-              <HomeHeader
-                style={{
-                  position: "fixed",
-                  top: 0,
-                  left: 0,
-                  zIndex: 10,
-                }}
-              />
-              <WebBanner />
-            </>
-          )}
-
+        <View
+          style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}
+        >
           {platform === "web" || key ? (
             <Wrapper
               {...animatedProps}
               style={{
-                // flex: 1,
-                width: wide ? calculateClamp(width, 340, "42%", 620) : "100%",
-                // maxWidth: 550,
+                flex: 1,
                 flexDirection: "column",
-                backgroundColor: wide ? themeColors?.text + "15" : "",
               }}
             >
-              {width < 720 && (
+              {!wide && (
                 <>
                   <View>{header}</View>
-                  <CloudBg />
                 </>
               )}
-              <View
+              <ScrollView
                 style={[
                   {
                     flex: 1,
-                    paddingTop: wide
-                      ? 60 + calculateClamp(width, 10, "3%", 60) * 2
-                      : 0,
+                    maxHeight: "100%",
                   },
                   styles,
                 ]}
               >
+                <View
+                  style={{
+                    height: wide
+                      ? 60 + calculateClamp(width, 10, "3%", 50) + 5
+                      : 0,
+                  }}
+                />
                 {children}
-              </View>
+                <View
+                  style={{
+                    height: 80,
+                  }}
+                ></View>
+              </ScrollView>
             </Wrapper>
           ) : (
             <></>

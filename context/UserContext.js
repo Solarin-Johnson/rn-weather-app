@@ -10,7 +10,7 @@ const UserProvider = ({ children }) => {
   const [location, setLocation] = useState(null);
 
   const fetchLocation = async () => {
-    console.log("Fetching location");
+    // console.log("Fetching location");
 
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -28,7 +28,7 @@ const UserProvider = ({ children }) => {
       // Reverse geocode to get address
 
       const { city, country } = await getLocation(location.coords);
-      console.log(city, country);
+      // console.log(city, country);
 
       const locationWithAddress = {
         ...location.coords,
@@ -42,7 +42,7 @@ const UserProvider = ({ children }) => {
     }
   };
 
-  console.log(location);
+  // console.log(location);
 
   useEffect(() => {
     const loadLocation = async () => {

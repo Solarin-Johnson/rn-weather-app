@@ -5,6 +5,7 @@ export const colors = {
     bg: "#ffffff",
     fg: "#e3e3e3",
     textFade: "#7b7b7b",
+    bgFade: "#F3F5F7",
   },
 
   dark: {
@@ -13,5 +14,6 @@ export const colors = {
     bg: "#000000",
     fg: "#1a1a1a",
     textFade: "#a2a2a2",
+    bgFade: "#151515",
   },
 };
