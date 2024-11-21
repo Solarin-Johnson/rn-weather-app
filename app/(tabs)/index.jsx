@@ -1,33 +1,36 @@
-import { View, Text, StyleSheet, Button } from "react-native";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 import { Screen } from "../../components/Screens";
-import { ThemeText } from "../../components/ThemeComponents";
 import generalStyles from "../../styles/styles";
 import HomeHeader from "../../components/HomeHeader";
-import Modal from "../../components/Modal";
-import { useState } from "react";
-import { router, useFocusEffect, usePathname } from "expo-router";
 import { useUser } from "../../context/UserContext";
-import WeatherIcon from "../../components/WeatherIcon";
 import { useWeather } from "../../context/WeatherContext";
+import CloudBg from "../../components/CloudBg";
+import { useTheme } from "../../context/ThemeContext";
+import WeatherMain from "../../components/Weather/Main";
+import WeatherFuture from "../../components/Weather/Future";
 
 export default function Tab() {
-  const [modalVisible, setModalVisible] = useState(false);
+  const { themeColors } = useTheme();
   const { location } = useUser();
   const { currentWeather } = useWeather();
+  const { width } = useWindowDimensions();
+  const wide = width > 720;
 
   return (
     <Screen styles={styles.container} header={<HomeHeader />}>
-      {/* <Modal modalVisible={modalVisible} setModalVisible={setModalVisible} /> */}
-      <WeatherIcon
-        code={currentWeather?.current.condition.code}
-        isDay={currentWeather?.current.is_day}
-      />
+      {!wide && <CloudBg />}
+      <View style={generalStyles.container}>
+        <WeatherMain {...{ currentWeather, themeColors }} />
+        <WeatherFuture />
+        <WeatherFuture />
+      </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "red",
+    // minHeight: "100%",
+    // flexDirection: "row",
   },
 });

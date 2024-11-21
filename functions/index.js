@@ -132,7 +132,6 @@ export function extractCityAndCountry(response) {
 
   // Loop through the address_components to find the city and country
   for (let component of response.results[0].address_components) {
-    console.log(component);
 
     if (!city && component.types.includes("political")) {
       city = component.short_name;

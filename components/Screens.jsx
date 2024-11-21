@@ -76,13 +76,15 @@ export function Screen({ children, header, styles }) {
                 </>
               )}
               <ScrollView
+                overScrollMode="always"
+                showsVerticalScrollIndicator={false}
                 style={[
                   {
                     flex: 1,
                     maxHeight: "100%",
                   },
-                  styles,
                 ]}
+                contentContainerStyle={styles}
               >
                 <View
                   style={{
@@ -94,7 +96,7 @@ export function Screen({ children, header, styles }) {
                 {children}
                 <View
                   style={{
-                    height: 80,
+                    height: 120,
                   }}
                 ></View>
               </ScrollView>

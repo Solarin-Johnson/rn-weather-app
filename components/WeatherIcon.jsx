@@ -4,7 +4,7 @@ import { getWeatherGroup } from "../functions";
 import { Image } from "expo-image";
 import { useFocusEffect } from "expo-router";
 
-const WeatherIcon = memo(({ code, isDay, style }) => {
+const WeatherIcon = memo(({ code, isDay, size, style }) => {
   // Memoizing the weather group and the image source based on the 'code' prop
   const weatherGroup = useMemo(() => getWeatherGroup(code), [code]);
   const [key, setKey] = useState(0);
@@ -37,7 +37,7 @@ const WeatherIcon = memo(({ code, isDay, style }) => {
   });
 
   const imgConfig = {
-    style: [styles.image, style],
+    style: [styles.image, style, { width: size ? size : "60%" }],
     contentFit: "contain",
     cachePolicy: "disk",
   };
@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
 
   image: {
     // flex: 1,
+    filter: "blur(0.51px)",
     aspectRatio: 1,
-    width: "60%",
   },
 });
 

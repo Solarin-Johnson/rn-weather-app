@@ -38,7 +38,7 @@ export const HomeIcon = ({ color }) => (
 
 export const BgCloud = () => {
   const { themeColors } = useTheme();
-  const color = themeColors?.text + "10";
+  const color = themeColors?.bgFade2;
 
   return (
     <Svg

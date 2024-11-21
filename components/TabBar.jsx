@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: "5%",
     width: "100%",
+    // backgroundColor: "red",
   },
   tabBlur: {
     alignSelf: "center",
