@@ -69,7 +69,6 @@ export default function TabLayout() {
             tabBarPosition: "left",
           }}
           sceneContainerStyle={{
-            backgroundColor: "red",
             alignContent: "start",
             flex: 1,
           }}

@@ -3,15 +3,18 @@ import { View, Text, StyleSheet } from "react-native";
 import { useWeather } from "../../context/WeatherContext";
 import { getNextHoursWeather } from "../../api";
 import WeatherMini from "./Mini";
+import { useUser } from "../../context/UserContext";
 
 const WeatherFuture = () => {
-  const { futureWeather, currentWeather } = useWeather();
+  const { futureWeather, currentWeather, currentWeatherLoc } = useWeather();
   const [next3HoursWeather, setNext3HoursWeather] = useState(null);
 
   useEffect(() => {
     if (futureWeather) {
       //   console.log("futureWeather", futureWeather);
-      setNext3HoursWeather(getNextHoursWeather(futureWeather));
+      setNext3HoursWeather(
+        getNextHoursWeather(futureWeather, currentWeatherLoc.localtime)
+      );
     }
   }, [futureWeather]);
   //   getNext3HoursWeather(futureWeather);

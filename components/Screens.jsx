@@ -16,7 +16,7 @@ import HomeHeader from "./HomeHeader";
 import CloudBg from "./CloudBg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export function Screen({ children, header, styles }) {
+export function Screen({ children, header, fixed, styles }) {
   const { themeColors } = useTheme();
   const platform = getPlatform();
   const { width } = useWindowDimensions();
@@ -86,19 +86,23 @@ export function Screen({ children, header, styles }) {
                 ]}
                 contentContainerStyle={styles}
               >
-                <View
-                  style={{
-                    height: wide
-                      ? 60 + calculateClamp(width, 10, "3%", 50) + 5
-                      : 0,
-                  }}
-                />
+                {!fixed && (
+                  <View
+                    style={{
+                      height: wide
+                        ? 60 + calculateClamp(width, 10, "3%", 50) + 5
+                        : 0,
+                    }}
+                  />
+                )}
                 {children}
-                <View
-                  style={{
-                    height: 120,
-                  }}
-                ></View>
+                {!fixed && (
+                  <View
+                    style={{
+                      height: 120,
+                    }}
+                  ></View>
+                )}
               </ScrollView>
             </Wrapper>
           ) : (

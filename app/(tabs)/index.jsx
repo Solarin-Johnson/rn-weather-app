@@ -22,7 +22,7 @@ export default function Tab() {
       <View style={generalStyles.container}>
         <WeatherMain {...{ currentWeather, themeColors }} />
         <WeatherFuture />
-        <WeatherFuture />
+        {/* <WeatherFuture /> */}
       </View>
     </Screen>
   );

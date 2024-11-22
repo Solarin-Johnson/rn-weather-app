@@ -4,6 +4,7 @@ import { ThemeText } from "../ThemeComponents";
 import { calculateClamp } from "../../hooks/useClamp";
 import { useTheme } from "../../context/ThemeContext";
 import { extractTime } from "../../api";
+import { useWeather } from "../../context/WeatherContext";
 
 export default function WeatherMini({ currentWeather: current, now }) {
   const { width } = useWindowDimensions();
@@ -17,7 +18,7 @@ export default function WeatherMini({ currentWeather: current, now }) {
         code={condition?.code}
         isDay={current?.is_day}
         size={calculateClamp(width, 0, "13%", 60)}
-        style={{ filter: "blur(0.3px)" }}
+        style={{ filter: "blur(0.5px)" }}
       />
       <ThemeText
         styles={{

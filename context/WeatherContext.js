@@ -1,12 +1,17 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useUser } from "./UserContext";
 import { getCurrentWeather, getFutureWeather } from "../api";
+import { ActivityIndicator } from "react-native";
+import { useTheme } from "./ThemeContext";
+import { Screen } from "../components/Screens";
 
 const WeatherContext = createContext();
 
 const WeatherProvider = ({ children }) => {
   const [currentWeather, setCurrentWeather] = useState(null);
   const [futureWeather, setFutureWeather] = useState(null);
+  const [currentWeatherLoc, setCurrentWeatherLoc] = useState(null);
+  const { themeColors } = useTheme();
   const { location } = useUser();
 
   useEffect(() => {
@@ -22,6 +27,7 @@ const WeatherProvider = ({ children }) => {
         .then((data) => {
           setFutureWeather(data.forecast);
           setCurrentWeather(data.current);
+          setCurrentWeatherLoc(data.location);
         })
         .catch((error) =>
           console.error("Error fetching future weather:", error)
@@ -43,8 +49,23 @@ const WeatherProvider = ({ children }) => {
     }
   }, [location]);
 
+  if (currentWeather === null || location === null)
+    return (
+      <Screen
+        styles={{
+          flex: 1,
+          justifyContent: "center",
+        }}
+        fixed
+      >
+        <ActivityIndicator size={"large"} color={themeColors?.primary} />
+      </Screen>
+    );
+
   return (
-    <WeatherContext.Provider value={{ currentWeather, futureWeather }}>
+    <WeatherContext.Provider
+      value={{ currentWeather, futureWeather, currentWeatherLoc }}
+    >
       {children}
     </WeatherContext.Provider>
   );

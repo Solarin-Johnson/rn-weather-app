@@ -26,16 +26,38 @@ export default function WeatherMain({ currentWeather: current }) {
       >
         {condition?.text}
       </ThemeText>
-      <ThemeText
-        styles={{
-          fontSize: 92,
-          lineHeight: 108,
-          textAlign: "center",
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "start",
         }}
       >
-        {current?.temp_c.toFixed(0)}
-        <Text style={{ color: themeColors.primary }}>°</Text>
-      </ThemeText>
+        <ThemeText
+          styles={{
+            fontSize: 92,
+            lineHeight: 108,
+            textAlign: "center",
+          }}
+        >
+          {current?.temp_c.toFixed(0)}
+        </ThemeText>
+        <Text
+          style={{ color: themeColors.primary, fontSize: 60, marginTop: 4 }}
+        >
+          °
+        </Text>
+        <Text
+          style={{
+            color: themeColors.primary,
+            fontSize: 56,
+            fontWeight: 500,
+            marginTop: -3,
+          }}
+        >
+          c
+        </Text>
+      </View>
     </View>
   );
 }

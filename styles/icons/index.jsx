@@ -1,5 +1,6 @@
 import Svg, { ClipPath, Mask, Path, Rect } from "react-native-svg";
 import { useTheme } from "../../context/ThemeContext";
+import { Circle } from "lucide-react-native";
 
 export const HomeIcon = ({ color }) => (
   <Svg
@@ -100,6 +101,29 @@ export const BgCloud = () => {
         d="M172.957 39.1111C173.644 43.0147 167.286 44.761 167.188 40.5967C166.929 37.199 173.246 34.7381 172.957 39.1111Z"
         fill={color}
       />
+    </Svg>
+  );
+};
+
+export const LoaderCircle = () => {
+  return (
+    <Svg height="100%" viewBox="0 0 32 32" width="100%">
+      <Circle
+        cx="16"
+        cy="16"
+        fill="none"
+        r="14"
+        stroke-width="4"
+        style="stroke: rgb(25, 118, 210); opacity: 0.2;"
+      ></Circle>
+      <Circle
+        cx="16"
+        cy="16"
+        fill="none"
+        r="14"
+        stroke-width="4"
+        style="stroke: rgb(25, 118, 210); stroke-dasharray: 80; stroke-dashoffset: 60;"
+      ></Circle>
     </Svg>
   );
 };
