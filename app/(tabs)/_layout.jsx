@@ -1,5 +1,11 @@
 import { Tabs, useFocusEffect, useNavigation, useRouter } from "expo-router";
-import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import MyTabBar from "@/components/TabBar";
 import { Home, Search, Sparkles, User2 } from "lucide-react-native";
 import { useTheme } from "@/context/ThemeContext";
@@ -9,10 +15,18 @@ import { useLayoutEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import WebBanner from "../../components/webBanner";
 import HomeHeader from "../../components/HomeHeader";
+import { useBottomSheet } from "../../context/BottomSheetContext";
+import BottomSheet, {
+  BottomSheetScrollView,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { calculateClamp } from "../../hooks/useClamp";
 
 export default function TabLayout() {
   const { themeColors } = useTheme();
   const { location } = useUser();
+  const { bottomSheet, setBottomSheet } = useBottomSheet();
   const navigation = useNavigation();
   const router = useRouter();
   const { width } = useWindowDimensions();
@@ -39,7 +53,7 @@ export default function TabLayout() {
 
   if (location !== "denied") {
     return (
-      <SafeAreaView
+      <View
         style={[
           {
             flex: 1,
@@ -114,7 +128,66 @@ export default function TabLayout() {
             }}
           />
         </Tabs>
-      </SafeAreaView>
+        {bottomSheet && <BottomSheetContent />}
+      </View>
     );
   }
 }
+
+const BottomSheetContent = () => {
+  const { themeColors } = useTheme();
+  const { bottomSheet, setBottomSheet } = useBottomSheet();
+  const { width } = useWindowDimensions();
+  const wide = width > 720;
+
+  const handleSheetChanges = (index) => {
+    console.log(index);
+
+    if (index < 0) {
+      setBottomSheet(null);
+    }
+  };
+
+  return (
+    <GestureHandlerRootView
+      style={[
+        generalStyles.btSheetContainer,
+        { width: wide ? calculateClamp(width, 340, "42%", 620) : "100%" },
+      ]}
+    >
+      <Pressable
+        onPress={() => setBottomSheet(null)}
+        style={generalStyles.overlay}
+      ></Pressable>
+      <BottomSheet
+        enablePanDownToClose
+        keyboardBehavior="interactive"
+        android_keyboardInputMode="adjustResize"
+        keyboardBlurBehavior="restore"
+        index={bottomSheet ? 0 : -1}
+        animateOnMount={true}
+        backgroundStyle={{
+          backgroundColor: themeColors.fgAlt,
+          borderTopLeftRadius: 28,
+          borderTopRightRadius: 28,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: themeColors?.text,
+          width: 35,
+          height: 5,
+        }}
+        onChange={handleSheetChanges}
+        snapPoints={[290, 500]}
+      >
+        <BottomSheetScrollView
+          contentContainerStyle={[
+            generalStyles.btSheetContentContainer,
+            { backgroundColor: themeColors?.fgAlt },
+          ]}
+        >
+          {bottomSheet}
+        </BottomSheetScrollView>
+      </BottomSheet>
+    </GestureHandlerRootView>
+  );
+};

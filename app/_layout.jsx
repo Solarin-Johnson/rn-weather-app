@@ -10,6 +10,7 @@ import { getPlatform } from "../functions";
 import WebBanner from "../components/webBanner";
 import { WeatherProvider } from "../context/WeatherContext";
 import { BgCloud } from "../styles/icons";
+import { BottomSheetProvider } from "../context/BottomSheetContext";
 
 export default function Layout() {
   const [location, setLocation] = useState(null);
@@ -34,20 +35,22 @@ export default function Layout() {
     <ThemeProvider>
       <UserProvider>
         <WeatherProvider>
-          <Stack
-            screenOptions={{
-              headerTitle: "",
-              headerTransparent: true,
-            }}
-          >
-            <Stack.Screen name="(tabs)" />
-            {/* <Stack.Screen
+          <BottomSheetProvider>
+            <Stack
+              screenOptions={{
+                headerTitle: "",
+                headerTransparent: true,
+              }}
+            >
+              <Stack.Screen name="(tabs)" />
+              {/* <Stack.Screen
             name="permission"
             options={{
               headerShown: false,
               }}
               /> */}
-          </Stack>
+            </Stack>
+          </BottomSheetProvider>
         </WeatherProvider>
       </UserProvider>
     </ThemeProvider>

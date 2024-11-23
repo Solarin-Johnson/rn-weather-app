@@ -1,33 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useWeather } from "../../context/WeatherContext";
 import { getNextHoursWeather } from "../../api";
 import WeatherMini from "./Mini";
-import { useUser } from "../../context/UserContext";
 
-const WeatherFuture = () => {
-  const { futureWeather, currentWeather, currentWeatherLoc } = useWeather();
+const WeatherFuture = ({
+  futureWeather,
+  currentWeather,
+  currentWeatherLoc,
+}) => {
   const [next3HoursWeather, setNext3HoursWeather] = useState(null);
 
   useEffect(() => {
     if (futureWeather) {
-      //   console.log("futureWeather", futureWeather);
       setNext3HoursWeather(
         getNextHoursWeather(futureWeather, currentWeatherLoc.localtime)
       );
     }
   }, [futureWeather]);
-  //   getNext3HoursWeather(futureWeather);
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.title}>Future Weather Forecast</Text> */}
       <WeatherMini currentWeather={currentWeather} now />
       {next3HoursWeather &&
         next3HoursWeather.map((weather, index) => (
           <WeatherMini key={index} currentWeather={weather} />
         ))}
-      {/* Add your future weather forecast components here */}
     </View>
   );
 };

@@ -43,6 +43,27 @@ const generalStyles = StyleSheet.create({
     textAlign: "center",
     color: "#666666",
   },
+  btSheetContainer: {
+    position: "absolute",
+    zIndex: 1000,
+    bottom: 0,
+    width: "100%",
+    height: "100%",
+    right: 0,
+    // flex: 1,
+    zIndex: 1000,
+  },
+  btSheetContentContainer: {
+    flex: 1,
+  },
+  overlay: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    height: "100%",
+    right: 0,
+    backgroundColor: "#00000070",
+  },
 });
 
 export default generalStyles;

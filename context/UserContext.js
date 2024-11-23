@@ -7,6 +7,10 @@ const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [preferences, setPreferences] = useState({
+    metric: true,
+    sound: true,
+  });
   const [location, setLocation] = useState(null);
 
   const fetchLocation = async () => {
@@ -60,7 +64,16 @@ const UserProvider = ({ children }) => {
   // removeData("location");
 
   return (
-    <UserContext.Provider value={{ user, setUser, location, fetchLocation }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        location,
+        fetchLocation,
+        preferences,
+        setPreferences,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

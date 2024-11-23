@@ -1,4 +1,4 @@
-import { StyleSheet, useWindowDimensions, View } from "react-native";
+import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 import { Screen } from "../../components/Screens";
 import generalStyles from "../../styles/styles";
 import HomeHeader from "../../components/HomeHeader";
@@ -8,12 +8,18 @@ import CloudBg from "../../components/CloudBg";
 import { useTheme } from "../../context/ThemeContext";
 import WeatherMain from "../../components/Weather/Main";
 import WeatherFuture from "../../components/Weather/Future";
+import WeatherDetails from "../../components/Weather/Details";
+import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
+import { ChevronsDown } from "lucide-react-native";
+import { useBottomSheet } from "../../context/BottomSheetContext";
+import { calculateClamp } from "../../hooks/useClamp";
 
 export default function Tab() {
   const { themeColors } = useTheme();
+  const { setBottomSheet } = useBottomSheet();
   const { location } = useUser();
-  const { currentWeather } = useWeather();
-  const { width } = useWindowDimensions();
+  const { futureWeather, currentWeather, currentWeatherLoc } = useWeather();
+  const { width, height } = useWindowDimensions();
   const wide = width > 720;
 
   return (
@@ -21,16 +27,67 @@ export default function Tab() {
       {!wide && <CloudBg />}
       <View style={generalStyles.container}>
         <WeatherMain {...{ currentWeather, themeColors }} />
-        <WeatherFuture />
+        <WeatherFuture
+          {...{ futureWeather, currentWeather, currentWeatherLoc }}
+        />
+        {wide && <WeatherDetails {...{ weather: currentWeather }} hasMargin />}
+        {!wide && (
+          <DetailsBtn
+            onPress={() =>
+              setBottomSheet(<WeatherDetails weather={currentWeather} isBottomSheet/>)
+            }
+            style={{ marginTop: height > 960 ? 10 : -24 }}
+          />
+        )}
+
         {/* <WeatherFuture /> */}
       </View>
     </Screen>
   );
 }
 
+const DetailsBtn = ({ onPress, style }) => {
+  const { themeColors } = useTheme();
+  return (
+    <Pressable
+      style={[styles.details, style]}
+      android_ripple={{
+        color: themeColors?.text + "22",
+        borderless: false,
+      }}
+      onPress={onPress}
+    >
+      <ThemeText styles={{ fontSize: 15, fontWeight: 500 }}>
+        More Details
+      </ThemeText>
+      <AdaptiveElement>
+        <ChevronsDown
+          size={18}
+          style={{
+            opacity: 0.9,
+          }}
+        />
+      </AdaptiveElement>
+    </Pressable>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     // minHeight: "100%",
     // flexDirection: "row",
+  },
+  details: {
+    marginHorizontal: 24,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 4,
+    padding: 18,
+    borderRadius: 50,
+    maxWidth: 300,
+    width: "100%",
+    alignSelf: "center",
+    opacity: 0.8,
   },
 });

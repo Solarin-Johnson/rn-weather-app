@@ -3,7 +3,7 @@
     "name": "rn-weather-app",
     "slug": "rn-weather-app",
     "version": "1.0.0",
-    "orientation": "automatic",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "your-app-scheme",

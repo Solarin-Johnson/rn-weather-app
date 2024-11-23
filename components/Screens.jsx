@@ -77,6 +77,7 @@ export function Screen({ children, header, fixed, styles }) {
               )}
               <ScrollView
                 overScrollMode="always"
+                bounces={true}
                 showsVerticalScrollIndicator={false}
                 style={[
                   {
@@ -99,7 +100,7 @@ export function Screen({ children, header, fixed, styles }) {
                 {!fixed && (
                   <View
                     style={{
-                      height: 120,
+                      height: 180,
                     }}
                   ></View>
                 )}

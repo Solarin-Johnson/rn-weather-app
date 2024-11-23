@@ -3,10 +3,12 @@ import WeatherIcon from "../WeatherIcon";
 import { ThemeText } from "../ThemeComponents";
 import { calculateClamp } from "../../hooks/useClamp";
 import { useTheme } from "../../context/ThemeContext";
+import { useUser } from "../../context/UserContext";
 
 export default function WeatherMain({ currentWeather: current }) {
   const { width } = useWindowDimensions();
   const { themeColors } = useTheme();
+  const { preferences } = useUser();
   const { condition } = current || {};
   const wide = width > 720;
 
@@ -55,7 +57,7 @@ export default function WeatherMain({ currentWeather: current }) {
             marginTop: -3,
           }}
         >
-          c
+          {preferences?.metric ? "c" : "f"}
         </Text>
       </View>
     </View>

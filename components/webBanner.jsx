@@ -16,13 +16,15 @@ const WebBanner = () => {
         {
           paddingTop: 60 + calculateClamp(width, 10, "3%", 60) + 5,
           // position: "absolute",
+          alignItems: "center",
+          justifyContent: "center",
           width: width - calculateClamp(width, 340, "42%", 620),
           // backgroundColor: themeColors?.bg,
         },
       ]}
     >
       {/* <CloudBg /> */}
-      <Text style={styles.text}>Welcome to the Weather App</Text>
+      <Text style={styles.text}>Sometin comin</Text>
     </DynamicView>
   );
 };

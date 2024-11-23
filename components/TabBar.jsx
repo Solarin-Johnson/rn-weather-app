@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   Pressable,
+  useWindowDimensions,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { BlurView } from "expo-blur";
@@ -17,10 +18,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useFocusEffect } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function MyTabBar({ state, descriptors, navigation }) {
   const { theme, themeColors } = useTheme();
   const containerBg = useSharedValue(0);
+  const { width } = useWindowDimensions();
+  const wide = width > 720;
+  const maskColor = wide ? themeColors?.bgFade2 : themeColors?.bg;
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -33,94 +38,105 @@ export default function MyTabBar({ state, descriptors, navigation }) {
   });
 
   return (
-    <Animated.View
-      key={theme}
-      entering={FadeIn.duration(200)}
-      style={[styles.container, animatedStyle]}
+    <LinearGradient
+      colors={[
+        "transparent",
+        maskColor + "ca",
+        // themeColors?.bg,
+        maskColor,
+      ]}
+      style={styles.container}
     >
-      <BlurView
-        intensity={60}
-        tint={
-          theme === "dark"
-            ? "systemThickMaterialDark"
-            : "systemThickMaterialLight"
-        }
-        experimentalBlurMethod="dimezisBlurView"
-        blurReductionFactor={0}
-        style={[
-          styles.tabBlur,
-          {
-            backgroundColor: themeColors?.fg + "ab",
-            shadowColor: themeColors?.text + "70",
-            shadowOffset: {
-              width: 0,
-              height: 1.5,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 2,
-            elevation: 1,
-          },
-        ]}
+      <Animated.View
+        key={theme}
+        entering={FadeIn.duration(200)}
+        style={[animatedStyle]}
       >
-        {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-                ? options.title
-                : route.name;
+        <BlurView
+          intensity={60}
+          tint={
+            theme === "dark"
+              ? "systemThickMaterialDark"
+              : "systemThickMaterialLight"
+          }
+          experimentalBlurMethod="dimezisBlurView"
+          blurReductionFactor={0}
+          style={[
+            styles.tabBlur,
+            {
+              backgroundColor: themeColors?.fg + "ab",
+              shadowColor: "#000000",
+              shadowOffset: {
+                width: 0,
+                height: 0.5,
+              },
+              shadowOpacity: 0.2,
+              shadowRadius: 3,
+              elevation: 1,
+            },
+          ]}
+        >
+          {state.routes.map((route, index) => {
+            const { options } = descriptors[route.key];
+            const label =
+              options.tabBarLabel !== undefined
+                ? options.tabBarLabel
+                : options.title !== undefined
+                  ? options.title
+                  : route.name;
 
-          const isFocused = state.index === index;
+            const isFocused = state.index === index;
 
-          return (
-            <Pressable
-              key={route.key}
-              onPress={() => {
-                const event = navigation.emit({
-                  // type: "tabPress",
-                  target: route.key,
-                  canPreventDefault: true,
-                });
+            return (
+              <Pressable
+                key={route.key}
+                onPress={() => {
+                  const event = navigation.emit({
+                    // type: "tabPress",
+                    target: route.key,
+                    canPreventDefault: true,
+                  });
 
-                if (!isFocused && !event.defaultPrevented) {
-                  navigation.navigate(route.name);
-                }
-              }}
-              style={[
-                {
-                  flex: 1,
-                  padding: 10,
-                  alignItems: "center",
-                },
-                styles.tabBarStyle,
-              ]}
-            >
-              {options.tabBarIcon ? (
-                options.tabBarIcon({
-                  color: isFocused
-                    ? themeColors?.primary
-                    : themeColors?.textFade,
-                  fill: isFocused ? themeColors?.primary : "transparent",
-                  focused: isFocused,
-                })
-              ) : (
-                <Text style={{ color: isFocused ? "blue" : "gray" }}>
-                  {label}
-                </Text>
-              )}
-            </Pressable>
-          );
-        })}
-      </BlurView>
-    </Animated.View>
+                  if (!isFocused && !event.defaultPrevented) {
+                    navigation.navigate(route.name);
+                  }
+                }}
+                style={[
+                  {
+                    flex: 1,
+                    padding: 10,
+                    alignItems: "center",
+                  },
+                  styles.tabBarStyle,
+                ]}
+              >
+                {options.tabBarIcon ? (
+                  options.tabBarIcon({
+                    color: isFocused
+                      ? themeColors?.primary
+                      : themeColors?.textFade,
+                    fill: isFocused ? themeColors?.primary : "transparent",
+                    focused: isFocused,
+                  })
+                ) : (
+                  <Text style={{ color: isFocused ? "blue" : "gray" }}>
+                    {label}
+                  </Text>
+                )}
+              </Pressable>
+            );
+          })}
+        </BlurView>
+      </Animated.View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: "5%",
+    paddingBottom: "10%",
+    bottom: "0",
     width: "100%",
     // backgroundColor: "red",
   },

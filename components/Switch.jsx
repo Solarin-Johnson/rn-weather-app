@@ -78,6 +78,7 @@ const Switch = ({
           customStyles.switch,
           {
             borderColor: themeColors?.textFade + "50",
+            backgroundColor: themeColors?.bg,
           },
         ]}
         onPress={toggleSwitch}
