@@ -27,16 +27,16 @@ export default function WeatherMain({
   return (
     <View style={styles.body}>
       <Pressable
-        onPress={() => {
-          !wide &&
-            setBottomSheet(
-              <WeatherDetails
-                {...{ weather: current }}
-                forcast={futureWeather.forecastday}
-                isBottomSheet
-              />
-            );
-        }}
+      // onPress={() => {
+      //   !wide &&
+      //     setBottomSheet(
+      //       <WeatherDetails
+      //         {...{ weather: current }}
+      //         forcast={futureWeather.forecastday}
+      //         isBottomSheet
+      //       />
+      //     );
+      // }}
       >
         <WeatherIcon
           code={condition?.code}

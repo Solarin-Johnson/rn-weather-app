@@ -26,14 +26,17 @@ export default function Tab() {
     <Screen styles={styles.container} header={<HomeHeader />}>
       {!wide && <CloudBg />}
       <View style={generalStyles.container}>
-        <WeatherMain {...{ currentWeather, futureWeather, themeColors }} />
+        <WeatherMain
+          {...{ currentWeather, futureWeather, currentWeatherLoc, themeColors }}
+        />
         <WeatherFuture
           {...{ futureWeather, currentWeather, currentWeatherLoc }}
         />
         {wide && (
           <WeatherDetails
             weather={currentWeather}
-            forcast={futureWeather.forecastday}
+            forcast={futureWeather}
+            currentLoc={currentWeatherLoc}
             hasMargin
           />
         )}
@@ -43,7 +46,8 @@ export default function Tab() {
               setBottomSheet(
                 <WeatherDetails
                   weather={currentWeather}
-                  forcast={futureWeather.forecastday}
+                  forcast={futureWeather}
+                  currentLoc={currentWeatherLoc}
                   isBottomSheet
                 />
               )

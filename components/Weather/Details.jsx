@@ -12,9 +12,15 @@ import {
 } from "react-native-reanimated";
 import { useBottomSheet } from "../../context/BottomSheetContext";
 import generalStyles from "../../styles/styles";
-import { DailyForecast } from "./Forcast";
+import { DailyForecast, HourlyForecast } from "./Forcast";
 
-const WeatherDetails = ({ weather, forcast, hasMargin, isBottomSheet }) => {
+const WeatherDetails = ({
+  weather,
+  forcast,
+  currentLoc,
+  hasMargin,
+  isBottomSheet,
+}) => {
   // const { setBottomSheet } = useBottomSheet();
 
   return (
@@ -22,8 +28,14 @@ const WeatherDetails = ({ weather, forcast, hasMargin, isBottomSheet }) => {
       <WeatherDetailsCard hasBg={isBottomSheet}>
         <CommonDetails {...{ weather }} />
       </WeatherDetailsCard>
-      <WeatherDetailsCard hasBg={isBottomSheet}>
-        <DailyForecast dailyData={forcast} />
+      <WeatherDetailsCard hasBg>
+        <DailyForecast dailyData={forcast.forecastday} />
+      </WeatherDetailsCard>
+      <WeatherDetailsCard hasBg>
+        <HourlyForecast
+          {...{ weather, forcast }}
+          currentWeatherLoc={currentLoc}
+        />
       </WeatherDetailsCard>
     </View>
   );

@@ -185,6 +185,7 @@ const BottomSheetContent = () => {
       >
         <BottomSheetScrollView
           showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
           contentContainerStyle={[
             generalStyles.btSheetContentContainer,
             { backgroundColor: themeColors?.fgAlt },
