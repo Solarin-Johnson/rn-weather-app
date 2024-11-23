@@ -65,8 +65,6 @@ export function getNextHoursWeather(forecastData, dateString, length = 2) {
   const now = Math.floor(new Date(dateString).getTime());
   const next3Hours = [];
 
-  console.log(now);
-
   // Loop through the forecast data (next 3 days or however many available)
   for (let day of forecastData.forecastday) {
     for (let hour of day.hour) {

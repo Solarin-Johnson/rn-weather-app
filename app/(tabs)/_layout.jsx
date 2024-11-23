@@ -11,7 +11,7 @@ import { Home, Search, Sparkles, User2 } from "lucide-react-native";
 import { useTheme } from "@/context/ThemeContext";
 import { useUser } from "@/context/UserContext";
 import generalStyles from "@/styles/styles";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import WebBanner from "../../components/webBanner";
 import HomeHeader from "../../components/HomeHeader";
@@ -135,17 +135,23 @@ export default function TabLayout() {
 }
 
 const BottomSheetContent = () => {
+  const bottomSheetRef = useRef(null);
   const { themeColors } = useTheme();
   const { bottomSheet, setBottomSheet } = useBottomSheet();
   const { width } = useWindowDimensions();
   const wide = width > 720;
 
   const handleSheetChanges = (index) => {
-    console.log(index);
-
     if (index < 0) {
       setBottomSheet(null);
     }
+  };
+
+  const closeSheet = () => {
+    bottomSheetRef.current.close();
+    setTimeout(() => {
+      setBottomSheet(null);
+    }, 30);
   };
 
   return (
@@ -155,16 +161,14 @@ const BottomSheetContent = () => {
         { width: wide ? calculateClamp(width, 340, "42%", 620) : "100%" },
       ]}
     >
-      <Pressable
-        onPress={() => setBottomSheet(null)}
-        style={generalStyles.overlay}
-      ></Pressable>
+      <Pressable onPress={closeSheet} style={generalStyles.overlay}></Pressable>
       <BottomSheet
+        ref={bottomSheetRef}
         enablePanDownToClose
         keyboardBehavior="interactive"
         android_keyboardInputMode="adjustResize"
         keyboardBlurBehavior="restore"
-        index={bottomSheet ? 0 : -1}
+        // index={sheetOpen ? 0 : -1}
         animateOnMount={true}
         backgroundStyle={{
           backgroundColor: themeColors.fgAlt,
@@ -180,6 +184,7 @@ const BottomSheetContent = () => {
         snapPoints={[290, 500]}
       >
         <BottomSheetScrollView
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={[
             generalStyles.btSheetContentContainer,
             { backgroundColor: themeColors?.fgAlt },

@@ -1,24 +1,49 @@
-import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import WeatherIcon from "../WeatherIcon";
 import { ThemeText } from "../ThemeComponents";
 import { calculateClamp } from "../../hooks/useClamp";
 import { useTheme } from "../../context/ThemeContext";
 import { useUser } from "../../context/UserContext";
+import { useBottomSheet } from "../../context/BottomSheetContext";
+import WeatherDetails from "./Details";
 
-export default function WeatherMain({ currentWeather: current }) {
+export default function WeatherMain({
+  currentWeather: current,
+  futureWeather,
+}) {
   const { width } = useWindowDimensions();
   const { themeColors } = useTheme();
   const { preferences } = useUser();
   const { condition } = current || {};
+  const { setBottomSheet } = useBottomSheet();
   const wide = width > 720;
 
   return (
     <View style={styles.body}>
-      <WeatherIcon
-        code={condition?.code}
-        isDay={current?.is_day}
-        size={wide ? 200 : calculateClamp(width, 0, "60%", 300)}
-      />
+      <Pressable
+        onPress={() => {
+          !wide &&
+            setBottomSheet(
+              <WeatherDetails
+                {...{ weather: current }}
+                forcast={futureWeather.forecastday}
+                isBottomSheet
+              />
+            );
+        }}
+      >
+        <WeatherIcon
+          code={condition?.code}
+          isDay={current?.is_day}
+          size={wide ? 200 : calculateClamp(width, 0, "60%", 300)}
+        />
+      </Pressable>
       <ThemeText
         styles={{
           fontSize: 18,
@@ -44,17 +69,14 @@ export default function WeatherMain({ currentWeather: current }) {
         >
           {current?.temp_c.toFixed(0)}
         </ThemeText>
-        <Text
-          style={{ color: themeColors.primary, fontSize: 60, marginTop: 4 }}
-        >
-          °
-        </Text>
+        <Text style={{ color: themeColors.primary, fontSize: 60 }}>°</Text>
         <Text
           style={{
             color: themeColors.primary,
-            fontSize: 56,
+            fontSize: 58,
             fontWeight: 500,
-            marginTop: -3,
+            lineHeight: 66,
+            // marginTop: -3,
           }}
         >
           {preferences?.metric ? "c" : "f"}

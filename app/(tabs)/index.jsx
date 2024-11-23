@@ -26,17 +26,29 @@ export default function Tab() {
     <Screen styles={styles.container} header={<HomeHeader />}>
       {!wide && <CloudBg />}
       <View style={generalStyles.container}>
-        <WeatherMain {...{ currentWeather, themeColors }} />
+        <WeatherMain {...{ currentWeather, futureWeather, themeColors }} />
         <WeatherFuture
           {...{ futureWeather, currentWeather, currentWeatherLoc }}
         />
-        {wide && <WeatherDetails {...{ weather: currentWeather }} hasMargin />}
+        {wide && (
+          <WeatherDetails
+            weather={currentWeather}
+            forcast={futureWeather.forecastday}
+            hasMargin
+          />
+        )}
         {!wide && (
           <DetailsBtn
             onPress={() =>
-              setBottomSheet(<WeatherDetails weather={currentWeather} isBottomSheet/>)
+              setBottomSheet(
+                <WeatherDetails
+                  weather={currentWeather}
+                  forcast={futureWeather.forecastday}
+                  isBottomSheet
+                />
+              )
             }
-            style={{ marginTop: height > 960 ? 10 : -24 }}
+            style={{ marginTop: height > 960 ? 10 : 0 }}
           />
         )}
 
@@ -62,7 +74,7 @@ const DetailsBtn = ({ onPress, style }) => {
       </ThemeText>
       <AdaptiveElement>
         <ChevronsDown
-          size={18}
+          size={16}
           style={{
             opacity: 0.9,
           }}

@@ -31,7 +31,8 @@ const WeatherFuture = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     width: "100%",
     maxWidth: 500,
     alignSelf: "center",

@@ -11,50 +11,65 @@ import {
   withTiming,
 } from "react-native-reanimated";
 import { useBottomSheet } from "../../context/BottomSheetContext";
+import generalStyles from "../../styles/styles";
+import { DailyForecast } from "./Forcast";
 
-const WeatherDetails = ({ weather, hasMargin, isBottomSheet }) => {
-  const { preferences } = useUser();
-  const { setBottomSheet } = useBottomSheet();
-  const { humidity, wind_kph, wind_mph, pressure_mb, uv } = weather;
+const WeatherDetails = ({ weather, forcast, hasMargin, isBottomSheet }) => {
+  // const { setBottomSheet } = useBottomSheet();
+
+  return (
+    <View style={[styles.wrapper]}>
+      <WeatherDetailsCard hasBg={isBottomSheet}>
+        <CommonDetails {...{ weather }} />
+      </WeatherDetailsCard>
+      <WeatherDetailsCard hasBg={isBottomSheet}>
+        <DailyForecast dailyData={forcast} />
+      </WeatherDetailsCard>
+    </View>
+  );
+};
+
+const WeatherDetailsCard = ({ hasBg, children }) => {
   const { themeColors } = useTheme();
+  return (
+    <View
+      style={[
+        styles.container,
+        generalStyles.bottomCard,
+        {
+          backgroundColor: hasBg ? themeColors?.fg : "",
+          marginTop: hasBg ? 0 : 32,
+        },
+      ]}
+    >
+      {children}
+    </View>
+  );
+};
+
+const CommonDetails = ({ weather }) => {
+  const { themeColors } = useTheme();
+  const { preferences } = useUser();
+  const { humidity, wind_kph, wind_mph, pressure_mb, uv } = weather;
   const wind = preferences?.metric
     ? parseInt(wind_kph) + " km/h"
     : parseInt(wind_mph) + " mph";
 
   return (
-    <View
-      style={[
-        styles.wrapper,
-        {
-          // marginVertical: hasMargin ? 35 : 0,
-        },
-      ]}
-    >
-      <View
-        style={[
-          styles.container,
-          {
-            backgroundColor: isBottomSheet ? themeColors?.text + "10" : "",
-            marginTop: isBottomSheet ? 6 : 32,
-          },
-        ]}
-      >
-        <View style={styles.cluster}>
-          <DetailsCard title="UV Index" value={uv} />
-          <DetailsCard title="Pressure" value={`${pressure_mb} hPa`} />
-        </View>
-        <LinearGradient
-          colors={["transparent", themeColors?.text + "55", "transparent"]}
-          style={styles.split}
-        />
-        <View style={styles.cluster}>
-          <DetailsCard title="Humidity" value={`${humidity}%`} />
-          <DetailsCard title="Wind" value={wind} />
-        </View>
+    <>
+      <View style={styles.cluster}>
+        <DetailsCard title="UV Index" value={uv} />
+        <DetailsCard title="Pressure" value={`${pressure_mb} hPa`} />
       </View>
-
-      {/* <MoreDetails {...{ weather }} /> */}
-    </View>
+      <LinearGradient
+        colors={["transparent", themeColors?.text + "55", "transparent"]}
+        style={styles.split}
+      />
+      <View style={styles.cluster}>
+        <DetailsCard title="Humidity" value={`${humidity}%`} />
+        <DetailsCard title="Wind" value={wind} />
+      </View>
+    </>
   );
 };
 
@@ -91,16 +106,15 @@ const styles = StyleSheet.create({
   },
   container: {
     margin: 32,
-    padding: 30,
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
-    maxWidth: 380,
+    maxWidth: 400,
     alignSelf: "center",
-    borderRadius: 28,
   },
   cluster: {
     gap: 32,
+    padding: 18,
   },
   split: {
     width: 1.5,

@@ -69,8 +69,8 @@ export const dpToPercentage = (dp, dimension) => {
 export const weatherGroups = {
   clear: [1000], // Clear/Sunny - 'Sun icon'
   cloudy: [1003, 1006, 1009], // Cloudy/Overcast - 'Partly Cloudy Day icon'
-  foggy: [1030, 1135, 1147], // Foggy/Mist - 'Cloud icon'
-  lightPrecipitation: [1150, 1153, 1180, 1183, 1240, 1204, 1210, 1213], // Light Precipitation - 'Umbrella icon'
+  foggy: [1030, 1063, 1135, 1147], // Foggy/Mist - 'Cloud icon'
+  lightPrecipitation: [1063, 1150, 1153, 1180, 1183, 1240, 1204, 1210, 1213], // Light Precipitation - 'Umbrella icon'
   moderateHeavyPrecipitation: [
     1186, 1189, 1192, 1195, 1243, 1246, 1207, 1216, 1219, 1255, 1222, 1225,
     1258,
@@ -132,7 +132,6 @@ export function extractCityAndCountry(response) {
 
   // Loop through the address_components to find the city and country
   for (let component of response.results[0].address_components) {
-
     if (!city && component.types.includes("political")) {
       city = component.short_name;
     }
@@ -168,3 +167,40 @@ export const getPlatform = () => {
 export const getWords = (str, len = 2) => {
   return str.split(" ").slice(0, len).join(" ");
 };
+
+export const treeShakeObject = (obj, keysToKeep = [], keysToRemove = []) => {
+  const result = {};
+
+  // Add keys to keep
+  for (const key of keysToKeep) {
+    if (obj.hasOwnProperty(key)) {
+      result[key] = obj[key];
+    }
+  }
+
+  // Add remaining keys if no keys to keep are specified
+  if (keysToKeep.length === 0) {
+    for (const key in obj) {
+      if (!keysToRemove.includes(key)) {
+        result[key] = obj[key];
+      }
+    }
+  }
+
+  return result;
+};
+
+export function getDayFromEpoch(epochTime) {
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const now = new Date();
+  const date = new Date(epochTime * 1000);
+
+  const today = now.toDateString();
+  const tomorrow = new Date(now);
+  tomorrow.setDate(now.getDate() + 1);
+
+  if (date.toDateString() === today) return "Today";
+  if (date.toDateString() === tomorrow.toDateString()) return "Tomorrow";
+
+  return days[date.getDay()];
+}

@@ -100,7 +100,8 @@ export function Screen({ children, header, fixed, styles }) {
                 {!fixed && (
                   <View
                     style={{
-                      height: 180,
+                      height: 120,
+                      // backgroundColor: "red",
                     }}
                   ></View>
                 )}

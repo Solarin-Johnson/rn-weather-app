@@ -6,18 +6,24 @@ import { useTheme } from "../../context/ThemeContext";
 import { extractTime } from "../../api";
 import { useWeather } from "../../context/WeatherContext";
 
-export default function WeatherMini({ currentWeather: current, now }) {
+export default function WeatherMini({
+  currentWeather: current,
+  now,
+  realProps,
+  stylesProp: _styles,
+}) {
   const { width } = useWindowDimensions();
   const { themeColors } = useTheme();
-  const { condition } = current || {};
+  const { condition } = realProps || current || {};
+
   const wide = width > 720;
 
   return (
-    <View style={styles.body}>
+    <View style={[styles.body, _styles?.body]}>
       <WeatherIcon
         code={condition?.code}
-        isDay={current?.is_day}
-        size={calculateClamp(width, 0, "13%", 60)}
+        isDay={realProps || current?.is_day}
+        size={calculateClamp(width, 0, "13%", _styles?.icon || 60)}
         style={{ filter: "blur(0.5px)" }}
       />
       <ThemeText
@@ -28,16 +34,20 @@ export default function WeatherMini({ currentWeather: current, now }) {
           lineHeight: 24,
         }}
       >
-        {now ? "Now" : extractTime(current?.time_epoch).toLowerCase()}
+        {realProps?.title ||
+          (now ? "Now" : extractTime(current?.time_epoch).toLowerCase())}
       </ThemeText>
       <ThemeText
-        styles={{
-          fontSize: 18,
-          //   lineHeight: 108,
-          textAlign: "center",
-        }}
+        styles={[
+          {
+            fontSize: 18,
+            //   lineHeight: 108,
+            textAlign: "center",
+          },
+          _styles?.temp,
+        ]}
       >
-        {current?.temp_c.toFixed(0)}°
+        {realProps?.temp || current?.temp_c.toFixed(0) + "°"}
       </ThemeText>
     </View>
   );

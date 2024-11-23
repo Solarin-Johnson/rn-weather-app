@@ -55,6 +55,7 @@ const generalStyles = StyleSheet.create({
   },
   btSheetContentContainer: {
     flex: 1,
+    paddingTop: 12,
   },
   overlay: {
     position: "absolute",
@@ -63,6 +64,10 @@ const generalStyles = StyleSheet.create({
     height: "100%",
     right: 0,
     backgroundColor: "#00000070",
+  },
+  bottomCard: {
+    padding: 12,
+    borderRadius: 28,
   },
 });
 
