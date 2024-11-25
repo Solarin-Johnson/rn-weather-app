@@ -61,6 +61,7 @@ export default function TabLayout() {
               flex: 1,
             }}
             tabBar={(props) => <MyTabBar {...props} />}
+            
           >
             <Tabs.Screen
               name="index"
