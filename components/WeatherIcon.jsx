@@ -1,23 +1,76 @@
-import { Image } from "expo-image";
-import React from "react";
+import React, { memo, useMemo, useState } from "react";
 import { View, StyleSheet } from "react-native";
+import { getWeatherGroup } from "../functions";
+import { Image } from "expo-image";
+import { useFocusEffect } from "expo-router";
 
-const WeatherIcon = ({ icon }) => {
+const WeatherIcon = memo(({ code, isDay, style }) => {
+  // Memoizing the weather group and the image source based on the 'code' prop
+  const weatherGroup = useMemo(() => getWeatherGroup(code), [code]);
+  const [key, setKey] = useState(0);
+
+  // Weather icon mapping
+  const weatherIcons = useMemo(
+    () => ({
+      clear: require("../assets/iconPacks/clear.png"),
+      cloudy: require("../assets/iconPacks/cloudy.png"),
+      foggy: require("../assets/iconPacks/foggy.png"),
+      lightPrecipitation: require("../assets/iconPacks/lightPrecipitation.png"),
+      moderateHeavyPrecipitation: require("../assets/iconPacks/heavyPrecipitation.png"),
+      freezingConditions: require("../assets/iconPacks/freezing.png"),
+      thunderstorms: require("../assets/iconPacks/thunderstorms.png"),
+      icePellets: require("../assets/iconPacks/icePellets.png"),
+    }),
+    []
+  );
+
+  // Determine source based on weather group
+  const src =
+    weatherIcons[weatherGroup] ||
+    require("../assets/iconPacks/moon-and-cloud.png");
+
+  useFocusEffect(() => {
+    setKey(1);
+    return () => {
+      setKey(0);
+    };
+  });
+
+  const imgConfig = {
+    style: [styles.image, style],
+    contentFit: "contain",
+    cachePolicy: "disk",
+  };
+
   return (
     <View style={styles.container}>
-      <Image source={iconSource[icon]} style={styles.icon} />
+      {key ? (
+        isDay ? (
+          <Image {...imgConfig} source={src} />
+        ) : (
+          <Image
+            {...imgConfig}
+            source={require("../assets/iconPacks/night.png")}
+          />
+        )
+      ) : (
+        <></>
+      )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    flex: 1,
     justifyContent: "center",
+    alignItems: "center",
   },
-  icon: {
-    width: 50,
-    height: 50,
+
+  image: {
+    // flex: 1,
+    aspectRatio: 1,
+    width: "60%",
   },
 });
 

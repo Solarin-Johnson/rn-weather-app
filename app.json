@@ -3,13 +3,11 @@
     "name": "rn-weather-app",
     "slug": "rn-weather-app",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "automatic",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "your-app-scheme",
-    "experiments": {
-      "reactCompiler": true
-    },
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -22,7 +20,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.dotjs.rnweatherapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,7 +37,18 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
-      ]
-    ]
+      ],
+      "expo-asset"
+    ],
+    "extra": {
+      "router": {
+        "origin": false,
+        "lazy": false
+      },
+      "eas": {
+        "projectId": "2fc26791-9c1b-4675-b9ce-4bdf496447b8"
+      },
+      "API_KEY": "@env:API_KEY"
+    }
   }
 }

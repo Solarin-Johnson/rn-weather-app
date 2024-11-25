@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getData, removeData, storeData } from "../functions";
+import { getData, getLocation, removeData, storeData } from "../functions";
 import * as Location from "expo-location";
+// import { getLocation } from "../api";
 
 const UserContext = createContext();
 
@@ -25,32 +26,29 @@ const UserProvider = ({ children }) => {
       });
 
       // Reverse geocode to get address
-      const reverseGeocode = await Location.reverseGeocodeAsync({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
 
-      if (reverseGeocode.length > 0) {
-        const { city, country } = reverseGeocode[0];
-        const locationWithAddress = {
-          ...location.coords,
-          city,
-          country,
-        };
-        setLocation(locationWithAddress);
-        await storeData("location", JSON.stringify(locationWithAddress));
-      }
+      const { city, country } = await getLocation(location.coords);
+      console.log(city, country);
+
+      const locationWithAddress = {
+        ...location.coords,
+        name: city,
+        country,
+      };
+      setLocation(locationWithAddress);
+      await storeData("location", JSON.stringify(locationWithAddress));
     } catch (error) {
       console.error("Error getting location or address:", error);
     }
   };
+
+  console.log(location);
 
   useEffect(() => {
     const loadLocation = async () => {
       const storedLocation = await getData("location");
       if (storedLocation) {
         setLocation(JSON.parse(storedLocation));
-        console.log("stored", storedLocation);
       } else {
         fetchLocation();
       }

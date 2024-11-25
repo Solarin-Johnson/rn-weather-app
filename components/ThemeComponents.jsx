@@ -1,14 +1,7 @@
 import { View, Text } from "react-native";
-import React, { useCallback, useLayoutEffect, useState } from "react";
+import React from "react";
 import { useTheme } from "../context/ThemeContext";
 import generalStyles from "../styles/styles";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Animated, {
-  Easing,
-  SlideInRight,
-  SlideOutLeft,
-} from "react-native-reanimated";
-import { useFocusEffect, usePathname } from "expo-router";
 
 export function ThemeView({ children, styles }) {
   const { themeColors } = useTheme();
@@ -25,41 +18,19 @@ export function ThemeView({ children, styles }) {
   );
 }
 
-export function ThemeScreen({ children, styles }) {
+export function ThemeScreen({ children }) {
   const { themeColors } = useTheme();
-  const [key, setKey] = useState(false);
-
-  useFocusEffect(
-    useCallback(() => {
-      setKey(true);
-
-      return () => {
-        setKey(false);
-      };
-    }, [])
-  );
 
   return (
     <View
-      style={[generalStyles.stack, { backgroundColor: themeColors?.bg }]}
-      key={key}
+      style={[
+        generalStyles.stack,
+        {
+          backgroundColor: themeColors?.bg,
+        },
+      ]}
     >
-      {key ? (
-        <Animated.View
-          entering={SlideInRight.duration(200)
-            .easing(Easing.bezier(0, 1, 0, 1))
-            .withInitialValues({
-              transform: [{ translateX: 10 ** 53 }],
-              opacity: 0,
-            })}
-          exiting={SlideOutLeft}
-          style={{ flex: 1 }}
-        >
-          <View style={[{ flex: 1 }, styles]}>{children}</View>
-        </Animated.View>
-      ) : (
-        <></>
-      )}
+      {children}
     </View>
   );
 }

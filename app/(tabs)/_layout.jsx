@@ -6,12 +6,6 @@ import { useTheme } from "@/context/ThemeContext";
 import { useUser } from "@/context/UserContext";
 import generalStyles from "@/styles/styles";
 import { useLayoutEffect } from "react";
-import { ThemeText, ThemeScreen } from "@/components/ThemeComponents";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabLayout() {
@@ -72,6 +66,7 @@ export default function TabLayout() {
                   <Home color={color} fill={fill} {...config} />
                 ),
               }}
+              lazy
             />
             <Tabs.Screen
               name="search"

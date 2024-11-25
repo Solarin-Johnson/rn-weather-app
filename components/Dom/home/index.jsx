@@ -1,13 +1,11 @@
 "use dom";
-import React from "react";
-import { View } from "react-native";
 
-export default function HomeComponent() {
+export default function IAmHere() {
   console.log("HomeComponent");
 
   return (
     <>
-      <div style={{ color: "red", fontSize: "40px" }}>Pussy</div>
+      <p style={{ fontSize: "40px" }}>I am here</p>
     </>
   );
 }

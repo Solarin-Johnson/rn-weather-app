@@ -1,20 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
-import { getDate } from "../functions";
+import { getDate, getWords } from "../functions";
 import { MapPin, Moon, Sun } from "lucide-react-native";
 import { useUser } from "../context/UserContext";
 import Switch from "./Switch";
 import { useTheme } from "../context/ThemeContext";
 import generalStyles from "../styles/styles";
+import { DynamicView } from "./Dynamics";
 
-const HomeHeader = () => {
+const HomeHeader = ({ style }) => {
   const { location } = useUser();
   const { theme, setTheme } = useTheme();
-  const { city, country } = location || {};
+  const { name, country } = location || {};
 
   return (
-    <View style={[generalStyles.paddedX, styles.container]}>
+    <DynamicView style={[styles.container, style]} clamp={[10, "3%", 60]}>
       <View style={styles.subContainer}>
         <ThemeText styles={{ fontSize: 17, opacity: 0.8 }}>
           {getDate()}
@@ -24,7 +25,6 @@ const HomeHeader = () => {
             <MapPin
               size={20}
               style={{
-                marginTop: 3,
                 marginLeft: -2,
               }}
             />
@@ -37,7 +37,7 @@ const HomeHeader = () => {
               textAlignVertical: "bottom",
             }}
           >
-            {city || "..."},{" "}
+            {name ? getWords(name) + ", " : "..."}
           </ThemeText>
           <ThemeText
             styles={{
@@ -47,7 +47,7 @@ const HomeHeader = () => {
               opacity: 0.8,
             }}
           >
-            {country}
+            {country && getWords(country)}
           </ThemeText>
         </View>
       </View>
@@ -64,7 +64,7 @@ const HomeHeader = () => {
           }}
         />
       </View>
-    </View>
+    </DynamicView>
   );
 };
 
@@ -75,10 +75,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 4,
   },
   subContainer: {
-    gap: 3,
+    gap: 4,
   },
   locationSection: {
     flexDirection: "row",

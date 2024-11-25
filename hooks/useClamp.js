@@ -1,0 +1,39 @@
+import { useEffect, useState } from "react";
+import { getValueInPx } from "../functions";
+import { Dimensions, useWindowDimensions } from "react-native";
+
+export const calculateClamp = (width, min, preferred, max) => {
+  const minValue = getValueInPx(min, width);
+  const maxValue = getValueInPx(max, width);
+  const preferredValue = getValueInPx(preferred, width);
+
+  // Return the clamped value (within min and max range)
+  return Math.max(minValue, Math.min(preferredValue, maxValue));
+};
+
+const useClamp = (min, preferred, max) => {
+  const { width, height } = useWindowDimensions();
+  const [clampedValue, setClampedValue] = useState(() =>
+    calculateClamp(min, preferred, max)
+  );
+
+  // Function to calculate the clamped value
+
+  useEffect(() => {
+    const onResize = () => {
+      setClampedValue(calculateClamp(min, preferred, max)); // Recalculate on screen resize
+    };
+
+    // Add event listener for screen resize
+    const subscription = Dimensions.addEventListener("change", onResize);
+
+    // Cleanup event listener when the component unmounts
+    return () => {
+      subscription?.remove();
+    };
+  }, [min, preferred, max]);
+
+  return clampedValue;
+};
+
+export default useClamp;

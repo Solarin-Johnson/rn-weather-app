@@ -51,13 +51,13 @@ export default function MyTabBar({ state, descriptors, navigation }) {
           styles.tabBlur,
           {
             backgroundColor: themeColors?.fg + "ab",
-            shadowColor: themeColors?.text + "90",
+            shadowColor: themeColors?.text + "50",
             shadowOffset: {
               width: 0,
               height: 2,
             },
             shadowOpacity: 0.25,
-            shadowRadius: 3.84,
+            shadowRadius: 2,
             elevation: 1,
           },
         ]}
@@ -68,8 +68,8 @@ export default function MyTabBar({ state, descriptors, navigation }) {
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
               : options.title !== undefined
-              ? options.title
-              : route.name;
+                ? options.title
+                : route.name;
 
           const isFocused = state.index === index;
 
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 50,
     overflow: "hidden",
-    padding: "3%",
+    padding: 12,
   },
   tabBarStyle: {
     borderRadius: 50,

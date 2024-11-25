@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { clamp } from "../functions";
 
 const generalStyles = StyleSheet.create({
   container: {
@@ -13,9 +14,18 @@ const generalStyles = StyleSheet.create({
   },
   stack: {
     flex: 1,
+    flexdirection: "column",
+    justifyContent: "start",
+  },
+  paddedWideScrrenTop: {
+    paddingTop: 100,
   },
   paddedX: {
     paddingHorizontal: 16,
+  },
+  padded: {
+    padding: clamp(16, "4%", 20000000),
+    // padding: "4%",
   },
   header: {
     fontSize: 24,
