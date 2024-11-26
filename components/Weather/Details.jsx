@@ -28,10 +28,10 @@ const WeatherDetails = ({
       <WeatherDetailsCard hasBg={isBottomSheet}>
         <CommonDetails {...{ weather }} />
       </WeatherDetailsCard>
-      <WeatherDetailsCard hasBg>
+      <WeatherDetailsCard hasBg={isBottomSheet}>
         <DailyForecast dailyData={forcast.forecastday} />
       </WeatherDetailsCard>
-      <WeatherDetailsCard hasBg>
+      <WeatherDetailsCard hasBg={isBottomSheet}>
         <HourlyForecast
           {...{ weather, forcast }}
           currentWeatherLoc={currentLoc}
