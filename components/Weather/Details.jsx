@@ -13,6 +13,7 @@ import {
 import { useBottomSheet } from "../../context/BottomSheetContext";
 import generalStyles from "../../styles/styles";
 import { DailyForecast, HourlyForecast } from "./Forcast";
+import { classifyUV } from "../../functions";
 
 const WeatherDetails = ({
   weather,
@@ -34,6 +35,7 @@ const WeatherDetails = ({
       <WeatherDetailsCard hasBg={isBottomSheet}>
         <HourlyForecast
           {...{ weather, forcast }}
+          full={!isBottomSheet}
           currentWeatherLoc={currentLoc}
         />
       </WeatherDetailsCard>
@@ -70,7 +72,7 @@ const CommonDetails = ({ weather }) => {
   return (
     <>
       <View style={styles.cluster}>
-        <DetailsCard title="UV Index" value={uv} />
+        <DetailsCard title="Humidity" value={`${humidity}%`} />
         <DetailsCard title="Pressure" value={`${pressure_mb} hPa`} />
       </View>
       <LinearGradient
@@ -78,7 +80,7 @@ const CommonDetails = ({ weather }) => {
         style={styles.split}
       />
       <View style={styles.cluster}>
-        <DetailsCard title="Humidity" value={`${humidity}%`} />
+        <DetailsCard title="UV Index" value={`${uv} (${classifyUV(uv)})`} />
         <DetailsCard title="Wind" value={wind} />
       </View>
     </>

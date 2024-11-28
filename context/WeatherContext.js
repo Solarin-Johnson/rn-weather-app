@@ -14,15 +14,8 @@ const WeatherProvider = ({ children }) => {
   const { themeColors } = useTheme();
   const { location } = useUser();
 
-  useEffect(() => {
-    // Fetch current weather data
+  const fetchWeather = async () => {
     if (location) {
-      // getCurrentWeather(location.latitude, location.longitude)
-      //   .then((data) => setCurrentWeather(data))
-      //   .catch((error) =>
-      //     console.error("Error fetching current weather:", error)
-      //   );
-
       getFutureWeather(location.latitude, location.longitude)
         .then((data) => {
           setFutureWeather(data.forecast);
@@ -32,21 +25,16 @@ const WeatherProvider = ({ children }) => {
         .catch((error) =>
           console.error("Error fetching future weather:", error)
         );
-
-      // Fetch future weather data
-      //   const fetchFutureWeather = async () => {
-      //     try {
-      //       const response = await fetch("API_URL_FOR_FUTURE_WEATHER");
-      //       const data = await response.json();
-      //       setFutureWeather(data);
-      //     } catch (error) {
-      //       console.error("Error fetching future weather:", error);
-      //     }
-      //   };
-
-      //   fetchCurrentWeather();
-      //   fetchFutureWeather();
     }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(fetchWeather, 10 * 60 * 1000); // Update every 10 minutes
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [location]);
+
+  useEffect(() => {
+    fetchWeather();
   }, [location]);
 
   if (currentWeather === null || location === null)

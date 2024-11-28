@@ -204,3 +204,10 @@ export function getDayFromEpoch(epochTime) {
 
   return days[date.getDay()];
 }
+export function classifyUV(uvIndex) {
+  if (uvIndex <= 2) return "Low";
+  if (uvIndex <= 5) return "Moderate";
+  if (uvIndex <= 7) return "High";
+  if (uvIndex <= 10) return "Very High";
+  return "Extreme";
+}

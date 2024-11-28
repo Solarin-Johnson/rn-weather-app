@@ -83,13 +83,17 @@ const DailyForecastCard = (props) => {
   );
 };
 
-const HourlyForecast = ({ weather, forcast, currentWeatherLoc }) => {
+const HourlyForecast = ({ weather, forcast, currentWeatherLoc, full }) => {
   const [next3HoursWeather, setNext3HoursWeather] = useState(null);
 
   useEffect(() => {
     if (forcast) {
       setNext3HoursWeather(
-        getNextHoursWeather(forcast, currentWeatherLoc.localtime, 18)
+        getNextHoursWeather(
+          forcast,
+          currentWeatherLoc.localtime,
+          full ? 24 : 18
+        )
       );
     }
   }, [forcast]);
@@ -98,19 +102,22 @@ const HourlyForecast = ({ weather, forcast, currentWeatherLoc }) => {
     <View style={styles.container}>
       <ThemeText styles={styles.title}>Hourly Forecast</ThemeText>
       <View>
-        <View style={[styles.body]}>
+        <ScrollView
+          horizontal={full}
+          contentContainerStyle={[!full && styles.body]}
+        >
           <WeatherMini currentWeather={weather} now />
           {next3HoursWeather &&
             next3HoursWeather.map(
               (weather, index) =>
-                index !== 0 &&
-                index % 6 === 0 && (
+                (!full ? index !== 0 && index % 6 === 0 : true) && (
                   <WeatherMini
                     key={index}
                     currentWeather={weather}
                     stylesProp={{
                       body: {
                         gap: 1,
+                        width: 100,
                       },
                       icon: 45,
                       temp: {
@@ -121,7 +128,7 @@ const HourlyForecast = ({ weather, forcast, currentWeatherLoc }) => {
                   />
                 )
             )}
-        </View>
+        </ScrollView>
       </View>
     </View>
   );

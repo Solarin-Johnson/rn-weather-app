@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
     padding: 18,
+    paddingBottom: 48,
     borderRadius: 50,
     maxWidth: 300,
     width: "100%",

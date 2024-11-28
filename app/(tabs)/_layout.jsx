@@ -181,7 +181,7 @@ const BottomSheetContent = () => {
           height: 5,
         }}
         onChange={handleSheetChanges}
-        snapPoints={[290, 500]}
+        snapPoints={[290, 530]}
       >
         <BottomSheetScrollView
           showsVerticalScrollIndicator={false}

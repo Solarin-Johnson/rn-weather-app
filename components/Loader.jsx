@@ -1,16 +1,23 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet } from "react-native";
+import { Screen } from "./Screens";
+import { useTheme } from "../context/ThemeContext";
 
 const Loader = () => {
-  return <View style={styles.container}></View>;
+  const { themeColors } = useTheme();
+  return (
+    <Screen
+      styles={{
+        flex: 1,
+        justifyContent: "center",
+      }}
+      fixed
+    >
+      <ActivityIndicator size={"large"} color={themeColors?.primary} />
+    </Screen>
+  );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+
 
 export default Loader;

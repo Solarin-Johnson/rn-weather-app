@@ -69,14 +69,18 @@ export default function WeatherMain({
         >
           {current?.temp_c.toFixed(0)}
         </ThemeText>
-        <Text style={{ color: themeColors.primary, fontSize: 60 }}>°</Text>
+        <Text
+          style={{ color: themeColors.primary, marginTop: 5, fontSize: 60 }}
+        >
+          °
+        </Text>
         <Text
           style={{
             color: themeColors.primary,
             fontSize: 58,
             fontWeight: 500,
-            lineHeight: 66,
-            // marginTop: -3,
+            // lineHeight: 66,
+            marginTop: preferences?.metric ? -4 : 1,
           }}
         >
           {preferences?.metric ? "c" : "f"}
