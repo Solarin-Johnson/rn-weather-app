@@ -13,50 +13,53 @@ const DailyForecast = ({ dailyData }) => {
   return (
     <View style={styles.container}>
       <ThemeText styles={styles.title}>Daily Forecast</ThemeText>
-      <View style={styles.body}>
-        {Array.isArray(dailyData) &&
-          dailyData.map((item, index) => {
-            const {
-              avgtemp_c,
-              avgtemp_f,
-              maxtemp_c,
-              maxtemp_f,
-              mintemp_c,
-              mintemp_f,
-              condition,
-              is_day,
-            } = item.day;
+      <View>
+        <ScrollView contentContainerStyle={[styles.body]}>
+          {Array.isArray(dailyData) &&
+            dailyData.map((item, index) => {
+              const {
+                avgtemp_c,
+                avgtemp_f,
+                maxtemp_c,
+                maxtemp_f,
+                mintemp_c,
+                mintemp_f,
+                condition,
+                is_day,
+              } = item.day;
 
-            const maxtemp = parseInt(
-              preferences?.metric ? maxtemp_c : maxtemp_f
-            );
-            const mintemp = parseInt(
-              preferences?.metric ? mintemp_c : mintemp_f
-            );
+              const maxtemp = parseInt(
+                preferences?.metric ? maxtemp_c : maxtemp_f
+              );
+              const mintemp = parseInt(
+                preferences?.metric ? mintemp_c : mintemp_f
+              );
 
-            return (
-              <WeatherMini
-                key={index}
-                currentWeather={item}
-                realProps={{
-                  title: getDayFromEpoch(item.date_epoch),
-                  temp: `${mintemp}°/ ${maxtemp}°`,
-                  condition,
-                  is_day,
-                }}
-                stylesProp={{
-                  body: {
-                    gap: 1,
-                  },
-                  icon: 45,
-                  temp: {
-                    fontSize: 16,
-                    lineHeight: 24,
-                  },
-                }}
-              />
-            );
-          })}
+              return (
+                <WeatherMini
+                  key={index}
+                  currentWeather={item}
+                  absolute
+                  realProps={{
+                    title: getDayFromEpoch(item.date_epoch),
+                    temp: `${mintemp}°/ ${maxtemp}°`,
+                    condition,
+                    is_day,
+                  }}
+                  stylesProp={{
+                    body: {
+                      gap: 1,
+                    },
+                    icon: 45,
+                    temp: {
+                      fontSize: 16,
+                      lineHeight: 24,
+                    },
+                  }}
+                />
+              );
+            })}
+        </ScrollView>
       </View>
     </View>
   );
@@ -117,7 +120,7 @@ const HourlyForecast = ({ weather, forcast, currentWeatherLoc, full }) => {
                     stylesProp={{
                       body: {
                         gap: 1,
-                        width: 100,
+                        width: full && 100,
                       },
                       icon: 45,
                       temp: {
@@ -145,6 +148,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   body: {
+    // flex: 1,
     // backgroundColor: "#fff",
     width: "100%",
     maxWidth: 500,

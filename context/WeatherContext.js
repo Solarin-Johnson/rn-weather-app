@@ -4,6 +4,7 @@ import { getCurrentWeather, getFutureWeather } from "../api";
 import { ActivityIndicator } from "react-native";
 import { useTheme } from "./ThemeContext";
 import { Screen } from "../components/Screens";
+import Loader from "../components/Loader";
 
 const WeatherContext = createContext();
 
@@ -37,18 +38,7 @@ const WeatherProvider = ({ children }) => {
     fetchWeather();
   }, [location]);
 
-  if (currentWeather === null || location === null)
-    return (
-      <Screen
-        styles={{
-          flex: 1,
-          justifyContent: "center",
-        }}
-        fixed
-      >
-        <ActivityIndicator size={"large"} color={themeColors?.primary} />
-      </Screen>
-    );
+  if (currentWeather === null || location === null) return <Loader />;
 
   return (
     <WeatherContext.Provider

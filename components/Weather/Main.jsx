@@ -53,28 +53,17 @@ export default function WeatherMain({
       >
         {condition?.text}
       </ThemeText>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "start",
-        }}
-      >
+      <View>
         <ThemeText
           styles={{
-            fontSize: 92,
-            lineHeight: 108,
+            fontSize: 94,
             textAlign: "center",
           }}
         >
           {current?.temp_c.toFixed(0)}
+          <Text style={{ color: themeColors.primary }}>°</Text>
         </ThemeText>
-        <Text
-          style={{ color: themeColors.primary, marginTop: 5, fontSize: 60 }}
-        >
-          °
-        </Text>
-        <Text
+        {/* <Text
           style={{
             color: themeColors.primary,
             fontSize: 58,
@@ -84,7 +73,7 @@ export default function WeatherMain({
           }}
         >
           {preferences?.metric ? "c" : "f"}
-        </Text>
+        </Text> */}
       </View>
     </View>
   );
@@ -95,6 +84,6 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
     flex: 1,
     // height: "100%",
-    paddingVertical: 24,
+    paddingVertical: 16,
   },
 });

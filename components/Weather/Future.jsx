@@ -18,13 +18,15 @@ const WeatherFuture = ({
     }
   }, [futureWeather]);
 
+  // console.log(next3HoursWeather);
+
   return (
     <View style={styles.container}>
       <WeatherMini currentWeather={currentWeather} now />
       {next3HoursWeather &&
-        next3HoursWeather.map((weather, index) => (
-          <WeatherMini key={index} currentWeather={weather} />
-        ))}
+        next3HoursWeather.map((weather, index) => {
+          return <WeatherMini key={index} currentWeather={weather} />;
+        })}
     </View>
   );
 };

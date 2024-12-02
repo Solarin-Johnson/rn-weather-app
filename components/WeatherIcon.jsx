@@ -5,7 +5,7 @@ import { Image } from "expo-image";
 import { useFocusEffect } from "expo-router";
 import { useTheme } from "../context/ThemeContext";
 
-const WeatherIcon = memo(({ code, isDay, size, style }) => {
+const WeatherIcon = memo(({ code, absolute, isDay, size, style }) => {
   // Memoizing the weather group and the image source based on the 'code' prop
   const weatherGroup = useMemo(() => getWeatherGroup(code), [code]);
   const [key, setKey] = useState(0);
@@ -47,7 +47,7 @@ const WeatherIcon = memo(({ code, isDay, size, style }) => {
   return (
     <View style={styles.container}>
       {key ? (
-        isDay ? (
+        isDay || absolute ? (
           <Image {...imgConfig} source={src} />
         ) : (
           <Image

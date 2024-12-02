@@ -3,7 +3,7 @@ import WeatherIcon from "../WeatherIcon";
 import { ThemeText } from "../ThemeComponents";
 import { calculateClamp } from "../../hooks/useClamp";
 import { useTheme } from "../../context/ThemeContext";
-import { extractTime } from "../../api";
+import { extractTime, toEpoch } from "../../api";
 import { useWeather } from "../../context/WeatherContext";
 
 export default function WeatherMini({
@@ -11,18 +11,22 @@ export default function WeatherMini({
   now,
   realProps,
   stylesProp: _styles,
+  absolute,
 }) {
   const { width } = useWindowDimensions();
   const { themeColors } = useTheme();
   const { condition } = realProps || current || {};
+
+  // console.log(current);
 
   const wide = width > 720;
 
   return (
     <View style={[styles.body, _styles?.body]}>
       <WeatherIcon
+        absolute={absolute}
         code={condition?.code}
-        isDay={realProps || current?.is_day}
+        isDay={current?.is_day}
         size={calculateClamp(width, 0, "13%", _styles?.icon || 60)}
         style={{ filter: "blur(0.5px)" }}
       />
@@ -35,7 +39,7 @@ export default function WeatherMini({
         }}
       >
         {realProps?.title ||
-          (now ? "Now" : extractTime(current?.time_epoch).toLowerCase())}
+          (now ? "Now" : extractTime(toEpoch(current.time)).toLowerCase())}
       </ThemeText>
       <ThemeText
         styles={[
@@ -57,8 +61,8 @@ const styles = StyleSheet.create({
   body: {
     // backgroundColor: "red",
     flex: 1,
-    alignSelf: "center",
-    height: "100%",
+    // alignSelf: "center",
+    // height: "100%",
     paddingVertical: 24,
   },
 });
