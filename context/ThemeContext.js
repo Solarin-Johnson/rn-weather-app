@@ -5,7 +5,7 @@ import React, {
   useContext,
   useLayoutEffect,
 } from "react";
-import { useColorScheme, View } from "react-native";
+import { useColorScheme, useWindowDimensions, View } from "react-native";
 import { getData, storeData } from "../functions";
 import { colors } from "../styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +18,12 @@ const ThemeProvider = ({ children }) => {
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useState("auto");
   const [themeColors, setThemeColors] = useState(false);
+  const width = useWindowDimensions().width;
+  const [wide, setWide] = useState(width > 720);
+
+  useEffect(() => {
+    setWide(width > 720);
+  }, [width]);
 
   useLayoutEffect(() => {
     const fetchTheme = async () => {
@@ -49,7 +55,7 @@ const ThemeProvider = ({ children }) => {
   if (!themeColors) return null;
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, themeColors }}>
+    <ThemeContext.Provider value={{ theme, setTheme, themeColors, wide }}>
       <StatusBar style={themeInv} />
       {children}
     </ThemeContext.Provider>

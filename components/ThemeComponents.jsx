@@ -52,7 +52,7 @@ export function AdaptiveElement({ children, styles }) {
 
   const clonedChildren = React.Children.map(children, (child) =>
     React.cloneElement(child, {
-      style: [child.props?.style, { color: themeColors?.text }],
+      style: [child.props?.style, styles, { color: themeColors?.text }],
     })
   );
   return <>{clonedChildren}</>;
