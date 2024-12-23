@@ -1,0 +1,30 @@
+From e03375786b471aca6072dbcd575f5983de7c707e Mon Sep 17 00:00:00 2001
+From: solarin-johnsontt <solarinjohnson@gmail.com>
+Date: Tue, 26 Nov 2024 09:44:30 +0100
+Subject: [PATCH] fix: update WeatherDetailsCard to use isBottomSheet for
+ background prop in Daily and Hourly forecasts
+
+---
+ components/Weather/Details.jsx | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/components/Weather/Details.jsx b/components/Weather/Details.jsx
+index 24de3dc..ff9a74d 100644
+--- a/components/Weather/Details.jsx
++++ b/components/Weather/Details.jsx
+@@ -28,10 +28,10 @@ const WeatherDetails = ({
+       <WeatherDetailsCard hasBg={isBottomSheet}>
+         <CommonDetails {...{ weather }} />
+       </WeatherDetailsCard>
+-      <WeatherDetailsCard hasBg>
++      <WeatherDetailsCard hasBg={isBottomSheet}>
+         <DailyForecast dailyData={forcast.forecastday} />
+       </WeatherDetailsCard>
+-      <WeatherDetailsCard hasBg>
++      <WeatherDetailsCard hasBg={isBottomSheet}>
+         <HourlyForecast
+           {...{ weather, forcast }}
+           currentWeatherLoc={currentLoc}
+-- 
+2.45.2.windows.1
+
