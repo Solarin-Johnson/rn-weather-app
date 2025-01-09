@@ -18,7 +18,7 @@ export const getCurrentWeather = async (lat, lon) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching weather data:", error);
-    throw error; // Re-throwing the error if needed for handling in the calling code
+    // throw error; // Re-throwing the error if needed for handling in the calling code
   }
 };
 
@@ -37,7 +37,7 @@ export const getFutureWeather = async (lat, lon) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching future weather data:", error);
-    throw error; // Re-throwing the error if needed for handling in the calling code
+    // throw error; // Re-throwing the error if needed for handling in the calling code
   }
 };
 
@@ -57,7 +57,7 @@ export const getLocation = async ({ latitude, longitude }) => {
     return response.data.location;
   } catch (error) {
     console.error("Error fetching weather data:", error);
-    throw error; // Re-throwing the error if needed for handling in the calling code
+    // throw error; // Re-throwing the error if needed for handling in the calling code
   }
 };
 

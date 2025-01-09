@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import MyTabBar from "@/components/TabBar";
-import { Home, Search, Sparkles, User2 } from "lucide-react-native";
+import { CloudRain, Home, Search, Sparkles, User2 } from "lucide-react-native";
 import { useTheme } from "@/context/ThemeContext";
 import { useUser } from "@/context/UserContext";
 import generalStyles from "@/styles/styles";
@@ -22,6 +22,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { calculateClamp } from "../../hooks/useClamp";
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 
 export default function TabLayout() {
   const { themeColors } = useTheme();
@@ -109,11 +110,11 @@ export default function TabLayout() {
             }}
           />
           <Tabs.Screen
-            name="suggestions"
+            name="insights"
             options={{
-              title: "Suggestions",
+              title: "Insights",
               tabBarIcon: ({ color, fill }) => (
-                <Sparkles color={color} fill={fill} {...config} />
+                <CloudRain color={color} fill={fill} {...config} />
               ),
             }}
           />

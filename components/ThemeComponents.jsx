@@ -25,7 +25,7 @@ export function ThemeScreen({ children }) {
   const wide = width > 720;
 
   return (
-    <SafeAreaView
+    <View
       style={[
         generalStyles.stack,
         {
@@ -34,7 +34,7 @@ export function ThemeScreen({ children }) {
       ]}
     >
       {children}
-    </SafeAreaView>
+    </View>
   );
 }
 

@@ -29,16 +29,20 @@ const WeatherDetails = ({
       <WeatherDetailsCard hasBg={isBottomSheet}>
         <CommonDetails {...{ weather }} />
       </WeatherDetailsCard>
-      <WeatherDetailsCard hasBg={isBottomSheet}>
-        <DailyForecast dailyData={forcast.forecastday} />
-      </WeatherDetailsCard>
-      <WeatherDetailsCard hasBg={isBottomSheet}>
-        <HourlyForecast
-          {...{ weather, forcast }}
-          full={!isBottomSheet}
-          currentWeatherLoc={currentLoc}
-        />
-      </WeatherDetailsCard>
+      {forcast && (
+        <WeatherDetailsCard hasBg={isBottomSheet}>
+          <DailyForecast dailyData={forcast.forecastday} />
+        </WeatherDetailsCard>
+      )}
+      {forcast && currentLoc && (
+        <WeatherDetailsCard hasBg={isBottomSheet}>
+          <HourlyForecast
+            {...{ weather, forcast }}
+            full={!isBottomSheet}
+            currentWeatherLoc={currentLoc}
+          />
+        </WeatherDetailsCard>
+      )}
     </View>
   );
 };

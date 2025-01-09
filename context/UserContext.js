@@ -29,17 +29,26 @@ const UserProvider = ({ children }) => {
         accuracy: Location.Accuracy.High,
       });
 
+      console.log(location);
+
       // Reverse geocode to get address
 
-      const { city, country } = await getLocation(location.coords);
-      // console.log(city, country);
-
-      const locationWithAddress = {
-        ...location.coords,
-        name: city,
-        country,
-      };
-      setLocation(locationWithAddress);
+      getLocation(location.coords)
+        .then(({ city, country }) => {
+          const locationWithAddress = {
+            ...location.coords,
+            name: city,
+            country,
+          };
+          setLocation(locationWithAddress);
+          return locationWithAddress;
+        })
+        .then((locationWithAddress) => {
+          storeData("location", JSON.stringify(locationWithAddress));
+        })
+        .catch((error) => {
+          console.error("Error in getLocation:", error);
+        });
       await storeData("location", JSON.stringify(locationWithAddress));
     } catch (error) {
       console.error("Error getting location or address:", error);

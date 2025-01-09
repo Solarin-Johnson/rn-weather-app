@@ -35,12 +35,11 @@ export default function Tab() {
         {wide && (
           <WeatherDetails
             weather={currentWeather}
-            forcast={futureWeather}
             currentLoc={currentWeatherLoc}
             hasMargin
           />
         )}
-        {!wide && (
+        {/* {!wide && (
           <DetailsBtn
             onPress={() =>
               setBottomSheet(
@@ -54,7 +53,7 @@ export default function Tab() {
             }
             style={{ marginTop: height > 960 ? 10 : 0 }}
           />
-        )}
+        )} */}
 
         {/* <WeatherFuture /> */}
       </View>

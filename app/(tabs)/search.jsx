@@ -10,7 +10,7 @@ import { TextInput } from "react-native";
 export default function Tab() {
   const { wide } = useTheme();
   return (
-    <Screen style={[styles.container]} headerFixed header={<SearchHeader />}>
+    <Screen style={styles.container} headerFixed header={<SearchHeader />}>
       {wide && <SearchHeader />}
       <SearchBox />
       <ThemeText>Tab Search</ThemeText>
@@ -59,7 +59,6 @@ const SearchBox = () => {
             placeholder="Search for city"
             style={styles.textInput}
             placeholderTextColor={themeColors?.textFade}
-            
           />
         </AdaptiveElement>
       </View>
@@ -77,21 +76,24 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 5,
   },
   headerText: {
     fontSize: 21,
   },
   searchBoxContainer: {
     width: "100%",
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   searchBox: {
     height: 50,
-    padding: 10,
+    paddingHorizontal: 14,
+    width: "100%",
+    maxWidth: 400,
+    alignSelf: "center",
     flexDirection: "row",
     alignItems: "center",
-    gap: 2.5,
+    gap: 4,
     borderRadius: 50,
     // justifyContent: "center",
   },

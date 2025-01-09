@@ -11,11 +11,17 @@ import WebBanner from "../components/webBanner";
 import { WeatherProvider } from "../context/WeatherContext";
 import { BgCloud } from "../styles/icons";
 import { BottomSheetProvider } from "../context/BottomSheetContext";
+import {
+  NavigationContainer,
+  DefaultTheme,
+  NavigationIndependentTree,
+} from "@react-navigation/native";
+import { useTheme } from "../context/ThemeContext";
+import { Tabs, TabList, TabTrigger, TabSlot } from "expo-router/ui";
 
 export default function Layout() {
   const [location, setLocation] = useState(null);
   const platform = getPlatform();
-  const { width } = useWindowDimensions();
 
   useEffect(() => {
     getData("location").then((location) => {
@@ -36,23 +42,22 @@ export default function Layout() {
       <UserProvider>
         <WeatherProvider>
           <BottomSheetProvider>
-            <Stack
-              screenOptions={{
-                headerTitle: "",
-                headerTransparent: true,
-              }}
-            >
-              <Stack.Screen name="(tabs)" />
-              {/* <Stack.Screen
-            name="permission"
-            options={{
-              headerShown: false,
-              }}
-              /> */}
-            </Stack>
+            <CustomTabs />
           </BottomSheetProvider>
         </WeatherProvider>
       </UserProvider>
     </ThemeProvider>
   );
 }
+
+const CustomTabs = () => {
+  const { themeColors } = useTheme();
+  return (
+    <Tabs style={{ flex: 1, backgroundColor: themeColors?.bg }}>
+      <TabSlot />
+      <TabList style={{ backgroundColor: "transparent" }}>
+        <TabTrigger name="home" href="/" />
+      </TabList>
+    </Tabs>
+  );
+};

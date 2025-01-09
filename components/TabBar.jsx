@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Pressable,
   useWindowDimensions,
+  Keyboard,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { BlurView } from "expo-blur";
@@ -26,6 +27,23 @@ export default function MyTabBar({ state, descriptors, navigation }) {
   const { width } = useWindowDimensions();
   const wide = width > 720;
   const maskColor = wide ? themeColors?.bgFade2 : themeColors?.bg;
+  const [isKeyboardVisible, setKeyboardVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => setKeyboardVisible(true)
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => setKeyboardVisible(false)
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -36,6 +54,8 @@ export default function MyTabBar({ state, descriptors, navigation }) {
   useFocusEffect(() => {
     containerBg.value = themeColors?.bg;
   });
+
+  if (isKeyboardVisible) return null;
 
   return (
     <LinearGradient
@@ -59,7 +79,7 @@ export default function MyTabBar({ state, descriptors, navigation }) {
               ? "systemThickMaterialDark"
               : "systemThickMaterialLight"
           }
-          experimentalBlurMethod="dimezisBlurView"
+          // experimentalBlurMethod="dimezisBlurView"
           blurReductionFactor={0}
           style={[
             styles.tabBlur,

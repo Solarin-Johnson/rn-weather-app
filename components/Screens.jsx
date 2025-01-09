@@ -14,7 +14,10 @@ import { useTheme } from "../context/ThemeContext";
 import { ThemeScreen } from "./ThemeComponents";
 import HomeHeader from "./HomeHeader";
 import CloudBg from "./CloudBg";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 export function Screen({ children, header, fixed, styles }) {
   const { themeColors } = useTheme();
@@ -26,6 +29,8 @@ export function Screen({ children, header, fixed, styles }) {
     width: 0,
     height: 0,
   });
+
+  const insets = useSafeAreaInsets();
 
   const Wrapper = platform === "web" || wide ? View : Animated.View;
 
@@ -58,60 +63,60 @@ export function Screen({ children, header, fixed, styles }) {
 
   return (
     <ThemeScreen>
-      <View key={key} onLayout={onLayout} style={{ flex: 1 }}>
-        <View
-          style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}
-        >
-          {platform === "web" || key ? (
-            <Wrapper
-              {...animatedProps}
-              style={{
-                flex: 1,
-                flexDirection: "column",
-              }}
+      {/* <View onLayout={onLayout} style={{ flex: 1 }}> */}
+      <View
+        style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}
+      >
+        {platform === "web" || key ? (
+          <Wrapper
+            {...animatedProps}
+            style={{
+              flex: 1,
+              flexDirection: "column",
+            }}
+          >
+            {!wide && (
+              <>
+                <View style={{ paddingTop: insets.top }}>{header}</View>
+              </>
+            )}
+            <ScrollView
+              overScrollMode="always"
+              bounces={true}
+              showsVerticalScrollIndicator={false}
+              style={[
+                {
+                  flex: 1,
+                  maxHeight: "100%",
+                },
+              ]}
+              contentContainerStyle={styles}
             >
-              {!wide && (
-                <>
-                  <View>{header}</View>
-                </>
+              {!fixed && (
+                <View
+                  style={{
+                    height: wide
+                      ? 60 + calculateClamp(width, 10, "3%", 50) + 5
+                      : 0,
+                  }}
+                />
               )}
-              <ScrollView
-                overScrollMode="always"
-                bounces={true}
-                showsVerticalScrollIndicator={false}
-                style={[
-                  {
-                    flex: 1,
-                    maxHeight: "100%",
-                  },
-                ]}
-                contentContainerStyle={styles}
-              >
-                {!fixed && (
-                  <View
-                    style={{
-                      height: wide
-                        ? 60 + calculateClamp(width, 10, "3%", 50) + 5
-                        : 0,
-                    }}
-                  />
-                )}
-                {children}
-                {!fixed && (
-                  <View
-                    style={{
-                      height: 120,
-                      // backgroundColor: "red",
-                    }}
-                  ></View>
-                )}
-              </ScrollView>
-            </Wrapper>
-          ) : (
-            <></>
-          )}
-        </View>
+              {children}
+              {!fixed && (
+                <View
+                  style={{
+                    height: 120,
+                    // backgroundColor: "red",
+                  }}
+                ></View>
+              )}
+            </ScrollView>
+          </Wrapper>
+        ) : (
+          <></>
+        )}
       </View>
+      {/* </View> */}
     </ThemeScreen>
   );
 }
