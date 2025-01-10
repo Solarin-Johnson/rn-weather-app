@@ -63,6 +63,6 @@ const styles = StyleSheet.create({
     flex: 1,
     // alignSelf: "center",
     // height: "100%",
-    paddingVertical: 24,
+    // paddingBottom: 24,
   },
 });

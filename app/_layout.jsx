@@ -18,6 +18,8 @@ import {
 } from "@react-navigation/native";
 import { useTheme } from "../context/ThemeContext";
 import { Tabs, TabList, TabTrigger, TabSlot } from "expo-router/ui";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 export default function Layout() {
   const [location, setLocation] = useState(null);
@@ -38,15 +40,19 @@ export default function Layout() {
   }
 
   return (
-    <ThemeProvider>
-      <UserProvider>
-        <WeatherProvider>
-          <BottomSheetProvider>
-            <CustomTabs />
-          </BottomSheetProvider>
-        </WeatherProvider>
-      </UserProvider>
-    </ThemeProvider>
+    <KeyboardProvider>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <UserProvider>
+            <WeatherProvider>
+              <BottomSheetProvider>
+                <CustomTabs />
+              </BottomSheetProvider>
+            </WeatherProvider>
+          </UserProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </KeyboardProvider>
   );
 }
 
@@ -55,8 +61,8 @@ const CustomTabs = () => {
   return (
     <Tabs style={{ flex: 1, backgroundColor: themeColors?.bg }}>
       <TabSlot />
-      <TabList style={{ backgroundColor: "transparent" }}>
-        <TabTrigger name="home" href="/" />
+      <TabList style={{ backgroundColor: themeColors?.bg }}>
+        <TabTrigger name="root" href="/" />
       </TabList>
     </Tabs>
   );

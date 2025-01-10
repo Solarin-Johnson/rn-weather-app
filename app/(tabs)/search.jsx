@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+} from "react-native";
 import { Screen } from "../../components/Screens";
 import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
 import BounceScrollView from "../../components/BounceScroll";
@@ -10,11 +18,20 @@ import { TextInput } from "react-native";
 export default function Tab() {
   const { wide } = useTheme();
   return (
+    // <KeyboardAvoidingView
+    //   style={{
+    //     flex: 1,
+    //   }}
+    //   behavior={Platform.OS === "ios" ? "padding" : undefined} // Adjust for iOS
+    // >
     <Screen style={styles.container} headerFixed header={<SearchHeader />}>
-      {wide && <SearchHeader />}
-      <SearchBox />
-      <ThemeText>Tab Search</ThemeText>
+      <View style={{ flex: 1 }}>
+        {wide && <SearchHeader />}
+        <SearchBox />
+        <ThemeText>Tab Search</ThemeText>
+      </View>
     </Screen>
+    // </KeyboardAvoidingView>
   );
 }
 
@@ -24,7 +41,10 @@ const SearchHeader = () => {
   return (
     <View style={styles.header}>
       <TouchableOpacity
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          Keyboard.dismiss();
+          navigation.goBack();
+        }}
         style={{
           position: "absolute",
           left: 10,
@@ -59,6 +79,7 @@ const SearchBox = () => {
             placeholder="Search for city"
             style={styles.textInput}
             placeholderTextColor={themeColors?.textFade}
+            autoFocus
           />
         </AdaptiveElement>
       </View>
@@ -69,8 +90,6 @@ const SearchBox = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   header: {
     height: 60,
@@ -83,13 +102,14 @@ const styles = StyleSheet.create({
   },
   searchBoxContainer: {
     width: "100%",
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
+    marginTop: 5,
   },
   searchBox: {
-    height: 50,
+    height: 52,
     paddingHorizontal: 14,
     width: "100%",
-    maxWidth: 400,
+    maxWidth: 450,
     alignSelf: "center",
     flexDirection: "row",
     alignItems: "center",

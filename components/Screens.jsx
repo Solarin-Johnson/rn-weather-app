@@ -19,7 +19,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
-export function Screen({ children, header, fixed, styles }) {
+export function Screen({ children, header, fixed, styles, ...props }) {
   const { themeColors } = useTheme();
   const platform = getPlatform();
   const { width } = useWindowDimensions();
@@ -29,6 +29,7 @@ export function Screen({ children, header, fixed, styles }) {
     width: 0,
     height: 0,
   });
+  const { height } = useWindowDimensions();
 
   const insets = useSafeAreaInsets();
 
@@ -87,10 +88,16 @@ export function Screen({ children, header, fixed, styles }) {
               style={[
                 {
                   flex: 1,
-                  maxHeight: "100%",
+                  maxHeight: height,
                 },
               ]}
-              contentContainerStyle={styles}
+              contentContainerStyle={[
+                styles,
+                {
+                  minHeight: "82%",
+                },
+              ]}
+              {...props}
             >
               {!fixed && (
                 <View
@@ -101,7 +108,16 @@ export function Screen({ children, header, fixed, styles }) {
                   }}
                 />
               )}
-              {children}
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignContent: "center",
+                  // backgroundColor: "#ffffff50",
+                }}
+              >
+                {children}
+              </View>
               {!fixed && (
                 <View
                   style={{

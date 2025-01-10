@@ -11,6 +11,7 @@ import { colors } from "../styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useThemeChange from "../hooks/useTheme";
 import { StatusBar } from "expo-status-bar";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 const ThemeContext = createContext();
 
@@ -56,7 +57,10 @@ const ThemeProvider = ({ children }) => {
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, themeColors, wide }}>
-      <StatusBar style={themeInv} />
+      <StatusBar
+        style={themeInv}
+        hidden={ScreenOrientation.getOrientationAsync() == "LANDSCAPE"}
+      />
       {children}
     </ThemeContext.Provider>
   );

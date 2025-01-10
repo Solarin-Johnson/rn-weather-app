@@ -1,4 +1,4 @@
-import { Tabs, useFocusEffect, useNavigation, useRouter } from "expo-router";
+import { useFocusEffect, useNavigation, useRouter } from "expo-router";
 import {
   Pressable,
   StyleSheet,
@@ -23,6 +23,8 @@ import BottomSheet, {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { calculateClamp } from "../../hooks/useClamp";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
+import { Tabs, TabSlot, TabList, TabTrigger } from "expo-router/ui";
+import { TabButton } from "../../components/TabBar";
 
 export default function TabLayout() {
   const { themeColors } = useTheme();
@@ -52,6 +54,12 @@ export default function TabLayout() {
     }, 0);
   }, [navigation]);
 
+  const TabBtnStyle = {
+    padding: 10,
+    flex: 1,
+    alignItems: "center",
+  };
+
   if (location !== "denied") {
     return (
       <View
@@ -79,55 +87,76 @@ export default function TabLayout() {
           </>
         )}
         <Tabs
+          style={{ flex: 1, backgroundColor: themeColors?.bg }}
           screenOptions={{
-            headerShown: false,
-            tabBarPosition: "left",
+            tabBarHideOnKeyboard: true,
           }}
-          sceneContainerStyle={{
-            alignContent: "start",
-            flex: 1,
-          }}
-          tabBar={(props) => <MyTabBar {...props} />}
         >
-          <Tabs.Screen
-            name="index"
-            title="Home"
-            options={{
-              title: "Home",
-              tabBarIcon: ({ color, fill }) => (
-                <Home color={color} fill={fill} {...config} />
-              ),
-            }}
-            lazy
-          />
-          <Tabs.Screen
-            name="search"
-            options={{
-              title: "Search",
-              tabBarIcon: ({ color, fill }) => (
-                <Search color={color} fill={fill} {...config} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="insights"
-            options={{
-              title: "Insights",
-              tabBarIcon: ({ color, fill }) => (
-                <CloudRain color={color} fill={fill} {...config} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="profile"
-            options={{
-              title: "Profile",
-              tabBarIcon: ({ color, fill }) => (
-                <User2 color={color} fill={fill} {...config} />
-              ),
-              tabBarBadge: 3,
-            }}
-          />
+          <TabSlot style={{ flex: 1, backgroundColor: themeColors?.bg }} />
+
+          <TabList style={{ backgroundColor: "red" }} asChild>
+            <MyTabBar>
+              {/* Home Tab */}
+              <TabTrigger name="home" href="/" style={TabBtnStyle} asChild>
+                <TabButton
+                  index={0}
+                  label="(tabs)"
+                  options={{
+                    tabBarIcon: ({ color, fill, size }) => (
+                      <Home color={color} fill={fill} size={size} />
+                    ),
+                    title: "Home",
+                  }}
+                />
+              </TabTrigger>
+
+              {/* Search Tab */}
+              <TabTrigger
+                name="search"
+                href="/search"
+                style={TabBtnStyle}
+                asChild
+              >
+                <TabButton
+                  index={1}
+                  options={{
+                    tabBarIcon: ({ color, fill, size }) => (
+                      <Search color={color} fill={fill} size={size} />
+                    ),
+                  }}
+                />
+              </TabTrigger>
+
+              {/* Insights Tab */}
+              <TabTrigger
+                name="insights"
+                href="/insights"
+                style={TabBtnStyle}
+                asChild
+              >
+                <TabButton
+                  index={2}
+                  options={{
+                    tabBarIcon: ({ color, fill, size }) => (
+                      <CloudRain color={color} fill={fill} size={size} />
+                    ),
+                  }}
+                />
+              </TabTrigger>
+
+              {/* Profile Tab */}
+              <TabTrigger name="me" href="/me" style={TabBtnStyle} asChild>
+                <TabButton
+                  index={3}
+                  options={{
+                    tabBarIcon: ({ color, fill, size }) => (
+                      <User2 color={color} fill={fill} size={size} />
+                    ),
+                  }}
+                />
+              </TabTrigger>
+            </MyTabBar>
+          </TabList>
         </Tabs>
         {bottomSheet && <BottomSheetContent />}
       </View>

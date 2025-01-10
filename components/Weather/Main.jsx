@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   Pressable,
   StyleSheet,
   Text,
@@ -27,53 +28,48 @@ export default function WeatherMain({
   return (
     <View style={styles.body}>
       <Pressable
-      // onPress={() => {
-      //   !wide &&
-      //     setBottomSheet(
-      //       <WeatherDetails
-      //         {...{ weather: current }}
-      //         forcast={futureWeather.forecastday}
-      //         isBottomSheet
-      //       />
-      //     );
-      // }}
+        style={{
+          height: 210,
+          // flex: 1,
+        }}
+        // onPress={() => {
+        //   !wide &&
+        //     setBottomSheet(
+        //       <WeatherDetails
+        //         {...{ weather: current }}
+        //         forcast={futureWeather.forecastday}
+        //         isBottomSheet
+        //       />
+        //     );
+        // }}
       >
         <WeatherIcon
           code={condition?.code}
           isDay={current?.is_day}
-          size={wide ? 200 : calculateClamp(width, 0, "60%", 300)}
+          size={wide ? 200 : calculateClamp(width, 0, "60%", 210)}
         />
       </Pressable>
-      <ThemeText
-        styles={{
-          fontSize: 18,
-          opacity: 0.8,
-          textAlign: "center",
-        }}
-      >
-        {condition?.text}
-      </ThemeText>
       <View>
         <ThemeText
           styles={{
-            fontSize: 94,
+            fontSize: 18,
+            opacity: 0.8,
             textAlign: "center",
           }}
         >
-          {current?.temp_c.toFixed(0)}
-          <Text style={{ color: themeColors.primary }}>°</Text>
+          {condition?.text}
         </ThemeText>
-        {/* <Text
-          style={{
-            color: themeColors.primary,
-            fontSize: 58,
-            fontWeight: 500,
-            // lineHeight: 66,
-            marginTop: preferences?.metric ? -4 : 1,
-          }}
-        >
-          {preferences?.metric ? "c" : "f"}
-        </Text> */}
+        <View>
+          <ThemeText
+            styles={{
+              fontSize: 92,
+              textAlign: "center",
+            }}
+          >
+            {current?.temp_c.toFixed(0)}
+            <Text style={{ color: themeColors.primary }}>°</Text>
+          </ThemeText>
+        </View>
       </View>
     </View>
   );
@@ -83,6 +79,9 @@ const styles = StyleSheet.create({
   body: {
     // backgroundColor: "red",
     flex: 1,
+    maxHeight: 540,
+    marginTop: calculateClamp(Dimensions.get("window").width, 0, "5%", 80),
+    // justifyContent: "center",
     // height: "100%",
     paddingVertical: 16,
   },

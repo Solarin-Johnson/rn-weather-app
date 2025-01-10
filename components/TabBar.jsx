@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children, forwardRef } from "react";
 import {
   View,
   TouchableOpacity,
@@ -14,89 +14,93 @@ import Animated, {
   FadeIn,
   FadeInDown,
   FadeInUp,
+  FadeOut,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect, useSegments } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { House } from "lucide-react-native";
 
-export default function MyTabBar({ state, descriptors, navigation }) {
-  const { theme, themeColors } = useTheme();
-  const containerBg = useSharedValue(0);
-  const { width } = useWindowDimensions();
-  const wide = width > 720;
-  const maskColor = wide ? themeColors?.bgFade2 : themeColors?.bg;
-  const [isKeyboardVisible, setKeyboardVisible] = React.useState(false);
+export const MyTabBar = forwardRef(
+  ({ state, descriptors, navigation, children }, ref) => {
+    const { theme, themeColors } = useTheme();
+    const containerBg = useSharedValue(0);
+    const { width } = useWindowDimensions();
+    const wide = width > 720;
+    const maskColor = wide ? themeColors?.bgFade2 : themeColors?.bg;
+    const [isKeyboardVisible, setKeyboardVisible] = React.useState(false);
 
-  React.useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => setKeyboardVisible(true)
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => setKeyboardVisible(false)
-    );
+    React.useEffect(() => {
+      const keyboardDidShowListener = Keyboard.addListener(
+        "keyboardDidShow",
+        () => setKeyboardVisible(!true)
+      );
+      const keyboardDidHideListener = Keyboard.addListener(
+        "keyboardDidHide",
+        () => setKeyboardVisible(false)
+      );
 
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
+      return () => {
+        keyboardDidShowListener.remove();
+        keyboardDidHideListener.remove();
+      };
+    }, []);
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      // backgroundColor: withTiming(containerBg.value, { duration: 90 }),
-    };
-  });
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        // backgroundColor: withTiming(containerBg.value, { duration: 90 }),
+      };
+    });
 
-  useFocusEffect(() => {
-    containerBg.value = themeColors?.bg;
-  });
+    useFocusEffect(() => {
+      containerBg.value = themeColors?.bg;
+    });
 
-  if (isKeyboardVisible) return null;
-
-  return (
-    <LinearGradient
-      colors={[
-        "transparent",
-        maskColor + "ca",
-        // themeColors?.bg,
-        maskColor,
-      ]}
-      style={styles.container}
-    >
-      <Animated.View
-        key={theme}
-        entering={FadeIn.duration(200)}
-        style={[animatedStyle]}
+    return (
+      <LinearGradient
+        ref={ref}
+        colors={[
+          "transparent",
+          maskColor + "ca",
+          // themeColors?.bg,
+          maskColor,
+        ]}
+        style={styles.container}
       >
-        <BlurView
-          intensity={60}
-          tint={
-            theme === "dark"
-              ? "systemThickMaterialDark"
-              : "systemThickMaterialLight"
-          }
-          // experimentalBlurMethod="dimezisBlurView"
-          blurReductionFactor={0}
-          style={[
-            styles.tabBlur,
-            {
-              backgroundColor: themeColors?.fg + "ab",
-              shadowColor: "#000000df",
-              shadowOffset: {
-                width: 0,
-                height: 1,
-              },
-              shadowOpacity: 0.2,
-              shadowRadius: 3,
-              elevation: 1,
-            },
-          ]}
-        >
-          {state.routes.map((route, index) => {
+        {!isKeyboardVisible && (
+          <Animated.View
+            key={theme}
+            entering={FadeIn.duration(200)}
+            exiting={FadeOut.duration(200)}
+            style={[animatedStyle]}
+          >
+            <BlurView
+              intensity={60}
+              tint={
+                theme === "dark"
+                  ? "systemThickMaterialDark"
+                  : "systemThickMaterialLight"
+              }
+              // experimentalBlurMethod="dimezisBlurView"
+              blurReductionFactor={0}
+              style={[
+                styles.tabBlur,
+                {
+                  backgroundColor: themeColors?.fg + "ab",
+                  shadowColor: "#000000df",
+                  shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 3,
+                  elevation: 1,
+                },
+              ]}
+            >
+              {/* {state.routes.map((route, index) => {
             const { options } = descriptors[route.key];
             const label =
               options.tabBarLabel !== undefined
@@ -145,12 +149,63 @@ export default function MyTabBar({ state, descriptors, navigation }) {
                 )}
               </Pressable>
             );
-          })}
-        </BlurView>
-      </Animated.View>
-    </LinearGradient>
-  );
-}
+          })} */}
+              {children}
+            </BlurView>
+          </Animated.View>
+        )}
+      </LinearGradient>
+    );
+  }
+);
+
+export const TabButton = forwardRef(
+  ({ options, icon, index, children, ...props }, ref) => {
+    const { theme, themeColors } = useTheme();
+    const segments = useSegments();
+    const isFocused =
+      props.href === "/" + segments[segments.length - 1] ||
+      segments.length - 1 + index === 0;
+
+    console.log(segments);
+
+    return (
+      <Pressable
+        // key={route.key}
+        // onPress={() => {
+        //   const event = navigation.emit({
+        //     // type: "tabPress",
+        //     target: route.key,
+        //     canPreventDefault: true,
+        //   });
+
+        //   if (!isFocused && !event.defaultPrevented) {
+        //     navigation.navigate(route.name);
+        //   }
+        // }}
+        style={[
+          {
+            flex: 1,
+            padding: 10,
+            alignItems: "center",
+          },
+          styles.tabBarStyle,
+        ]}
+        {...props}
+      >
+        {options.tabBarIcon ? (
+          options.tabBarIcon({
+            fill: isFocused ? themeColors?.primary : "transparent",
+            color: isFocused ? themeColors?.primary : themeColors?.textFade,
+            focused: isFocused,
+          })
+        ) : (
+          <Text style={{ color: isFocused ? "blue" : "gray" }}>{label}</Text>
+        )}
+      </Pressable>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -168,9 +223,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     overflow: "hidden",
     padding: 12,
+    justifyContent: "space-evenly",
   },
   tabBarStyle: {
     borderRadius: 50,
     overflow: "hidden",
   },
 });
+
+export default MyTabBar;

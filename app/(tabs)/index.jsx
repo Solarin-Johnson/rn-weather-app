@@ -13,6 +13,7 @@ import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
 import { ChevronsDown } from "lucide-react-native";
 import { useBottomSheet } from "../../context/BottomSheetContext";
 import { calculateClamp } from "../../hooks/useClamp";
+import { useState } from "react";
 
 export default function Tab() {
   const { themeColors } = useTheme();
@@ -20,25 +21,63 @@ export default function Tab() {
   const { location } = useUser();
   const { futureWeather, currentWeather, currentWeatherLoc } = useWeather();
   const { width, height } = useWindowDimensions();
+  const [screenDim, setScreenDim] = useState({ width, height });
   const wide = width > 720;
 
+  const onLayout = (event) => {
+    const { width, height } = event.nativeEvent.layout;
+    setScreenDim({ width, height });
+  };
+
   return (
-    <Screen styles={styles.container} header={<HomeHeader />}>
+    <Screen
+      styles={styles.container}
+      header={<HomeHeader />}
+      onLayout={onLayout}
+    >
       {!wide && <CloudBg />}
-      <View style={generalStyles.container}>
+      <View
+        style={[
+          generalStyles.container,
+          {
+            // gap: 100,
+            // minHeight: calculateClamp(
+            //   screenDim.height - 150,
+            //   0,
+            //   screenDim.height - 150,
+            //   840
+            // ),
+            alignContent: "center",
+          },
+        ]}
+      >
         <WeatherMain
-          {...{ currentWeather, futureWeather, currentWeatherLoc, themeColors }}
+          {...{
+            currentWeather,
+            futureWeather,
+            currentWeatherLoc,
+            themeColors,
+          }}
         />
-        <WeatherFuture
-          {...{ futureWeather, currentWeather, currentWeatherLoc }}
-        />
-        {wide && (
-          <WeatherDetails
-            weather={currentWeather}
-            currentLoc={currentWeatherLoc}
-            hasMargin
+        <View
+          style={{
+            flex: 1,
+            marginTop: 60,
+            justifyContent: "flex-end",
+          }}
+        >
+          <WeatherFuture
+            {...{ futureWeather, currentWeather, currentWeatherLoc }}
           />
-        )}
+          {wide && (
+            <WeatherDetails
+              weather={currentWeather}
+              currentLoc={currentWeatherLoc}
+              hasMargin
+            />
+          )}
+        </View>
+
         {/* {!wide && (
           <DetailsBtn
             onPress={() =>
@@ -99,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
     padding: 18,
-    paddingBottom: 48,
+    // paddingBottom: 48,
     borderRadius: 50,
     maxWidth: 300,
     width: "100%",
