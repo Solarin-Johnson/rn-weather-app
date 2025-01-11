@@ -5,7 +5,12 @@ import React, {
   useContext,
   useLayoutEffect,
 } from "react";
-import { useColorScheme, useWindowDimensions, View } from "react-native";
+import {
+  Platform,
+  useColorScheme,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { getData, storeData } from "../functions";
 import { colors } from "../styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -53,6 +58,12 @@ const ThemeProvider = ({ children }) => {
 
   const themeInv = theme === "dark" ? "light" : "dark";
 
+  if (Platform.OS === "web") {
+    const style = document.createElement("style");
+    style.innerHTML = `:root { color-scheme: ${theme}; }`;
+    document.head.appendChild(style);
+  }
+
   if (!themeColors) return null;
 
   return (
@@ -61,6 +72,7 @@ const ThemeProvider = ({ children }) => {
         style={themeInv}
         hidden={ScreenOrientation.getOrientationAsync() == "LANDSCAPE"}
       />
+
       {children}
     </ThemeContext.Provider>
   );

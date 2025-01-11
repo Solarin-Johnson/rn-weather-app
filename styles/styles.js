@@ -11,6 +11,7 @@ const generalStyles = StyleSheet.create({
   },
   screen: {
     flex: 1,
+    justifyContent: "start",
   },
   stack: {
     flex: 1,
@@ -66,7 +67,7 @@ const generalStyles = StyleSheet.create({
     backgroundColor: "#00000070",
   },
   bottomCard: {
-    padding: 12,
+    // padding: 12,
     borderRadius: 28,
   },
 });

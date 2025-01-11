@@ -42,7 +42,6 @@ const SearchHeader = () => {
     <View style={styles.header}>
       <TouchableOpacity
         onPress={() => {
-          Keyboard.dismiss();
           navigation.goBack();
         }}
         style={{
@@ -96,6 +95,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
+    maxWidth: 450,
+    width: "100%",
+    alignSelf: "center",
   },
   headerText: {
     fontSize: 21,
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
   searchBoxContainer: {
     width: "100%",
     paddingHorizontal: 14,
-    marginTop: 5,
+    marginTop: 10,
   },
   searchBox: {
     height: 52,
@@ -121,6 +123,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     borderWidth: 0,
-    outline: "none",
+    ...(Platform.OS === "web" && {
+      outlineStyle: "none", // Disables the outline on web
+    }),
   },
 });

@@ -7,6 +7,7 @@ import {
   Pressable,
   useWindowDimensions,
   Keyboard,
+  Platform,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { BlurView } from "expo-blur";
@@ -63,7 +64,8 @@ export const MyTabBar = forwardRef(
         ref={ref}
         colors={[
           "transparent",
-          maskColor + "ca",
+          maskColor + "bc",
+          maskColor,
           // themeColors?.bg,
           maskColor,
         ]}
@@ -71,7 +73,7 @@ export const MyTabBar = forwardRef(
       >
         {!isKeyboardVisible && (
           <Animated.View
-            key={theme}
+            // key={theme}
             entering={FadeIn.duration(200)}
             exiting={FadeOut.duration(200)}
             style={[animatedStyle]}
@@ -167,22 +169,8 @@ export const TabButton = forwardRef(
       props.href === "/" + segments[segments.length - 1] ||
       segments.length - 1 + index === 0;
 
-    console.log(segments);
-
     return (
       <Pressable
-        // key={route.key}
-        // onPress={() => {
-        //   const event = navigation.emit({
-        //     // type: "tabPress",
-        //     target: route.key,
-        //     canPreventDefault: true,
-        //   });
-
-        //   if (!isFocused && !event.defaultPrevented) {
-        //     navigation.navigate(route.name);
-        //   }
-        // }}
         style={[
           {
             flex: 1,
@@ -198,6 +186,7 @@ export const TabButton = forwardRef(
             fill: isFocused ? themeColors?.primary : "transparent",
             color: isFocused ? themeColors?.primary : themeColors?.textFade,
             focused: isFocused,
+            size: Platform.OS === "web" ? 24 : 28,
           })
         ) : (
           <Text style={{ color: isFocused ? "blue" : "gray" }}>{label}</Text>
@@ -210,8 +199,9 @@ export const TabButton = forwardRef(
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    paddingBottom: "10%",
+    paddingBottom: "8%",
     bottom: "0",
+    paddingTop: 50,
     width: "100%",
     // backgroundColor: "red",
   },

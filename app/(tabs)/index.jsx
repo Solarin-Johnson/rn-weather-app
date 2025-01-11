@@ -35,50 +35,51 @@ export default function Tab() {
       header={<HomeHeader />}
       onLayout={onLayout}
     >
-      {!wide && <CloudBg />}
-      <View
-        style={[
-          generalStyles.container,
-          {
-            // gap: 100,
-            // minHeight: calculateClamp(
-            //   screenDim.height - 150,
-            //   0,
-            //   screenDim.height - 150,
-            //   840
-            // ),
-            alignContent: "center",
-          },
-        ]}
-      >
-        <WeatherMain
-          {...{
-            currentWeather,
-            futureWeather,
-            currentWeatherLoc,
-            themeColors,
-          }}
-        />
+      <>
+        {!wide && <CloudBg />}
         <View
-          style={{
-            flex: 1,
-            marginTop: 60,
-            justifyContent: "flex-end",
-          }}
+          style={[
+            generalStyles.screen,
+            {
+              // gap: 100,
+              // minHeight: calculateClamp(
+              //   screenDim.height - 150,
+              //   0,
+              //   screenDim.height - 150,
+              //   840
+              // ),
+              alignContent: "center",
+            },
+          ]}
         >
-          <WeatherFuture
-            {...{ futureWeather, currentWeather, currentWeatherLoc }}
+          <WeatherMain
+            {...{
+              currentWeather,
+              futureWeather,
+              currentWeatherLoc,
+              themeColors,
+            }}
           />
-          {wide && (
-            <WeatherDetails
-              weather={currentWeather}
-              currentLoc={currentWeatherLoc}
-              hasMargin
+          <View
+            style={{
+              flex: 1,
+              marginTop: 50,
+              justifyContent: "flex-end",
+            }}
+          >
+            <WeatherFuture
+              {...{ futureWeather, currentWeather, currentWeatherLoc }}
             />
-          )}
-        </View>
+            {wide && (
+              <WeatherDetails
+                weather={currentWeather}
+                currentLoc={currentWeatherLoc}
+                hasMargin
+              />
+            )}
+          </View>
 
-        {/* {!wide && (
+          {/* {!wide && (
           <DetailsBtn
             onPress={() =>
               setBottomSheet(
@@ -94,8 +95,9 @@ export default function Tab() {
           />
         )} */}
 
-        {/* <WeatherFuture /> */}
-      </View>
+          {/* <WeatherFuture /> */}
+        </View>
+      </>
     </Screen>
   );
 }

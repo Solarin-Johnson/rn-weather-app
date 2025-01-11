@@ -95,7 +95,8 @@ const HourlyForecast = ({ weather, forcast, currentWeatherLoc, full }) => {
         getNextHoursWeather(
           forcast,
           currentWeatherLoc.localtime,
-          full ? 24 : 18
+          full ? 24 : 18,
+          true
         )
       );
     }
@@ -108,8 +109,11 @@ const HourlyForecast = ({ weather, forcast, currentWeatherLoc, full }) => {
         <ScrollView
           horizontal={full}
           contentContainerStyle={[!full && styles.body]}
+          style={{
+            paddingVertical: 28,
+          }}
         >
-          <WeatherMini currentWeather={weather} now />
+          {/* <WeatherMini currentWeather={weather} now /> */}
           {next3HoursWeather &&
             next3HoursWeather.map(
               (weather, index) =>
@@ -119,7 +123,7 @@ const HourlyForecast = ({ weather, forcast, currentWeatherLoc, full }) => {
                     currentWeather={weather}
                     stylesProp={{
                       body: {
-                        gap: 1,
+                        gap: 0,
                         width: full && 100,
                       },
                       icon: 45,
@@ -140,7 +144,7 @@ const HourlyForecast = ({ weather, forcast, currentWeatherLoc, full }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 4,
+    // gap: 6,
   },
   title: {
     // fontSize: 18,
@@ -149,10 +153,10 @@ const styles = StyleSheet.create({
   },
   body: {
     // flex: 1,
-    // backgroundColor: "#fff",
     width: "100%",
     maxWidth: 500,
     // alignSelf: "center",
+    paddingVertical: 28,
     justifyContent: "space-between",
     flexDirection: "row",
   },

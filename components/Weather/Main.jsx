@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
     flex: 1,
     maxHeight: 540,
-    marginTop: calculateClamp(Dimensions.get("window").width, 0, "5%", 80),
+    marginTop: calculateClamp(Dimensions.get("window").height, 0, "4.5%", 80),
     // justifyContent: "center",
     // height: "100%",
     paddingVertical: 16,

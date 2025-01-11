@@ -55,8 +55,8 @@ const WeatherDetailsCard = ({ hasBg, children }) => {
         styles.container,
         generalStyles.bottomCard,
         {
-          backgroundColor: hasBg ? themeColors?.fg : "",
-          marginTop: hasBg ? 0 : 32,
+          backgroundColor: themeColors?.fg,
+          // marginTop: hasBg ? 0 : 32,
         },
       ]}
     >
@@ -121,22 +121,25 @@ const MoreDetails = ({ weather }) => {
 const styles = StyleSheet.create({
   wrapper: {
     marginHorizontal: 24,
+    gap: 24,
   },
   container: {
-    margin: 32,
+    margin: 6,
     flexDirection: "row",
     justifyContent: "space-around",
+    alignItems: "center",
     width: "100%",
     maxWidth: 400,
     alignSelf: "center",
   },
   cluster: {
     gap: 32,
-    padding: 18,
+    padding: 36,
   },
   split: {
     width: 1.5,
-    height: "100%",
+    height: "95%",
+    maxHeight: 180,
   },
   detail: {
     alignItems: "center",

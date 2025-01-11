@@ -25,6 +25,20 @@ import { calculateClamp } from "../../hooks/useClamp";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { Tabs, TabSlot, TabList, TabTrigger } from "expo-router/ui";
 import { TabButton } from "../../components/TabBar";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { HomeIcon } from "../../styles/icons";
+
+const AnimatedScreen = ({ children, style }) => {
+  return (
+    <Animated.View
+      entering={FadeIn.duration(2000)}
+      exiting={FadeOut.duration(2000)}
+      style={[{ flex: 1 }, style]}
+    >
+      {children}
+    </Animated.View>
+  );
+};
 
 export default function TabLayout() {
   const { themeColors } = useTheme();
@@ -58,6 +72,7 @@ export default function TabLayout() {
     padding: 10,
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
   };
 
   if (location !== "denied") {
@@ -92,9 +107,12 @@ export default function TabLayout() {
             tabBarHideOnKeyboard: true,
           }}
         >
-          <TabSlot style={{ flex: 1, backgroundColor: themeColors?.bg }} />
+          <TabSlot
+            style={{ flex: 1, backgroundColor: themeColors?.bg }}
+            render={(props) => <AnimatedScreen {...props} />}
+          />
 
-          <TabList style={{ backgroundColor: "red" }} asChild>
+          <TabList style={{ backgroundColor: "transparent" }} asChild>
             <MyTabBar>
               {/* Home Tab */}
               <TabTrigger name="home" href="/" style={TabBtnStyle} asChild>
@@ -103,7 +121,7 @@ export default function TabLayout() {
                   label="(tabs)"
                   options={{
                     tabBarIcon: ({ color, fill, size }) => (
-                      <Home color={color} fill={fill} size={size} />
+                      <HomeIcon color={color} fill={fill} size={size} />
                     ),
                     title: "Home",
                   }}

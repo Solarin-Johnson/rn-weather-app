@@ -61,30 +61,35 @@ export const getLocation = async ({ latitude, longitude }) => {
   }
 };
 
-export function getNextHoursWeather(forecastData, dateString, length = 2) {
+export function getNextHoursWeather(
+  forecastData,
+  dateString,
+  length = 2,
+  includeNow
+) {
   const now = toEpoch(dateString);
-  const next3Hours = [];
+  const nextHours = [];
 
   // Loop through the forecast data (next 3 days or however many available)
   for (let day of forecastData.forecastday) {
     for (let hour of day.hour) {
-      const hourEpoch = toEpoch(hour.time); // Convert time_epoch to milliseconds
+      const hourEpoch = toEpoch(hour.time) + (includeNow ? 3600 : 0); // Convert time_epoch to milliseconds and subtract 1 hour (3600 seconds)
       // console.log(extractTime(now), (hourEpoch));
 
       // Add the hour if it's in the future (greater than now) and we're collecting the next 3 hours
-      if (hourEpoch > now && next3Hours.length < length) {
-        next3Hours.push(hour);
+      if (hourEpoch > now && nextHours.length < length) {
+        nextHours.push(hour);
         // console.log("hour", hour, length);
       }
 
       // Stop once we have 3 hours
-      if (next3Hours.length === length) {
-        return next3Hours;
+      if (nextHours.length === length) {
+        return nextHours;
       }
     }
   }
 
-  return next3Hours;
+  return nextHours;
 }
 
 export const extractTime = (time) => {
