@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  useWindowDimensions,
+} from "react-native";
 import { AdaptiveElement, ThemeText } from "../ThemeComponents";
 import { useUser } from "../../context/UserContext";
 import { LinearGradient } from "expo-linear-gradient";
@@ -48,14 +54,20 @@ const WeatherDetails = ({
 };
 
 const WeatherDetailsCard = ({ hasBg, children }) => {
-  const { themeColors } = useTheme();
+  const { themeColors, theme } = useTheme();
+  const { width } = useWindowDimensions();
+  const wide = width > 720;
   return (
     <View
       style={[
         styles.container,
         generalStyles.bottomCard,
         {
-          backgroundColor: themeColors?.fg,
+          backgroundColor: wide
+            ? theme === "light"
+              ? themeColors?.bg
+              : themeColors?.fg
+            : themeColors?.fg,
           // marginTop: hasBg ? 0 : 32,
         },
       ]}

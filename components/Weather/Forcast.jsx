@@ -117,7 +117,7 @@ const HourlyForecast = ({ weather, forcast, currentWeatherLoc, full }) => {
           {next3HoursWeather &&
             next3HoursWeather.map(
               (weather, index) =>
-                (!full ? index !== 0 && index % 6 === 0 : true) && (
+                (!full ? index !== 0 && index % 6 === 0 : index % 2 === 0) && (
                   <WeatherMini
                     key={index}
                     currentWeather={weather}

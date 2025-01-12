@@ -8,7 +8,7 @@ import { useTheme } from "../context/ThemeContext";
 const WeatherIcon = memo(({ code, absolute, isDay, size, style }) => {
   // Memoizing the weather group and the image source based on the 'code' prop
   const weatherGroup = useMemo(() => getWeatherGroup(code), [code]);
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(true);
   const { themeColors } = useTheme();
 
   // Weather icon mapping
@@ -32,9 +32,9 @@ const WeatherIcon = memo(({ code, absolute, isDay, size, style }) => {
     require("../assets/iconPacks/moon-and-cloud.png");
 
   useFocusEffect(() => {
-    setKey(1);
+    // setKey(1);
     return () => {
-      setKey(0);
+      // setKey(0);
     };
   });
 

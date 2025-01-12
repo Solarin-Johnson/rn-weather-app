@@ -53,7 +53,7 @@ export function Screen({
   transitHeaderTreshhold = 40,
   ...props
 }) {
-  const { themeColors } = useTheme();
+  const { themeColors, isLandscape } = useTheme();
   const platform = getPlatform();
   const { width } = useWindowDimensions();
   const wide = width > 720;
@@ -163,10 +163,15 @@ export function Screen({
       Easing.bezier(0.33, 1, 0.68, 1) // Add same easing for consistency
     );
 
-    return {
-      opacity,
-      transform: [{ translateY }],
-    };
+    if (wide && Platform.OS === "web")
+      return {
+        visibility: "hidden",
+      };
+    else
+      return {
+        opacity,
+        transform: [{ translateY }],
+      };
   });
 
   const handleScrollEnd = (event) => {
@@ -280,7 +285,7 @@ export function Screen({
               contentContainerStyle={[
                 styles,
                 {
-                  minHeight: alwaysShowHeader ? "100%" : "82%",
+                  minHeight: alwaysShowHeader ? "100%" : "100%",
                 },
               ]}
               onScroll={scrollHandler} // Attach the animated scroll handler
@@ -298,7 +303,7 @@ export function Screen({
                     paddingBottom: 40,
                   }}
                 >
-                  {!wide && (
+                  {(!wide || Platform.OS !== "web") && (
                     <Animated.View style={animatedStyle}>
                       <ThemeText
                         styles={{
@@ -317,9 +322,10 @@ export function Screen({
               {!fixed && !alwaysShowHeader && (
                 <View
                   style={{
-                    height: wide
-                      ? 60 + calculateClamp(width, 10, "3%", 50) + 5
-                      : 0,
+                    height:
+                      wide && Platform.OS === "web"
+                        ? 60 + calculateClamp(width, 10, "3%", 50) + 5
+                        : 20,
                   }}
                 />
               )}

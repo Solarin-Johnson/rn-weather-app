@@ -8,6 +8,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Pressable,
+  useWindowDimensions,
 } from "react-native";
 import { Screen } from "../../components/Screens";
 import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
@@ -17,9 +18,11 @@ import { useTheme } from "../../context/ThemeContext";
 import { useNavigation } from "expo-router";
 import { TextInput } from "react-native";
 import { useRef } from "react";
+import { calculateClamp } from "../../hooks/useClamp";
 
 export default function Tab() {
   const { wide } = useTheme();
+  const { height } = useWindowDimensions();
   return (
     // <KeyboardAvoidingView
     //   style={{
@@ -29,7 +32,15 @@ export default function Tab() {
     // >
     <Screen style={styles.container} headerFixed header={<SearchHeader />}>
       <View style={{ flex: 1 }}>
-        {wide && <SearchHeader />}
+        {wide && (
+          <View
+            style={{
+              marginTop: Platform.OS !== "web" ? 60 : 0,
+            }}
+          >
+            <SearchHeader />
+          </View>
+        )}
         <SearchBox />
         <ThemeText>Tab Search</ThemeText>
       </View>

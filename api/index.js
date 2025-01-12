@@ -73,7 +73,7 @@ export function getNextHoursWeather(
   // Loop through the forecast data (next 3 days or however many available)
   for (let day of forecastData.forecastday) {
     for (let hour of day.hour) {
-      const hourEpoch = toEpoch(hour.time) + (includeNow ? 3600 : 0); // Convert time_epoch to milliseconds and subtract 1 hour (3600 seconds)
+      const hourEpoch = toEpoch(hour.time) - 3600 + (includeNow ? 3600 : 0); // Convert time_epoch to milliseconds and subtract 1 hour (3600 seconds)
       // console.log(extractTime(now), (hourEpoch));
 
       // Add the hour if it's in the future (greater than now) and we're collecting the next 3 hours
@@ -100,8 +100,6 @@ export const extractTime = (time) => {
     minute: "numeric",
   });
 };
-
-
 
 export function toEpoch(datetime) {
   return Math.floor(new Date(datetime.replace(" ", "T")).getTime() / 1000);

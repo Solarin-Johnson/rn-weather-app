@@ -30,12 +30,8 @@ export default function Tab() {
   };
 
   return (
-    <Screen
-      styles={styles.container}
-      header={<HomeHeader />}
-      onLayout={onLayout}
-    >
-      <>
+    <Screen header={<HomeHeader />} onLayout={onLayout}>
+      <View style={styles.container}>
         {!wide && <CloudBg />}
         <View
           style={[
@@ -64,6 +60,7 @@ export default function Tab() {
             style={{
               flex: 1,
               marginTop: 50,
+              // marginTop: calculateClamp(height, 40, "6.5%", 60),
               justifyContent: "flex-end",
             }}
           >
@@ -103,7 +100,7 @@ export default function Tab() {
 
           {/* <WeatherFuture /> */}
         </View>
-      </>
+      </View>
     </Screen>
   );
 }
@@ -136,8 +133,11 @@ const DetailsBtn = ({ onPress, style }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     // minHeight: "100%",
     // flexDirection: "row",
+    justifyContent: "center",
+    paddingBottom: 42,
   },
   details: {
     marginHorizontal: 24,

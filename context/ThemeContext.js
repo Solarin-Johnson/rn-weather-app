@@ -6,6 +6,7 @@ import React, {
   useLayoutEffect,
 } from "react";
 import {
+  AppState,
   Platform,
   useColorScheme,
   useWindowDimensions,
@@ -64,15 +65,46 @@ const ThemeProvider = ({ children }) => {
     document.head.appendChild(style);
   }
 
+  const [isLandscape, setIsLandscape] = useState(null);
+
+  useEffect(() => {
+    const checkOrientation = async () => {
+      const orientation = await ScreenOrientation.getOrientationAsync();
+      setIsLandscape(
+        orientation === ScreenOrientation.Orientation.LANDSCAPE_RIGHT ||
+          orientation === ScreenOrientation.Orientation.LANDSCAPE_LEFT
+      );
+    };
+    checkOrientation();
+
+    const subscription = ScreenOrientation.addOrientationChangeListener(
+      (event) => {
+        setIsLandscape(
+          event.orientationInfo.orientation ===
+            ScreenOrientation.Orientation.LANDSCAPE_RIGHT
+        );
+      }
+    );
+
+    return () => {
+      ScreenOrientation.removeOrientationChangeListener(subscription);
+    };
+  }, [AppState.currentState]);
+
+  console.log(AppState);
+
   if (!themeColors) return null;
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, themeColors, wide }}>
+    <ThemeContext.Provider
+      value={{ theme, setTheme, themeColors, wide, isLandscape }}
+    >
       <StatusBar
         style={themeInv}
-        hidden={ScreenOrientation.getOrientationAsync() == "LANDSCAPE"}
+        hidden={isLandscape}
+        hideTransitionAnimation="slide"
+        animated={true}
       />
-
       {children}
     </ThemeContext.Provider>
   );
