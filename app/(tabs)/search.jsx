@@ -6,6 +6,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  TouchableWithoutFeedback,
+  Pressable,
 } from "react-native";
 import { Screen } from "../../components/Screens";
 import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
@@ -14,6 +16,7 @@ import { ChevronLeft, Search } from "lucide-react-native";
 import { useTheme } from "../../context/ThemeContext";
 import { useNavigation } from "expo-router";
 import { TextInput } from "react-native";
+import { useRef } from "react";
 
 export default function Tab() {
   const { wide } = useTheme();
@@ -60,29 +63,38 @@ const SearchHeader = () => {
 
 const SearchBox = () => {
   const { themeColors, wide } = useTheme();
+  const inputRef = useRef(null);
   return (
-    <View style={styles.searchBoxContainer}>
-      <View
-        style={[
-          styles.searchBox,
-          {
-            backgroundColor: wide
-              ? themeColors?.textFade + 24
-              : themeColors?.fg,
-          },
-        ]}
-      >
-        <AdaptiveElement styles={{ padding: 5 }}>
-          <Search size={20} />
-          <TextInput
-            placeholder="Search for city"
-            style={styles.textInput}
-            placeholderTextColor={themeColors?.textFade}
-            autoFocus
-          />
-        </AdaptiveElement>
+    <Pressable
+      onPress={() => {
+        inputRef.current?.focus();
+        console.log("kk");
+      }}
+    >
+      <View style={styles.searchBoxContainer}>
+        <View
+          style={[
+            styles.searchBox,
+            {
+              backgroundColor: wide
+                ? themeColors?.textFade + 24
+                : themeColors?.fg,
+            },
+          ]}
+        >
+          <AdaptiveElement styles={{ padding: 5 }}>
+            <Search size={20} />
+            <TextInput
+              ref={inputRef}
+              placeholder="Search for city"
+              style={styles.textInput}
+              placeholderTextColor={themeColors?.textFade}
+              autoFocus
+            />
+          </AdaptiveElement>
+        </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -108,7 +120,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   searchBox: {
-    height: 52,
+    height: 54,
     paddingHorizontal: 14,
     width: "100%",
     maxWidth: 450,
@@ -123,6 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     borderWidth: 0,
+    zIndex: 1000,
     ...(Platform.OS === "web" && {
       outlineStyle: "none", // Disables the outline on web
     }),

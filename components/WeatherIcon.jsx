@@ -1,5 +1,5 @@
 import React, { memo, useMemo, useState } from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { View, StyleSheet, ActivityIndicator, Platform } from "react-native";
 import { getWeatherGroup } from "../functions";
 import { Image } from "expo-image";
 import { useFocusEffect } from "expo-router";
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 
   image: {
     // flex: 1,
-    filter: "blur(0.51px)",
+    filter: Platform.OS !== "ios" ? "blur(0.51px)" : "",
     aspectRatio: 1,
   },
 });

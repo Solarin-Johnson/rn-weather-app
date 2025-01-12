@@ -71,11 +71,17 @@ export default function Tab() {
               {...{ futureWeather, currentWeather, currentWeatherLoc }}
             />
             {wide && (
-              <WeatherDetails
-                weather={currentWeather}
-                currentLoc={currentWeatherLoc}
-                hasMargin
-              />
+              <View
+                style={{
+                  marginTop: 42,
+                }}
+              >
+                <WeatherDetails
+                  weather={currentWeather}
+                  currentLoc={currentWeatherLoc}
+                  hasMargin
+                />
+              </View>
             )}
           </View>
 

@@ -1,4 +1,10 @@
-import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import WeatherIcon from "../WeatherIcon";
 import { ThemeText } from "../ThemeComponents";
 import { calculateClamp } from "../../hooks/useClamp";
@@ -28,7 +34,7 @@ export default function WeatherMini({
         code={condition?.code}
         isDay={current?.is_day}
         size={calculateClamp(width, 0, "13%", _styles?.icon || 60)}
-        style={{ filter: "blur(0.5px)" }}
+        style={{ filter: Platform.OS !== "ios" ? "blur(0.5px)" : "" }}
       />
       <ThemeText
         styles={{

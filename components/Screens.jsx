@@ -67,7 +67,7 @@ export function Screen({
   const shouldSnap = useSharedValue(true); // Track snapping state
 
   const [snapOffsets, setSnapOffsets] = useState(
-    !header && title ? [0, transitHeaderTreshhold + 40] : null
+    !header && title ? [transitHeaderTreshhold + 40] : null
   );
 
   const scrollViewRef = useAnimatedRef(null);
@@ -78,9 +78,9 @@ export function Screen({
 
   const updateSnapOffsets = (shouldSnapValue) => {
     if (shouldSnapValue) {
-      setSnapOffsets([0, transitHeaderTreshhold + 40]); // Restore snap points
+      // setSnapOffsets([0, transitHeaderTreshhold + 40]); // Restore snap points
     } else {
-      setSnapOffsets(); // Clear snap points
+      // setSnapOffsets(); // Clear snap points
     }
   };
 
@@ -221,7 +221,7 @@ export function Screen({
                         ? themeColors?.bgFade
                         : themeColors?.bg,
                       width: "100%",
-                      maxHeight: 100,
+                      maxHeight: 95,
                       ...(wide
                         ? {
                             height: 60 + calculateClamp(width, 10, "2%", 45),
@@ -239,37 +239,35 @@ export function Screen({
                   ]}
                 >
                   {header}
-                  {Platform.OS !== "web" ? (
-                    <Animated.View style={headerAnimatedStyle}>
-                      <ThemeText
-                        styles={{
-                          fontSize: wide ? 23 : 18,
-                          opacity: 0.85,
-                          textAlign: wide ? "start" : "center",
-                          paddingLeft: wide ? 24 : 0,
-                        }}
-                      >
-                        {title}
-                      </ThemeText>
-                    </Animated.View>
-                  ) : (
-                    wide && (
-                      <ThemeText
-                        styles={{
-                          fontSize: wide ? 23 : 21,
-                          opacity: 0.85,
-                          textAlign: wide ? "start" : "center",
-                          paddingLeft: wide ? 24 : 0,
-                        }}
-                      >
-                        {title}
-                      </ThemeText>
-                    )
+                  <Animated.View style={headerAnimatedStyle}>
+                    <ThemeText
+                      styles={{
+                        fontSize: wide ? 23 : 18,
+                        opacity: 0.85,
+                        textAlign: wide ? "start" : "center",
+                        paddingLeft: wide ? 24 : 0,
+                      }}
+                    >
+                      {title}
+                    </ThemeText>
+                  </Animated.View>
+                  {Platform.OS === "web" && wide && (
+                    <ThemeText
+                      styles={{
+                        fontSize: wide ? 23 : 21,
+                        opacity: 0.85,
+                        textAlign: wide ? "start" : "center",
+                        paddingLeft: wide ? 24 : 0,
+                      }}
+                    >
+                      {title}
+                    </ThemeText>
                   )}
                 </Animated.View>
               </>
             )}
             <Animated.ScrollView
+              keyboardShouldPersistTaps="handled"
               overScrollMode="always"
               bounces={true}
               showsVerticalScrollIndicator={false}
@@ -286,7 +284,7 @@ export function Screen({
                 },
               ]}
               onScroll={scrollHandler} // Attach the animated scroll handler
-              snapToOffsets={snapOffsets}
+              // snapToOffsets={snapOffsets}
               decelerationRate={"fast"}
               ref={scrollViewRef}
               // scrollEventThrottle={16}

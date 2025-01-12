@@ -59,8 +59,10 @@ export const MyTabBar = forwardRef(
       containerBg.value = themeColors?.bg;
     });
 
+    const TabBottomGradient = Platform.OS !== "ios" ? LinearGradient : View;
+
     return (
-      <LinearGradient
+      <TabBottomGradient
         ref={ref}
         colors={[
           "transparent",
@@ -156,7 +158,7 @@ export const MyTabBar = forwardRef(
             </BlurView>
           </Animated.View>
         )}
-      </LinearGradient>
+      </TabBottomGradient>
     );
   }
 );
@@ -186,7 +188,7 @@ export const TabButton = forwardRef(
             fill: isFocused ? themeColors?.primary : "transparent",
             color: isFocused ? themeColors?.primary : themeColors?.textFade,
             focused: isFocused,
-            size: Platform.OS === "web" ? 24 : 28,
+            size: Platform.OS === "web" ? 24 : Platform.OS === "ios" ? 30 : 28,
           })
         ) : (
           <Text style={{ color: isFocused ? "blue" : "gray" }}>{label}</Text>
@@ -199,7 +201,7 @@ export const TabButton = forwardRef(
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    paddingBottom: "8%",
+    paddingBottom: Platform.OS === "ios" ? "11%" : "8%",
     bottom: "0",
     paddingTop: 50,
     width: "100%",

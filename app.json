@@ -15,7 +15,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "requireFullScreen": true
+      "requireFullScreen": true,
+      "bundleIdentifier": "com.dotjs.rnweatherapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +32,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-
     "plugins": [
       "expo-router",
       [
