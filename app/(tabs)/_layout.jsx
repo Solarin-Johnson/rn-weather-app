@@ -46,7 +46,7 @@ export default function TabLayout() {
   const { bottomSheet, setBottomSheet } = useBottomSheet();
   const navigation = useNavigation();
   const router = useRouter();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const wide = width > 720;
 
   const config = {
@@ -82,6 +82,7 @@ export default function TabLayout() {
           {
             flex: 1,
             flexDirection: "row",
+            height: height,
             backgroundColor: themeColors?.bg,
           },
         ]}

@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     // opacity: 0.7,
-    top: 10,
+    top: -10,
     left: 0,
     flex: 1,
     width: "100%",

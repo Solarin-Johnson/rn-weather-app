@@ -24,13 +24,11 @@ export default function Tab() {
   const { wide } = useTheme();
   const { height } = useWindowDimensions();
   return (
-    // <KeyboardAvoidingView
-    //   style={{
-    //     flex: 1,
-    //   }}
-    //   behavior={Platform.OS === "ios" ? "padding" : undefined} // Adjust for iOS
-    // >
-    <Screen style={styles.container} headerFixed header={<SearchHeader />}>
+    <Screen
+      style={styles.container}
+      fixed={Platform.OS !== "web"}
+      header={<SearchHeader />}
+    >
       <View style={{ flex: 1 }}>
         {wide && (
           <View
@@ -42,18 +40,25 @@ export default function Tab() {
           </View>
         )}
         <SearchBox />
-        <ThemeText>Tab Search</ThemeText>
+        {/* <ThemeText>Tab Search</ThemeText> */}
       </View>
     </Screen>
-    // </KeyboardAvoidingView>
   );
 }
 
 const SearchHeader = () => {
   const navigation = useNavigation();
+  const { wide } = useTheme();
 
   return (
-    <View style={styles.header}>
+    <View
+      style={[
+        styles.header,
+        {
+          paddingBottom: Platform.OS === "web" && wide ? 20 : 0,
+        },
+      ]}
+    >
       <TouchableOpacity
         onPress={() => {
           navigation.goBack();
@@ -81,29 +86,28 @@ const SearchBox = () => {
         inputRef.current?.focus();
         console.log("kk");
       }}
+      style={styles.searchBoxContainer}
     >
-      <View style={styles.searchBoxContainer}>
-        <View
-          style={[
-            styles.searchBox,
-            {
-              backgroundColor: wide
-                ? themeColors?.textFade + 24
-                : themeColors?.fg,
-            },
-          ]}
-        >
-          <AdaptiveElement styles={{ padding: 5 }}>
-            <Search size={20} />
-            <TextInput
-              ref={inputRef}
-              placeholder="Search for city"
-              style={styles.textInput}
-              placeholderTextColor={themeColors?.textFade}
-              autoFocus
-            />
-          </AdaptiveElement>
-        </View>
+      <View
+        style={[
+          styles.searchBox,
+          {
+            backgroundColor: wide
+              ? themeColors?.textFade + 24
+              : themeColors?.fg,
+          },
+        ]}
+      >
+        <AdaptiveElement styles={{ padding: 5 }}>
+          <Search size={20} />
+          <TextInput
+            ref={inputRef}
+            placeholder="Search for city"
+            style={styles.textInput}
+            placeholderTextColor={themeColors?.textFade}
+            autoFocus
+          />
+        </AdaptiveElement>
       </View>
     </Pressable>
   );
@@ -114,10 +118,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 60,
+    height: 50,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
+    paddingTop: Platform.OS === "web" ? 20 : 0,
+
     maxWidth: 450,
     width: "100%",
     alignSelf: "center",
@@ -131,7 +137,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   searchBox: {
-    height: 54,
     paddingHorizontal: 14,
     width: "100%",
     maxWidth: 450,
@@ -144,6 +149,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
+    // height: "100%",
+    height: 54,
     fontSize: 16,
     borderWidth: 0,
     zIndex: 1000,

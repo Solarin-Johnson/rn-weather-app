@@ -36,6 +36,7 @@ export default function WeatherMain({
             Platform.OS === "web"
               ? 200
               : PixelRatio.getPixelSizeForLayoutSize(80),
+          maxHeight: 190,
         }}
         // onPress={() => {
         //   !wide &&
@@ -54,10 +55,15 @@ export default function WeatherMain({
           size={wide ? 200 : calculateClamp(width, 0, "60%", 210)}
         />
       </Pressable>
-      <View>
+      <View
+        style={{
+          height: 160,
+          justifyContent: "flex-end",
+        }}
+      >
         <ThemeText
           styles={{
-            fontSize: 18,
+            fontSize: 18.5,
             opacity: 0.8,
             textAlign: "center",
           }}
@@ -68,7 +74,7 @@ export default function WeatherMain({
           <ThemeText
             styles={{
               fontSize: 92,
-              // lineHeight: 100,
+              lineHeight: 115,
               textAlign: "center",
             }}
           >
@@ -85,9 +91,8 @@ const styles = StyleSheet.create({
   body: {
     // backgroundColor: "red",
     flex: 1,
-    maxHeight: 540,
     // marginTop: calculateClamp(Dimensions.get("window").height, 0, "4.5%", 80),
-    marginTop: PixelRatio.getPixelSizeForLayoutSize(5),
+    marginTop: PixelRatio.getPixelSizeForLayoutSize(10),
     // justifyContent: "center",
     // height: "100%",
     paddingVertical: 16,

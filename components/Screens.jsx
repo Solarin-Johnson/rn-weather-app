@@ -4,6 +4,7 @@ import {
   useWindowDimensions,
   ScrollView,
   Platform,
+  PixelRatio,
 } from "react-native";
 import React, {
   useCallback,
@@ -165,7 +166,7 @@ export function Screen({
 
     if (wide && Platform.OS === "web")
       return {
-        visibility: "hidden",
+        opacity: 0,
       };
     else
       return {
@@ -226,7 +227,7 @@ export function Screen({
                         ? themeColors?.bgFade
                         : themeColors?.bg,
                       width: "100%",
-                      maxHeight: 95,
+                      // maxHeight: PixelRatio.getPixelSizeForLayoutSize(40),
                       ...(wide
                         ? {
                             height: 60 + calculateClamp(width, 10, "2%", 45),
@@ -244,18 +245,20 @@ export function Screen({
                   ]}
                 >
                   {header}
-                  <Animated.View style={headerAnimatedStyle}>
-                    <ThemeText
-                      styles={{
-                        fontSize: wide ? 23 : 18,
-                        opacity: 0.85,
-                        textAlign: wide ? "start" : "center",
-                        paddingLeft: wide ? 24 : 0,
-                      }}
-                    >
-                      {title}
-                    </ThemeText>
-                  </Animated.View>
+                  {title && (
+                    <Animated.View style={headerAnimatedStyle}>
+                      <ThemeText
+                        styles={{
+                          fontSize: wide ? 23 : 18,
+                          opacity: 0.85,
+                          textAlign: wide ? "start" : "center",
+                          paddingLeft: wide ? 24 : 0,
+                        }}
+                      >
+                        {title}
+                      </ThemeText>
+                    </Animated.View>
+                  )}
                   {Platform.OS === "web" && wide && (
                     <ThemeText
                       styles={{
@@ -285,7 +288,7 @@ export function Screen({
               contentContainerStyle={[
                 styles,
                 {
-                  minHeight: alwaysShowHeader ? "100%" : "100%",
+                  minHeight: alwaysShowHeader ? "100%" : "95%",
                 },
               ]}
               onScroll={scrollHandler} // Attach the animated scroll handler
