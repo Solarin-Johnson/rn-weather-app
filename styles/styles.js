@@ -70,6 +70,10 @@ const generalStyles = StyleSheet.create({
     // padding: 12,
     borderRadius: 28,
   },
+  title: {
+    fontSize: 18,
+    opacity: 0.85,
+  },
 });
 
 export default generalStyles;

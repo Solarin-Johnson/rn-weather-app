@@ -1,4 +1,10 @@
-import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+import {
+  PixelRatio,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Screen } from "../../components/Screens";
 import generalStyles from "../../styles/styles";
 import HomeHeader from "../../components/HomeHeader";
@@ -59,8 +65,7 @@ export default function Tab() {
           <View
             style={{
               flex: 1,
-              marginTop: 50,
-              // marginTop: calculateClamp(height, 40, "6.5%", 60),
+              marginTop: 80 - PixelRatio.getPixelSizeForLayoutSize(20),
               justifyContent: "flex-end",
             }}
           >

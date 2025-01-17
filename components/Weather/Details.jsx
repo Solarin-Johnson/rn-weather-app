@@ -25,14 +25,15 @@ const WeatherDetails = ({
   weather,
   forcast,
   currentLoc,
-  hasMargin,
+  hasBg,
   isBottomSheet,
+  style,
 }) => {
   // const { setBottomSheet } = useBottomSheet();
 
   return (
     <View style={[styles.wrapper]}>
-      <WeatherDetailsCard hasBg={isBottomSheet}>
+      <WeatherDetailsCard {...{ style }}>
         <CommonDetails {...{ weather }} />
       </WeatherDetailsCard>
       {forcast && (
@@ -53,7 +54,7 @@ const WeatherDetails = ({
   );
 };
 
-const WeatherDetailsCard = ({ hasBg, children }) => {
+const WeatherDetailsCard = ({ style, children }) => {
   const { themeColors, theme } = useTheme();
   const { width } = useWindowDimensions();
   const wide = width > 720;
@@ -63,13 +64,10 @@ const WeatherDetailsCard = ({ hasBg, children }) => {
         styles.container,
         generalStyles.bottomCard,
         {
-          backgroundColor: wide
-            ? theme === "light"
-              ? themeColors?.bg
-              : themeColors?.fg
-            : themeColors?.fg,
-          // marginTop: hasBg ? 0 : 32,
+          backgroundColor:
+            wide && theme === "light" ? themeColors?.bg : themeColors?.fg,
         },
+        style,
       ]}
     >
       {children}

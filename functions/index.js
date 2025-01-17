@@ -205,10 +205,61 @@ export function getDayFromEpoch(epochTime) {
 
   return days[date.getDay()];
 }
+
 export function classifyUV(uvIndex) {
   if (uvIndex <= 2) return "Low";
   if (uvIndex <= 5) return "Moderate";
   if (uvIndex <= 7) return "High";
   if (uvIndex <= 10) return "Very High";
   return "Extreme";
+}
+
+export function getHighestValue(obj) {
+  if (!obj || typeof obj !== "object") return null;
+  return Math.max(...Object.values(obj));
+}
+
+export function calculateAQI(airQuality) {
+  // Return EPA index if available
+  if (airQuality["us-epa-index"]) {
+    return {
+      value: airQuality["us-epa-index"],
+      level: getAQILevel(airQuality["us-epa-index"]),
+    };
+  }
+
+  // Fallback calculation based on PM2.5 (most common indicator)
+  const pm25 = airQuality.pm2_5;
+  let aqi = 1;
+
+  if (pm25 <= 12.0) aqi = 1;
+  else if (pm25 <= 35.4) aqi = 2;
+  else if (pm25 <= 55.4) aqi = 3;
+  else if (pm25 <= 150.4) aqi = 4;
+  else if (pm25 <= 250.4) aqi = 5;
+  else aqi = 6;
+
+  return {
+    value: aqi,
+    level: getAQILevel(aqi),
+  };
+}
+
+function getAQILevel(aqi) {
+  switch (aqi) {
+    case 1:
+      return "Good";
+    case 2:
+      return "Fair";
+    case 3:
+      return "Poor";
+    case 4:
+      return "Bad";
+    case 5:
+      return "Very Bad";
+    case 6:
+      return "Severe";
+    default:
+      return "N/A";
+  }
 }

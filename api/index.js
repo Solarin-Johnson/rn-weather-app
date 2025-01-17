@@ -22,6 +22,25 @@ export const getCurrentWeather = async (lat, lon) => {
   }
 };
 
+export const searchCurrentWeather = async (q) => {
+  try {
+    const response = await axios.get(
+      `https://api.weatherapi.com/v1/current.json`,
+      {
+        params: {
+          key: weatherApiKey,
+          q: q,
+          aqi: "yes",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    // throw error; // Re-throwing the error if needed for handling in the calling code
+  }
+};
+
 export const getFutureWeather = async (lat, lon) => {
   try {
     const response = await axios.get(

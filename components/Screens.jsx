@@ -42,6 +42,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { KeyboardGestureArea } from "react-native-keyboard-controller";
 
 export function Screen({
   children,
@@ -209,8 +210,8 @@ export function Screen({
         }}
       >
         {platform === "web" || key ? (
-          <Wrapper
-            {...animatedProps}
+          <View
+            // {...animatedProps}
             style={{
               flex: 1,
               justifyContent: "flex-start",
@@ -250,7 +251,7 @@ export function Screen({
                       <ThemeText
                         styles={{
                           fontSize: wide ? 23 : 18,
-                          opacity: 0.85,
+                          opacity: 0.9,
                           textAlign: wide ? "start" : "center",
                           paddingLeft: wide ? 24 : 0,
                         }}
@@ -263,7 +264,7 @@ export function Screen({
                     <ThemeText
                       styles={{
                         fontSize: wide ? 23 : 21,
-                        opacity: 0.85,
+                        opacity: 0.9,
                         textAlign: wide ? "start" : "center",
                         paddingLeft: wide ? 24 : 0,
                       }}
@@ -274,86 +275,89 @@ export function Screen({
                 </Animated.View>
               </>
             )}
-            <Animated.ScrollView
-              keyboardShouldPersistTaps="handled"
-              overScrollMode="always"
-              bounces={true}
-              showsVerticalScrollIndicator={false}
-              style={[
-                {
-                  flex: 1,
-                  maxHeight: height,
-                },
-              ]}
-              contentContainerStyle={[
-                styles,
-                {
-                  minHeight: alwaysShowHeader ? "100%" : "95%",
-                },
-              ]}
-              onScroll={scrollHandler} // Attach the animated scroll handler
-              // snapToOffsets={snapOffsets}
-              decelerationRate={"fast"}
-              ref={scrollViewRef}
-              // scrollEventThrottle={16}
-              {...props}
-            >
-              {title && (
+            <KeyboardGestureArea style={{ flex: 1 }}>
+              <Animated.ScrollView
+                keyboardShouldPersistTaps="handled"
+                overScrollMode="always"
+                bounces={true}
+                showsVerticalScrollIndicator={false}
+                style={[
+                  {
+                    flex: 1,
+                    maxHeight: height,
+                  },
+                ]}
+                contentContainerStyle={[
+                  styles,
+                  {
+                    minHeight: alwaysShowHeader ? "100%" : "90%",
+                  },
+                ]}
+                onScroll={scrollHandler} // Attach the animated scroll handler
+                // snapToOffsets={snapOffsets}
+                decelerationRate={"fast"}
+                ref={scrollViewRef}
+                // scrollEventThrottle={16}
+                {...props}
+              >
+                {title && (
+                  <View
+                    style={{
+                      height: 180,
+                      justifyContent: "flex-end",
+                      paddingBottom: 40,
+                    }}
+                  >
+                    {(!wide || Platform.OS !== "web") && (
+                      <Animated.View style={animatedStyle}>
+                        <ThemeText
+                          styles={{
+                            fontSize: 29.5,
+                            opacity: 0.9,
+                            paddingLeft: 24,
+                            textAlign:
+                              Platform.OS === "web" ? "center" : "start",
+                          }}
+                        >
+                          {title}
+                        </ThemeText>
+                      </Animated.View>
+                    )}
+                  </View>
+                )}
+                {!fixed && !alwaysShowHeader && (
+                  <View
+                    style={{
+                      height:
+                        wide && Platform.OS === "web"
+                          ? 60 + calculateClamp(width, 10, "3%", 50) + 5
+                          : 20,
+                    }}
+                  />
+                )}
                 <View
                   style={{
-                    height: 180,
-                    justifyContent: "flex-end",
-                    paddingBottom: 40,
+                    flex: 1,
+                    justifyContent: "center",
+                    alignContent: "center",
+                    // backgroundColor: "#ffffff50",
                   }}
                 >
-                  {(!wide || Platform.OS !== "web") && (
-                    <Animated.View style={animatedStyle}>
-                      <ThemeText
-                        styles={{
-                          fontSize: 29.5,
-                          opacity: 0.85,
-                          paddingLeft: 24,
-                          textAlign: Platform.OS === "web" ? "center" : "start",
-                        }}
-                      >
-                        {title}
-                      </ThemeText>
-                    </Animated.View>
+                  {React.Children.map(children, (child) =>
+                    React.cloneElement(child, { screenScrollY: scrollY })
                   )}
                 </View>
-              )}
-              {!fixed && !alwaysShowHeader && (
-                <View
-                  style={{
-                    height:
-                      wide && Platform.OS === "web"
-                        ? 60 + calculateClamp(width, 10, "3%", 50) + 5
-                        : 20,
-                  }}
-                />
-              )}
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignContent: "center",
-                  // backgroundColor: "#ffffff50",
-                }}
-              >
-                {React.Children.map(children, (child) =>
-                  React.cloneElement(child, { screenScrollY: scrollY })
+                {!fixed && (
+                  <View
+                    style={{
+                      height: title ? 180 : 170,
+                      // backgroundColor: "red",
+                    }}
+                  ></View>
                 )}
-              </View>
-              {!fixed && (
-                <View
-                  style={{
-                    height: title ? 180 : 170,
-                    // backgroundColor: "red",
-                  }}
-                ></View>
-              )}
-            </Animated.ScrollView>
-          </Wrapper>
+              </Animated.ScrollView>
+            </KeyboardGestureArea>
+          </View>
         ) : (
           <></>
         )}

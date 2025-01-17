@@ -12,6 +12,9 @@ const WeatherProvider = ({ children }) => {
   const [currentWeather, setCurrentWeather] = useState(null);
   const [futureWeather, setFutureWeather] = useState(null);
   const [currentWeatherLoc, setCurrentWeatherLoc] = useState(null);
+  const [recentSearches, setRecentSearches] = useState([
+    { name: "London", sub: "London, United Kingdom" },
+  ]);
   const { themeColors } = useTheme();
   const { location } = useUser();
 
@@ -38,11 +41,35 @@ const WeatherProvider = ({ children }) => {
     fetchWeather();
   }, [location]);
 
+  const removeRecentSearch = (index) => {
+    const newRecentSearches = [...recentSearches];
+    newRecentSearches.splice(index, 1);
+    setRecentSearches(newRecentSearches);
+  };
+
+  const addRecentSearch = (search) => {
+    const filteredSearches = recentSearches.filter((item) => item !== search);
+    const newRecentSearches = [search, ...filteredSearches];
+    setRecentSearches(newRecentSearches);
+  };
+
+  const clearRecentSearches = () => {
+    setRecentSearches([]);
+  };
+
   if (currentWeather === null || location === null) return <Loader />;
 
   return (
     <WeatherContext.Provider
-      value={{ currentWeather, futureWeather, currentWeatherLoc }}
+      value={{
+        currentWeather,
+        futureWeather,
+        currentWeatherLoc,
+        recentSearches,
+        removeRecentSearch,
+        addRecentSearch,
+        clearRecentSearches,
+      }}
     >
       {children}
     </WeatherContext.Provider>
