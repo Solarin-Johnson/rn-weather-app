@@ -38,10 +38,13 @@ export function ThemeScreen({ children }) {
   );
 }
 
-export function ThemeText({ children, styles }) {
+export function ThemeText({ children, styles, ...props }) {
   const { themeColors } = useTheme();
   return (
-    <Text style={[generalStyles.text, styles, { color: themeColors?.text }]}>
+    <Text
+      style={[generalStyles.text, styles, { color: themeColors?.text }]}
+      {...props}
+    >
       {children}
     </Text>
   );

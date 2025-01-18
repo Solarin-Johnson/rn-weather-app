@@ -468,7 +468,7 @@ const QuickSearch = ({
     >
       <View
         style={{
-          backgroundColor: themeColors?.textFade + "35",
+          backgroundColor: themeColors?.textFade + "25",
           padding: 7,
           borderRadius: "50%",
         }}

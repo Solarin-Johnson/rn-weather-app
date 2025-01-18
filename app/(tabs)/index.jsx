@@ -43,13 +43,6 @@ export default function Tab() {
           style={[
             generalStyles.screen,
             {
-              // gap: 100,
-              // minHeight: calculateClamp(
-              //   screenDim.height - 150,
-              //   0,
-              //   screenDim.height - 150,
-              //   840
-              // ),
               alignContent: "center",
             },
           ]}
@@ -86,24 +79,6 @@ export default function Tab() {
               </View>
             )}
           </View>
-
-          {/* {!wide && (
-          <DetailsBtn
-            onPress={() =>
-              setBottomSheet(
-                <WeatherDetails
-                  weather={currentWeather}
-                  forcast={futureWeather}
-                  currentLoc={currentWeatherLoc}
-                  isBottomSheet
-                />
-              )
-            }
-            style={{ marginTop: height > 960 ? 10 : 0 }}
-          />
-        )} */}
-
-          {/* <WeatherFuture /> */}
         </View>
       </View>
     </Screen>

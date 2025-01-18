@@ -28,11 +28,19 @@ const WeatherDetails = ({
   hasBg,
   isBottomSheet,
   style,
+  fill = true,
 }) => {
   // const { setBottomSheet } = useBottomSheet();
 
   return (
-    <View style={[styles.wrapper]}>
+    <View
+      style={[
+        styles.wrapper,
+        {
+          marginHorizontal: fill ? 24 : 12,
+        },
+      ]}
+    >
       <WeatherDetailsCard {...{ style }}>
         <CommonDetails {...{ weather }} />
       </WeatherDetailsCard>
@@ -105,7 +113,9 @@ const DetailsCard = ({ title, value }) => {
   return (
     <View style={styles.detail}>
       <ThemeText styles={styles.title}>{title}</ThemeText>
-      <ThemeText styles={styles.sub}>{value}</ThemeText>
+      <ThemeText styles={styles.sub} numberOfLines={1} ellipsizeMode="tail">
+        {value}
+      </ThemeText>
     </View>
   );
 };
@@ -130,8 +140,9 @@ const MoreDetails = ({ weather }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginHorizontal: 24,
     gap: 24,
+    overflow: "hidden",
+    maxWidth: "100%",
   },
   container: {
     margin: 6,
@@ -145,6 +156,7 @@ const styles = StyleSheet.create({
   cluster: {
     gap: 32,
     padding: 36,
+    flex: 1,
   },
   split: {
     width: 1.5,
@@ -153,7 +165,10 @@ const styles = StyleSheet.create({
   },
   detail: {
     alignItems: "center",
+    // alignSelf: "center",
+    overflow: "hidden",
     gap: 6,
+    flex: 1,
   },
   title: {
     fontSize: 14,
@@ -163,6 +178,7 @@ const styles = StyleSheet.create({
   sub: {
     fontSize: 19,
     fontWeight: "500",
+    textAlign: "center",
   },
   details: {
     marginHorizontal: 24,

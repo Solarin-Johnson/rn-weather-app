@@ -8,7 +8,7 @@ import {
 import { Screen } from "./Screens";
 import { useTheme } from "../context/ThemeContext";
 
-const Loader = () => {
+const Loader = ({ full = true }) => {
   const { themeColors } = useTheme();
   const { height } = useWindowDimensions();
   return (
@@ -16,7 +16,7 @@ const Loader = () => {
       style={{
         flex: 1,
         justifyContent: "center",
-        height: height,
+        ...(full && { height: height }),
         backgroundColor: themeColors?.bg,
       }}
     >

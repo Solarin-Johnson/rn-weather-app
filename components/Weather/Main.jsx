@@ -87,6 +87,49 @@ export default function WeatherMain({
   );
 }
 
+export function WeatherSearchMain({ currentWeather: current }) {
+  const { width } = useWindowDimensions();
+  const { themeColors } = useTheme();
+  const { preferences } = useUser();
+  const { condition } = current || {};
+  const { setBottomSheet } = useBottomSheet();
+  const wide = width > 720;
+
+  return (
+    <View style={styles.searchBody}>
+      <Pressable>
+        <WeatherIcon
+          code={condition?.code}
+          isDay={current?.is_day}
+          size={wide ? 180 : calculateClamp(width, 0, "50%", 180)}
+        />
+      </Pressable>
+      <View style={[styles.searchReadings]}>
+        <View>
+          <ThemeText
+            styles={{
+              fontSize: 46,
+              textAlign: "center",
+            }}
+          >
+            {current?.temp_c.toFixed(0)}
+            <Text style={{ color: themeColors.primary }}>°</Text>
+          </ThemeText>
+        </View>
+        <ThemeText
+          styles={{
+            fontSize: 21,
+            opacity: 0.9,
+            textAlign: "center",
+          }}
+        >
+          {condition?.text}
+        </ThemeText>
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   body: {
     // backgroundColor: "red",
@@ -96,5 +139,16 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // height: "100%",
     paddingVertical: 16,
+  },
+  searchBody: {
+    flex: 1,
+    // paddingVertical: 16,
+  },
+  searchReadings: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    // padding: 8,
   },
 });
