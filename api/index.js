@@ -123,3 +123,39 @@ export const extractTime = (time) => {
 export function toEpoch(datetime) {
   return Math.floor(new Date(datetime.replace(" ", "T")).getTime() / 1000);
 }
+
+export const searchAutoComplete = async (query) => {
+  try {
+    const response = await axios.get(
+      `https://api.weatherapi.com/v1/search.json`,
+      {
+        params: {
+          key: weatherApiKey,
+          q: query,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    // throw error; // Re-throwing the error if needed for handling in the calling code
+  }
+};
+
+export const SearchWeather = async (query) => {
+  try {
+    const response = await axios.get(
+      `https://api.weatherapi.com/v1/current.json`,
+      {
+        params: {
+          key: weatherApiKey,
+          q: query,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    // throw error; // Re-throwing the error if needed for handling in the calling code
+  }
+};

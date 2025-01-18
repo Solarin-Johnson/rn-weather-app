@@ -154,6 +154,8 @@ export const getLocation = async (cord) => {
     );
 
     if (response.data.results.length > 0) {
+      console.log(extractCityAndCountry(response.data));
+
       return extractCityAndCountry(response.data);
     }
   } catch (error) {

@@ -11,15 +11,34 @@ import {
   useWindowDimensions,
   LayoutAnimation,
   UIManager,
+  ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { Screen } from "../../components/Screens";
 import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
 import BounceScrollView from "../../components/BounceScroll";
-import { ChevronLeft, History, Search, X } from "lucide-react-native";
+import {
+  ArrowUpRight,
+  ChevronLeft,
+  History,
+  Search,
+  X,
+} from "lucide-react-native";
 import { useTheme } from "../../context/ThemeContext";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import {
+  useFocusEffect,
+  useLocalSearchParams,
+  useNavigation,
+  useRouter,
+} from "expo-router";
 import { TextInput } from "react-native";
-import { useRef, useState, useLayoutEffect, useEffect } from "react";
+import {
+  useRef,
+  useState,
+  useLayoutEffect,
+  useEffect,
+  useCallback,
+} from "react";
 import { calculateClamp } from "../../hooks/useClamp";
 import { useWeather } from "../../context/WeatherContext";
 import WeatherDetails from "../../components/Weather/Details";
@@ -36,12 +55,25 @@ import Animated, {
 } from "react-native-reanimated";
 import generalStyles from "../../styles/styles";
 import { useKeyboardHandler } from "react-native-keyboard-controller";
+import { searchAutoComplete } from "../../api";
+import { useSearch } from "../../context/SearchContext";
 
 export default function Tab() {
   const { wide } = useTheme();
-  const { height } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const { futureWeather, currentWeather, currentWeatherLoc } = useWeather();
   const { q } = useLocalSearchParams();
+  const { searchQuery, setSearchQuery } = useSearch();
+
+  useEffect(() => {
+    q && setSearchQuery(q);
+  }, [q]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setSearchQuery("");
+    }, [setSearchQuery])
+  );
 
   return (
     <Screen
@@ -49,7 +81,12 @@ export default function Tab() {
       fixed={Platform.OS !== "web"}
       header={<SearchHeader />}
     >
-      <View style={{ flex: 1 }}>
+      <View
+        style={{
+          flex: 1,
+          paddingHorizontal: wide ? calculateClamp(width, 16, "2%", 54) : 16,
+        }}
+      >
         {wide && (
           <View
             style={{
@@ -59,11 +96,11 @@ export default function Tab() {
             <SearchHeader />
           </View>
         )}
-        <SearchBox />
         {q ? (
           <SearchResult />
         ) : (
           <View>
+            <Suggestions />
             <PopularCities />
           </View>
         )}
@@ -77,6 +114,7 @@ const SearchHeader = () => {
   const navigation = useNavigation();
   const { wide } = useTheme();
   const { q } = useLocalSearchParams();
+  const { setSearchQuery } = useSearch();
 
   return (
     <View
@@ -87,90 +125,107 @@ const SearchHeader = () => {
         },
       ]}
     >
-      <TouchableOpacity
-        onPress={() => {
-          q ? navigation.navigate("search") : navigation.goBack();
-        }}
+      <View
         style={{
-          position: "absolute",
-          left: 10,
+          position: "relative",
+          width: "100%",
+          justifyContent: "center",
         }}
       >
-        <AdaptiveElement>
-          <ChevronLeft size={24} strokeWidth={2.4} />
-        </AdaptiveElement>
-      </TouchableOpacity>
-      <ThemeText styles={styles.headerText}>Search for city</ThemeText>
+        <TouchableOpacity
+          onPress={() => {
+            q ? navigation.navigate("search") : navigation.goBack();
+            setSearchQuery("");
+          }}
+          style={{
+            position: "absolute",
+            left: 10,
+            zIndex: 10,
+          }}
+        >
+          <AdaptiveElement>
+            <ChevronLeft size={24} strokeWidth={2.4} />
+          </AdaptiveElement>
+        </TouchableOpacity>
+        <ThemeText
+          styles={[
+            styles.headerText,
+            {
+              textAlign: "center",
+            },
+          ]}
+        >
+          Search for city
+        </ThemeText>
+      </View>
+      <SearchBox />
     </View>
   );
 };
 
 const SearchBox = () => {
   const { themeColors, wide } = useTheme();
+  const { width } = useWindowDimensions();
   const inputRef = useRef(null);
   const { q } = useLocalSearchParams();
-  const [query, setQuery] = useState(q);
+  const { searchQuery: query, setSearchQuery: setQuery } = useSearch();
   const [textFocus, setTextFocus] = useState(false);
-  const [contentHeight, setContentHeight] = useState(0);
   const height = useSharedValue(0);
   const opacity = useSharedValue(0);
   const [keyboardHide, setKeyboardHide] = useState(true);
 
   const navigation = useNavigation();
-
-  const handleSearchSubmit = () => {
-    if (!query.trim()) return;
-    // Navigate to the search results page with the query as a parameter
-    navigation.navigate("search", { q: query });
-  };
-
-  useLayoutEffect(() => {
-    q ? setQuery(q) : setQuery("");
-  }, [q]);
+  const router = useRouter();
+  const pathname = router.pathname;
 
   const handleFocus = () => {
     setTextFocus(true);
-    height.value = contentHeight;
-    setTimeout(() => {
-      opacity.value = 1;
-    }, 200);
+    opacity.value = 1;
+
+    pathname !== "/search" && navigation.navigate("search");
   };
 
   const handleBlur = () => {
     setTextFocus(false);
-    height.value = 0;
     opacity.value = 0;
   };
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: withTiming(height.value, { duration: 400 }),
-    opacity: withTiming(opacity.value, { duration: 100 }),
-  }));
-
-  useKeyboardHandler(
-    {
-      onEnd: (e) => {
-        "worklet";
-        runOnJS(setKeyboardHide)(e.progress === 0);
+  Platform.OS !== "web" &&
+    useKeyboardHandler(
+      {
+        onEnd: (e) => {
+          "worklet";
+          runOnJS(setKeyboardHide)(e.progress === 0);
+        },
       },
-    },
-    []
-  );
+      []
+    );
 
   useEffect(() => {
     console.log(keyboardHide);
 
     if (keyboardHide) {
-      if (inputRef.current?.isFocused()) inputRef.current?.blur();
+      if (inputRef.current.isFocused()) inputRef.current.blur();
     }
   }, [keyboardHide, inputRef]);
 
   return (
-    <View>
+    <View
+      style={{
+        width: "100%",
+        alignSelf: "center",
+        paddingHorizontal:
+          Platform.OS === "web" && wide
+            ? 0
+            : wide
+              ? calculateClamp(width, 16, "2%", 54)
+              : 16,
+        // maxWidth: 450,
+      }}
+    >
       <Pressable
         onPress={() => {
           inputRef.current?.focus();
-          console.log("kk");
         }}
         style={styles.searchBoxContainer}
       >
@@ -195,8 +250,6 @@ const SearchBox = () => {
                 onChangeText={setQuery}
                 placeholderTextColor={themeColors?.textFade}
                 // autoFocus
-                returnKeyType="search"
-                onSubmitEditing={handleSearchSubmit}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
               />
@@ -204,38 +257,44 @@ const SearchBox = () => {
           </View>
         </Animated.View>
       </Pressable>
-      <Animated.View
-        key={textFocus}
-        style={[
-          animatedStyle,
-          {
-            // flex: 1,
-          },
-        ]}
-      >
-        {!query ? (
-          <RecentSearches
-            onLayout={(event) => {
-              const measuredHeight = event.nativeEvent.layout.height;
-              setContentHeight(Number(measuredHeight) + 64);
-            }}
-          />
-        ) : (
-          <AutoComplete
-            onLayout={(event) => {
-              const measuredHeight = event.nativeEvent.layout.height;
-              setContentHeight(Number(measuredHeight) + 64);
-            }}
-            q={query}
-          />
-        )}
-      </Animated.View>
     </View>
   );
 };
 
-const RecentSearches = ({ ...props }) => {
-  const { recentSearches } = useWeather();
+const Suggestions = () => {
+  const { themeColors, wide } = useTheme();
+  const { q } = useLocalSearchParams();
+  const { searchQuery: query, setSearchQuery: setQuery } = useSearch();
+
+  const navigation = useNavigation();
+
+  const config = {
+    ...{ query, setQuery },
+  };
+
+  return (
+    <View
+      style={{
+        width: "100%",
+        alignSelf: "center",
+        // maxWidth: 450,
+      }}
+    >
+      <View>
+        {!query ? <RecentSearches {...config} /> : <AutoComplete {...config} />}
+      </View>
+    </View>
+  );
+};
+
+const RecentSearches = ({ query, setQuery, ...props }) => {
+  const { recentSearches, removeRecentSearch } = useSearch();
+  const navigation = useNavigation();
+
+  const handleSearchSubmit = ({ name, lat, lng }) => {
+    navigation.navigate("search", { q: name, cord: lat + "," + lng });
+  };
+
   if (recentSearches.length > 0)
     return (
       <View style={styles.recentSearches} {...props}>
@@ -244,31 +303,142 @@ const RecentSearches = ({ ...props }) => {
             generalStyles.title,
             {
               fontSize: 15,
-              fontWeight: "600",
             },
           ]}
         >
           Recent
         </ThemeText>
         <View>
-          {recentSearches.map((search, i) => (
-            <QuickSearch key={i} {...search} labelIcon={History} />
-          ))}
+          {recentSearches.map((search, i) => {
+            const handlePress = () =>
+              handleSearchSubmit({
+                lat: search.lat,
+                lng: search.lng,
+                name: search.name,
+              });
+            return (
+              <QuickSearch
+                key={i}
+                {...search}
+                labelIcon={History}
+                onPress={handlePress}
+                onBtnPress={() => removeRecentSearch(i)}
+              />
+            );
+          })}
         </View>
       </View>
     );
 };
 
-const AutoComplete = ({ q, ...props }) => {
-  const { recentSearches } = useWeather();
-  if (recentSearches.length > 0)
+const AutoComplete = ({ ...props }) => {
+  const [searchResults, setSearchResults] = useState([]);
+  const { searchQuery: q, setSearchQuery: setQ, addRecentSearch } = useSearch();
+  const [loading, setLoading] = useState(true);
+  const { themeColors } = useTheme();
+  const navigation = useNavigation();
+
+  const handleSearchSubmit = ({ name, lat, lng, sub }) => {
+    navigation.navigate("search", { q: name, cord: lat + "," + lng });
+    addRecentSearch({ name, lat, lng, sub });
+  };
+
+  useEffect(() => {
+    if (q) {
+      const fetchResults = async () => {
+        setLoading(true);
+        const response = await searchAutoComplete(q);
+        setSearchResults(
+          response.map((item) => ({
+            name: item.name,
+            sub: item.country,
+            lat: item.lat,
+            lng: item.lon,
+          }))
+        );
+        setLoading(false);
+      };
+
+      fetchResults();
+    }
+  }, [q]);
+
+  if (loading)
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          gap: 6,
+          height: 72,
+        }}
+      >
+        <ActivityIndicator size={"small"} color={themeColors?.primary} />
+        <ThemeText
+          styles={[
+            generalStyles.title,
+            {
+              fontSize: 15,
+              fontWeight: "400",
+            },
+          ]}
+        >
+          Searching...
+        </ThemeText>
+      </View>
+    );
+
+  if (searchResults.length > 0)
     return (
       <View style={styles.recentSearches} {...props}>
         <View>
-          {recentSearches.map((search, i) => (
-            <QuickSearch key={i} {...search} labelIcon={History} />
-          ))}
+          {searchResults.map((search, i) => {
+            const handlePress = () =>
+              handleSearchSubmit({
+                lat: search.lat,
+                lng: search.lng,
+                name: search.name,
+                sub: search.sub,
+              });
+
+            return (
+              <QuickSearch
+                key={i}
+                {...search}
+                icon={ArrowUpRight}
+                onPress={handlePress}
+                onBtnPress={handlePress}
+              />
+            );
+          })}
         </View>
+      </View>
+    );
+  else
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          gap: 6,
+          height: 72,
+        }}
+      >
+        <ThemeText
+          styles={[
+            generalStyles.title,
+            {
+              fontSize: 15,
+              fontWeight: "400",
+            },
+          ]}
+        >
+          No results
+        </ThemeText>
       </View>
     );
 };
@@ -278,6 +448,8 @@ const QuickSearch = ({
   icon: Icon = X,
   name,
   sub,
+  onPress,
+  onBtnPress,
 }) => {
   const { themeColors } = useTheme();
   return (
@@ -288,14 +460,15 @@ const QuickSearch = ({
         justifyContent: "space-between",
         padding: 4,
         gap: 10,
-        height: 64,
+        height: 72,
         borderBottomWidth: 1,
-        borderBottomColor: themeColors?.textFade + "50",
+        borderBottomColor: themeColors?.textFade + "30",
       }}
+      onPress={onPress}
     >
       <View
         style={{
-          backgroundColor: themeColors?.textFade + 30,
+          backgroundColor: themeColors?.textFade + "35",
           padding: 7,
           borderRadius: "50%",
         }}
@@ -307,6 +480,8 @@ const QuickSearch = ({
       <View
         style={{
           flexDirection: "column",
+          flex: 1,
+          alignItems: "flex-start",
         }}
       >
         <ThemeText
@@ -318,28 +493,26 @@ const QuickSearch = ({
           {name}
         </ThemeText>
         <ThemeText
-          styles={[
-            generalStyles.title,
-            {
-              fontSize: 13,
-              fontWeight: "400",
-            },
-          ]}
+          styles={{
+            fontSize: 13,
+            fontWeight: "400",
+            opacity: 0.6,
+          }}
         >
           {sub}
         </ThemeText>
       </View>
-      <View
+      <Pressable
         style={{
-          flex: 1,
-          width: "100%",
+          padding: 12,
           alignItems: "flex-end",
         }}
+        onPress={onBtnPress}
       >
         <AdaptiveElement>
           <Icon size={16} strokeWidth={3} />
         </AdaptiveElement>
-      </View>
+      </Pressable>
     </Pressable>
   );
 };
@@ -349,14 +522,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 50,
+    // height: 300,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
-    paddingTop: Platform.OS === "web" ? 20 : 0,
+    paddingTop: Platform.OS === "web" ? 20 : 10,
     opacity: 0.9,
-
-    maxWidth: 450,
+    gap: 14,
+    // maxWidth: 450,
     width: "100%",
     alignSelf: "center",
   },
@@ -365,12 +538,12 @@ const styles = StyleSheet.create({
   },
   searchBoxContainer: {
     width: "100%",
-    paddingHorizontal: 14,
-    marginTop: 10,
+    // paddingHorizontal: 14,
+    marginBottom: 6,
   },
   searchBoxContent: {
     width: "100%",
-    maxWidth: 450,
+    // maxWidth: 450,
     alignSelf: "center",
     flexDirection: "column",
     alignItems: "center",
@@ -388,12 +561,13 @@ const styles = StyleSheet.create({
     flex: 1,
     // gap: 6,
     // overflow: "hidden",
-    padding: 16,
+
+    // paddingHorizontal: 16,
   },
   textInput: {
     flex: 1,
     // height: "100%",
-    height: 54,
+    height: 50,
     fontSize: 16,
     borderWidth: 0,
     zIndex: 1000,

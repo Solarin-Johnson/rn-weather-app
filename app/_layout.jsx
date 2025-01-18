@@ -20,6 +20,7 @@ import { useTheme } from "../context/ThemeContext";
 import { Tabs, TabList, TabTrigger, TabSlot } from "expo-router/ui";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import { SearchProvider } from "../context/SearchContext";
 
 export default function Layout() {
   const [location, setLocation] = useState(null);
@@ -45,9 +46,11 @@ export default function Layout() {
         <ThemeProvider>
           <UserProvider>
             <WeatherProvider>
-              <BottomSheetProvider>
-                <CustomTabs />
-              </BottomSheetProvider>
+              <SearchProvider>
+                <BottomSheetProvider>
+                  <CustomTabs />
+                </BottomSheetProvider>
+              </SearchProvider>
             </WeatherProvider>
           </UserProvider>
         </ThemeProvider>

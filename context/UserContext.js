@@ -46,9 +46,6 @@ const UserProvider = ({ children }) => {
         .then((locationWithAddress) => {
           storeData("location", JSON.stringify(locationWithAddress));
         })
-        .then((locationWithAddress) => {
-          storeData("location", JSON.stringify(locationWithAddress));
-        })
         .catch((error) => {
           console.error("Error in getLocation:", error);
         });

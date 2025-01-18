@@ -325,7 +325,7 @@ export function Screen({
                     )}
                   </View>
                 )}
-                {!fixed && !alwaysShowHeader && (
+                {wide && (
                   <View
                     style={{
                       height:
@@ -347,14 +347,13 @@ export function Screen({
                     React.cloneElement(child, { screenScrollY: scrollY })
                   )}
                 </View>
-                {!fixed && (
-                  <View
-                    style={{
-                      height: title ? 180 : 170,
-                      // backgroundColor: "red",
-                    }}
-                  ></View>
-                )}
+
+                <View
+                  style={{
+                    height: Platform.OS === "web" ? 180 : 150,
+                    // backgroundColor: "red",
+                  }}
+                ></View>
               </Animated.ScrollView>
             </KeyboardGestureArea>
           </View>

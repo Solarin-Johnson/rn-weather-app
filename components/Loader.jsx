@@ -1,23 +1,28 @@
 import React from "react";
-import { ActivityIndicator, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Screen } from "./Screens";
 import { useTheme } from "../context/ThemeContext";
 
 const Loader = () => {
   const { themeColors } = useTheme();
+  const { height } = useWindowDimensions();
   return (
-    <Screen
-      styles={{
+    <View
+      style={{
         flex: 1,
         justifyContent: "center",
+        height: height,
+        backgroundColor: themeColors?.bg,
       }}
-      fixed
     >
       <ActivityIndicator size={"large"} color={themeColors?.primary} />
-    </Screen>
+    </View>
   );
 };
-
-
 
 export default Loader;

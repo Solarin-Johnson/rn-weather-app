@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     // minHeight: "100%",
     // flexDirection: "row",
     justifyContent: "center",
-    paddingBottom: 42,
+    // paddingBottom: 42,
   },
   details: {
     marginHorizontal: 24,

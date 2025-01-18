@@ -15,6 +15,7 @@ import WeatherIcon from "./WeatherIcon";
 import { Link } from "expo-router";
 import { calculateAQI, getHighestValue } from "../functions";
 import generalStyles from "../styles/styles";
+import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native";
 
 const popularCitiesList = [
   { id: 1, name: "London" },
@@ -27,9 +28,11 @@ export const PopularCities = () => {
   const { themeColors } = useTheme();
 
   const [popularCities, setPopularCities] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCitiesWeather = async () => {
+      setLoading(true);
       const cities = await Promise.all(
         popularCitiesList.map(async (city) => {
           const weather = await searchCurrentWeather(city.name);
@@ -38,11 +41,13 @@ export const PopularCities = () => {
             temp: `${Math.round(weather.current.temp_c)}°`,
             code: weather.current.condition.code,
             isDay: weather.current.is_day,
-            aqi: calculateAQI(weather.current.air_quality),
+            country: weather.location.country,
+            // aqi: calculateAQI(weather.current.air_quality),
           };
         })
       );
       setPopularCities(cities);
+      setLoading(false);
     };
 
     fetchCitiesWeather();
@@ -50,15 +55,29 @@ export const PopularCities = () => {
 
   return (
     <View style={styles.container}>
-      <ThemeText styles={generalStyles.title}>Popular Cities</ThemeText>
+      <ThemeText
+        styles={[
+          generalStyles.title,
+          {
+            fontSize: 15,
+          },
+        ]}
+      >
+        Popular Cities
+      </ThemeText>
       <View style={styles.grid}>
-        {popularCities.map((city) => (
-          <CityCard
-            key={city.id}
-            city={city}
-            onPress={() => console.log(`Selected ${city.name}`)}
-          />
-        ))}
+        {popularCities.map((city) => {
+          if (loading) {
+            return <LoaderCard key={city.id} />;
+          }
+          return (
+            <CityCard
+              key={city.id}
+              city={city}
+              onPress={() => console.log(`Selected ${city.name}`)}
+            />
+          );
+        })}
       </View>
     </View>
   );
@@ -77,16 +96,10 @@ const CityCard = ({ city, onPress }) => {
         params: { q: city.name },
       }}
       onPress={onPress}
-      //   background={
-      //     Platform.OS === "android"
-      //       ? TouchableNativeFeedback.Ripple(themeColors.primary + "40", true)
-      //       : "undefined"
-      //   }
-
       style={[
         styles.cardContainer,
         {
-          backgroundColor: themeColors.fg + "99",
+          backgroundColor: themeColors.fg + "bc",
         },
       ]}
     >
@@ -95,7 +108,7 @@ const CityCard = ({ city, onPress }) => {
 
         <View style={{ gap: 4 }}>
           <ThemeText styles={styles.cityName}>{city.name}</ThemeText>
-          <ThemeText styles={styles.aqi}>AQI {city.aqi.level}</ThemeText>
+          <ThemeText styles={styles.aqi}>{city.country}</ThemeText>
         </View>
         <View style={{ flex: 1 }}>
           <ThemeText styles={styles.temperature}>{city.temp}</ThemeText>
@@ -105,14 +118,33 @@ const CityCard = ({ city, onPress }) => {
   );
 };
 
+const LoaderCard = (props) => {
+  const { themeColors } = useTheme();
+  return (
+    <ContentLoader
+      speed={2}
+      width={"100%"}
+      height={100}
+      // viewBox="0 0 400 90"
+      backgroundColor={themeColors.fg}
+      foregroundColor={themeColors.bg + "20"}
+      {...props}
+    >
+      <Rect x="0" y="0" rx="12" ry="12" width="100%" height={80} />
+    </ContentLoader>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    paddingVertical: 16,
     width: "100%",
-    maxWidth: 450,
+    // maxWidth: 450,
     gap: 16,
     alignSelf: "center",
     marginTop: 8,
+    flex: 1,
+    // paddingBottom: 400,
   },
   cardContainer: {
     padding: 18,
@@ -139,7 +171,7 @@ const styles = StyleSheet.create({
   },
   aqi: {
     fontSize: 12,
-    opacity: 0.75,
+    opacity: 0.65,
   },
   temperature: {
     fontSize: 28,
