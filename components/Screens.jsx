@@ -303,23 +303,19 @@ export function Screen({
                         : 16,
                     }}
                   >
-                    {true && (
-                      <Animated.View style={animatedStyle}>
-                        <ThemeText
-                          styles={{
-                            fontSize: 29.5,
-                            opacity: 0.9,
-                            paddingLeft: 24,
-                            textAlign:
-                              !wide && Platform.OS === "web"
-                                ? "center"
-                                : "start",
-                          }}
-                        >
-                          {title}
-                        </ThemeText>
-                      </Animated.View>
-                    )}
+                    <Animated.View style={animatedStyle}>
+                      <ThemeText
+                        styles={{
+                          fontSize: 29.5,
+                          opacity: 0.9,
+                          paddingLeft: wide ? 24 : 0,
+                          textAlign:
+                            !wide && Platform.OS === "web" ? "center" : "start",
+                        }}
+                      >
+                        {title}
+                      </ThemeText>
+                    </Animated.View>
                   </View>
                 )}
                 {wide && !title && (

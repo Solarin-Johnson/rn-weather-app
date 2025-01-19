@@ -6,17 +6,14 @@ import {
   Pressable,
   useWindowDimensions,
   PixelRatio,
+  Platform,
 } from "react-native";
 import { AdaptiveElement, ThemeText } from "../ThemeComponents";
 import { useUser } from "../../context/UserContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "../../context/ThemeContext";
 import { ChevronsDown } from "lucide-react-native";
-import {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import { useBottomSheet } from "../../context/BottomSheetContext";
 import generalStyles from "../../styles/styles";
 import { DailyForecast, HourlyForecast } from "./Forcast";
@@ -26,39 +23,49 @@ const WeatherDetails = ({
   weather,
   forcast,
   currentLoc,
-  hasBg,
   isBottomSheet,
   style,
-  fill = true,
 }) => {
-  // const { setBottomSheet } = useBottomSheet();
+  const cards = [
+    { content: <CommonDetails weather={weather} /> },
+    forcast && { content: <DailyForecast dailyData={forcast.forecastday} /> },
+    forcast &&
+      currentLoc && {
+        content: (
+          <HourlyForecast
+            weather={weather}
+            forcast={forcast}
+            full={!isBottomSheet}
+            currentWeatherLoc={currentLoc}
+          />
+        ),
+      },
+  ].filter(Boolean);
 
   return (
     <View
       style={[
         styles.wrapper,
-        {
-          marginHorizontal: PixelRatio.getPixelSizeForLayoutSize(4),
-        },
+        { marginHorizontal: PixelRatio.getPixelSizeForLayoutSize(4) },
       ]}
     >
-      <WeatherDetailsCard {...{ style }}>
-        <CommonDetails {...{ weather }} />
-      </WeatherDetailsCard>
-      {forcast && (
-        <WeatherDetailsCard hasBg={isBottomSheet}>
-          <DailyForecast dailyData={forcast.forecastday} />
-        </WeatherDetailsCard>
-      )}
-      {forcast && currentLoc && (
-        <WeatherDetailsCard hasBg={isBottomSheet}>
-          <HourlyForecast
-            {...{ weather, forcast }}
-            full={!isBottomSheet}
-            currentWeatherLoc={currentLoc}
-          />
-        </WeatherDetailsCard>
-      )}
+      {cards.map((card, index) => (
+        <Animated.View
+          key={index}
+          style={{ width: "100%" }}
+          entering={
+            Platform.OS !== "web"
+              ? FadeInDown.duration(500).withInitialValues({
+                  transform: [{ translateY: 80 }],
+                })
+              : FadeIn
+          }
+        >
+          <WeatherDetailsCard hasBg={isBottomSheet}>
+            {card.content}
+          </WeatherDetailsCard>
+        </Animated.View>
+      ))}
     </View>
   );
 };
