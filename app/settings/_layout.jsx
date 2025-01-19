@@ -8,20 +8,17 @@ export default function SettingsLayout() {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: themeColors.bg,
+          backgroundColor: themeColors.bgFade,
           shadowColor: "transparent",
         },
-        cardStyle: {
-          backgroundColor: themeColors.bg,
-        },
         headerTintColor: themeColors.text,
+        headerTitleAlign: "center",
       }}
     >
       <Stack.Screen
         name="index"
         options={{
           title: "Settings",
-          headerTitleAlign: "center",
         }}
       />
     </Stack>

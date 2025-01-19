@@ -74,6 +74,9 @@ const generalStyles = StyleSheet.create({
     fontSize: 18,
     opacity: 0.85,
   },
+  buttonPressed: {
+    opacity: 0.7,
+  },
 });
 
 export default generalStyles;

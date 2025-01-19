@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import { Screen } from "../../components/Screens";
 import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
 import generalStyles from "../../styles/styles";
@@ -15,12 +15,18 @@ import {
 import { useUser } from "../../context/UserContext";
 import Svg, { Circle } from "react-native-svg";
 import { useNavigation, useRouter } from "expo-router";
+import WeatherIcon from "../../components/WeatherIcon";
+import { useWeather } from "../../context/WeatherContext";
 
 export default function Tab() {
   const { wide } = useTheme();
   const { location } = useUser();
   const navigation = useNavigation();
   const router = useRouter();
+
+  const handleClusterPress = (route) => {
+    router.push(`/settings/${route}`);
+  };
   return (
     <Screen style={styles.container} title={"Profile"}>
       <View
@@ -33,13 +39,13 @@ export default function Tab() {
         ]}
       >
         <Cluster>
-          <UserCluster />
+          <UserCluster onPress={() => handleClusterPress("change-name")} />
         </Cluster>
         <Cluster>
           <ClusterItem
             text={location.name}
             icon={MapPin}
-            onPress={() => router.push("/settings")}
+            onPress={() => handleClusterPress("location")}
           />
           <ClusterItem text={"Units"} icon={Thermometer} />
           <ClusterItem
@@ -61,19 +67,24 @@ export default function Tab() {
   );
 }
 
-const UserCluster = () => {
+const UserCluster = ({ onPress }) => {
   const { themeColors } = useTheme();
+  const { currentWeather: current } = useWeather();
   return (
-    <ClusterChild>
+    <ClusterChild onPress={onPress}>
       <View style={styles.user}>
-        <View
+        {/* <View
           style={{
             width: 48,
             aspectRatio: 1,
             borderRadius: 50,
-            backgroundColor: themeColors.primary,
+            overflow: "hidden",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        ></View>
+        >
+          <ThemeText>{current?.temp_c}°</ThemeText>
+        </View> */}
         <ThemeText styles={{ fontSize: 21, flex: 1 }}>User</ThemeText>
 
         <AdaptiveElement
@@ -93,7 +104,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   user: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
     gap: 14,

@@ -145,7 +145,7 @@ const SearchHeader = () => {
           }}
           style={{
             position: "absolute",
-            left: 0,
+            left: wide ? 0 : 16,
             zIndex: 10,
           }}
         >
@@ -220,7 +220,7 @@ const SearchBox = () => {
       style={{
         width: "100%",
         alignSelf: "center",
-        // paddingHorizontal: Platform.OS === "web" && wide ? 0 : 8,
+        paddingHorizontal: wide ? 0 : 16,
         // maxWidth: 450,
       }}
     >

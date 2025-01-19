@@ -4,6 +4,7 @@ import { useTheme } from "../context/ThemeContext";
 import { ChevronRight } from "lucide-react-native";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
+import generalStyles from "../styles/styles";
 
 const Cluster = ({ children }) => {
   const { theme, wide, themeColors } = useTheme();
@@ -51,12 +52,16 @@ export const ClusterChild = ({ children, onPress }) => {
   const { themeColors } = useTheme();
   return (
     <Pressable
-      style={{
-        flex: 1,
-        paddingHorizontal: 14,
-        paddingVertical: 16,
-        borderRadius: "inherit",
-      }}
+      style={({ pressed, hovered }) => [
+        {
+          flex: 1,
+          paddingHorizontal: 14,
+          paddingVertical: 16,
+          // borderRadius: "inherit",
+          backgroundColor: hovered ? themeColors?.fg : "transparent",
+        },
+        pressed && generalStyles.buttonPressed,
+      ]}
       android_ripple={{
         color: themeColors?.textFade + "25",
       }}
