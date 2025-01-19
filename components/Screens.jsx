@@ -257,7 +257,7 @@ export function Screen({
                           fontSize: wide ? 23 : 18,
                           opacity: 0.9,
                           textAlign: wide ? "start" : "center",
-                          paddingLeft: wide ? 24 : 0,
+                          paddingLeft: wide ? 8 : 0,
                         }}
                       >
                         {title}
@@ -308,7 +308,7 @@ export function Screen({
                         styles={{
                           fontSize: 29.5,
                           opacity: 0.9,
-                          paddingLeft: wide ? 24 : 0,
+                          paddingLeft: wide ? 8 : 0,
                           textAlign:
                             !wide && Platform.OS === "web" ? "center" : "start",
                         }}

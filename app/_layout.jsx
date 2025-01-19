@@ -5,7 +5,7 @@ import { UserProvider } from "@/context/UserContext";
 import { getData } from "@/functions";
 import { Home } from "lucide-react-native";
 import HomeHeader from "../components/HomeHeader";
-import { useWindowDimensions, View } from "react-native";
+import { Platform, useWindowDimensions, View } from "react-native";
 import { getPlatform } from "../functions";
 import WebBanner from "../components/webBanner";
 import { WeatherProvider } from "../context/WeatherContext";
@@ -21,6 +21,10 @@ import { Tabs, TabList, TabTrigger, TabSlot } from "expo-router/ui";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SearchProvider } from "../context/SearchContext";
+
+export const unstable_settings = {
+  initialRouteName: "(tabs)",
+};
 
 export default function Layout() {
   const [location, setLocation] = useState(null);
@@ -62,11 +66,27 @@ export default function Layout() {
 const CustomTabs = () => {
   const { themeColors } = useTheme();
   return (
-    <Tabs style={{ flex: 1, backgroundColor: themeColors?.bg }}>
-      <TabSlot />
-      <TabList style={{ backgroundColor: themeColors?.bg }}>
-        <TabTrigger name="root" href="/" />
-      </TabList>
-    </Tabs>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: themeColors.bg,
+      }}
+    >
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen
+          name="settings"
+          options={{
+            title: "Settings",
+            presentation: Platform.OS === "ios" ? "modal" : "transparentModal",
+            animation: "fade_from_bottom",
+          }}
+        />
+      </Stack>
+    </View>
   );
 };

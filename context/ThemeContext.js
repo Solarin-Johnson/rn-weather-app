@@ -91,8 +91,6 @@ const ThemeProvider = ({ children }) => {
     };
   }, [AppState.currentState]);
 
-  console.log(AppState);
-
   if (!themeColors) return null;
 
   return (

@@ -145,7 +145,7 @@ const SearchHeader = () => {
           }}
           style={{
             position: "absolute",
-            left: 10,
+            left: 0,
             zIndex: 10,
           }}
         >
@@ -220,12 +220,7 @@ const SearchBox = () => {
       style={{
         width: "100%",
         alignSelf: "center",
-        paddingHorizontal:
-          Platform.OS === "web" && wide
-            ? 0
-            : wide
-              ? calculateClamp(width, 16, "2%", 54)
-              : 16,
+        // paddingHorizontal: Platform.OS === "web" && wide ? 0 : 8,
         // maxWidth: 450,
       }}
     >
@@ -485,6 +480,9 @@ const QuickSearch = ({
         borderBottomColor: themeColors?.textFade + "30",
       }}
       onPress={onPress}
+      android_ripple={{
+        color: themeColors?.textFade + "20",
+      }}
     >
       <View
         style={{

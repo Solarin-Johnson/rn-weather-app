@@ -95,8 +95,6 @@ export const PopularCities = () => {
 const CityCard = ({ city, onPress }) => {
   const { themeColors } = useTheme();
   const { width } = useWindowDimensions();
-  const Touchable =
-    Platform.OS === "android" ? TouchableNativeFeedback : TouchableOpacity;
 
   return (
     <Link

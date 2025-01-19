@@ -56,7 +56,7 @@ const WeatherDetails = ({
           entering={
             Platform.OS !== "web"
               ? FadeInDown.duration(500).withInitialValues({
-                  transform: [{ translateY: 80 }],
+                  transform: [{ translateY: 50 }],
                 })
               : FadeIn
           }
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   },
   split: {
     width: 1.5,
-    height: "95%",
+    height: Platform.OS === "web" ? 180 : "95%",
     maxHeight: 180,
   },
   detail: {

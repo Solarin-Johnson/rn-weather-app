@@ -28,7 +28,14 @@ export default function WeatherMain({
   const wide = width > 720;
 
   return (
-    <View style={styles.body}>
+    <View
+      style={[
+        styles.body,
+        {
+          maxHeight: 1160 - PixelRatio.getPixelSizeForLayoutSize(300),
+        },
+      ]}
+    >
       <Pressable
         style={{
           // flex: 1,
