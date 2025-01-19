@@ -60,7 +60,7 @@ export default function SearchResult() {
     }
   }, []);
 
-  if (!currentWeather) return <Loader full={false} />;
+  if (!currentWeather) return <Loader full={false} noBg />;
 
   return (
     <View style={styles.container}>
@@ -97,7 +97,7 @@ export default function SearchResult() {
           >
             <View
               style={{
-                marginTop: 42,
+                marginTop: 48,
               }}
             >
               <WeatherDetails

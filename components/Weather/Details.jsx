@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   useWindowDimensions,
+  PixelRatio,
 } from "react-native";
 import { AdaptiveElement, ThemeText } from "../ThemeComponents";
 import { useUser } from "../../context/UserContext";
@@ -37,7 +38,7 @@ const WeatherDetails = ({
       style={[
         styles.wrapper,
         {
-          marginHorizontal: fill ? 24 : 12,
+          marginHorizontal: PixelRatio.getPixelSizeForLayoutSize(4),
         },
       ]}
     >
@@ -63,9 +64,8 @@ const WeatherDetails = ({
 };
 
 const WeatherDetailsCard = ({ style, children }) => {
-  const { themeColors, theme } = useTheme();
-  const { width } = useWindowDimensions();
-  const wide = width > 720;
+  const { themeColors, theme, wide } = useTheme();
+
   return (
     <View
       style={[
@@ -73,7 +73,11 @@ const WeatherDetailsCard = ({ style, children }) => {
         generalStyles.bottomCard,
         {
           backgroundColor:
-            wide && theme === "light" ? themeColors?.bg : themeColors?.fg,
+            wide && theme === "light"
+              ? themeColors?.bg
+              : wide
+                ? themeColors?.fg
+                : themeColors?.fg + "90",
         },
         style,
       ]}
@@ -142,7 +146,7 @@ const styles = StyleSheet.create({
   wrapper: {
     gap: 24,
     overflow: "hidden",
-    maxWidth: "100%",
+    // width: "100%",
   },
   container: {
     margin: 6,
@@ -150,12 +154,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     width: "100%",
-    maxWidth: 400,
+    // maxWidth: 400,
     alignSelf: "center",
   },
   cluster: {
     gap: 32,
-    padding: 36,
+    paddingVertical: 36,
+    paddingHorizontal: 8,
     flex: 1,
   },
   split: {
@@ -181,7 +186,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   details: {
-    marginHorizontal: 24,
+    // marginHorizontal: 24,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

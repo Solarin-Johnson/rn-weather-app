@@ -24,7 +24,7 @@ const WebBanner = () => {
       ]}
     >
       {/* <CloudBg /> */}
-      <Text style={styles.text}>Sometin comin</Text>
+      <Text style={styles.text}>Somethin comin</Text>
     </DynamicView>
   );
 };

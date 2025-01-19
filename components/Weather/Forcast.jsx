@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
   body: {
     // flex: 1,
     width: "100%",
-    maxWidth: 500,
-    // alignSelf: "center",
+    maxWidth: 450,
+    alignSelf: "center",
     paddingVertical: 28,
     justifyContent: "space-between",
     flexDirection: "row",

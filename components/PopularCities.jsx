@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -12,10 +12,15 @@ import { ThemeText } from "./ThemeComponents";
 import { CloudRain, Sun, Cloud } from "lucide-react-native";
 import { searchCurrentWeather } from "../api";
 import WeatherIcon from "./WeatherIcon";
-import { Link } from "expo-router";
+import { Link, useFocusEffect } from "expo-router";
 import { calculateAQI, getHighestValue } from "../functions";
 import generalStyles from "../styles/styles";
 import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  SlideInDown,
+} from "react-native-reanimated";
 
 const popularCitiesList = [
   { id: 1, name: "London" },
@@ -27,29 +32,29 @@ const popularCitiesList = [
 export const PopularCities = () => {
   const { themeColors } = useTheme();
 
-  const [popularCities, setPopularCities] = useState([]);
+  const [popularCities, setPopularCities] = useState(popularCitiesList);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchCitiesWeather = async () => {
-      setLoading(true);
-      const cities = await Promise.all(
-        popularCitiesList.map(async (city) => {
-          const weather = await searchCurrentWeather(city.name);
-          return {
-            ...city,
-            temp: `${Math.round(weather.current.temp_c)}°`,
-            code: weather.current.condition.code,
-            isDay: weather.current.is_day,
-            country: weather.location.country,
-            // aqi: calculateAQI(weather.current.air_quality),
-          };
-        })
-      );
-      setPopularCities(cities);
-      setLoading(false);
-    };
+  const fetchCitiesWeather = async () => {
+    setLoading(true);
+    const cities = await Promise.all(
+      popularCitiesList.map(async (city) => {
+        const weather = await searchCurrentWeather(city.name);
+        return {
+          ...city,
+          temp: `${Math.round(weather.current.temp_c)}°`,
+          code: weather.current.condition.code,
+          isDay: weather.current.is_day,
+          country: weather.location.country,
+          // aqi: calculateAQI(weather.current.air_quality),
+        };
+      })
+    );
+    setPopularCities(cities);
+    setLoading(false);
+  };
 
+  useLayoutEffect(() => {
     fetchCitiesWeather();
   }, []);
 
@@ -66,18 +71,22 @@ export const PopularCities = () => {
         Popular Cities
       </ThemeText>
       <View style={styles.grid}>
-        {popularCities.map((city) => {
-          if (loading) {
-            return <LoaderCard key={city.id} />;
-          }
-          return (
-            <CityCard
-              key={city.id}
-              city={city}
-              onPress={() => console.log(`Selected ${city.name}`)}
-            />
-          );
-        })}
+        {popularCities.map((city, i) => (
+          <Animated.View
+            key={i}
+            style={{ width: "100%" }}
+            entering={Platform.OS !== "web" ? FadeInDown.delay(30 * i) : FadeIn}
+          >
+            {loading ? (
+              <LoaderCard />
+            ) : (
+              <CityCard
+                city={city}
+                onPress={() => console.log(`Selected ${city.name}`)}
+              />
+            )}
+          </Animated.View>
+        ))}
       </View>
     </View>
   );
@@ -99,7 +108,7 @@ const CityCard = ({ city, onPress }) => {
       style={[
         styles.cardContainer,
         {
-          backgroundColor: themeColors.fg + "bc",
+          backgroundColor: themeColors.textFade + "10",
         },
       ]}
     >
@@ -120,38 +129,45 @@ const CityCard = ({ city, onPress }) => {
 
 const LoaderCard = (props) => {
   const { themeColors } = useTheme();
+  const { length = 1 } = props;
   return (
-    <ContentLoader
-      speed={2}
-      width={"100%"}
-      height={100}
-      // viewBox="0 0 400 90"
-      backgroundColor={themeColors.fg}
-      foregroundColor={themeColors.bg + "20"}
-      {...props}
-    >
-      <Rect x="0" y="0" rx="12" ry="12" width="100%" height={80} />
-    </ContentLoader>
+    <>
+      {[...Array(length)].map((_, index) => (
+        <ContentLoader
+          key={index}
+          speed={2}
+          width={"100%"}
+          height={94}
+          backgroundColor={themeColors.fg}
+          foregroundColor={themeColors.bg + "20"}
+          {...props}
+        >
+          <Rect x="0" y="0" rx="12" ry="12" width="100%" height={80} />
+        </ContentLoader>
+      ))}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 16,
+    // paddingVertical: 16,
     width: "100%",
     // maxWidth: 450,
     gap: 16,
     alignSelf: "center",
-    marginTop: 8,
+    // marginTop: 8,
     flex: 1,
     // paddingBottom: 400,
   },
   cardContainer: {
     padding: 18,
+    flex: 1,
     width: "100%",
     marginBottom: 16,
     borderRadius: 12,
     display: "flex",
+    alignItems: "flex-start",
   },
 
   grid: {

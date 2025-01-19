@@ -8,7 +8,7 @@ import {
 import { Screen } from "./Screens";
 import { useTheme } from "../context/ThemeContext";
 
-const Loader = ({ full = true }) => {
+const Loader = ({ full = true, noBg }) => {
   const { themeColors } = useTheme();
   const { height } = useWindowDimensions();
   return (
@@ -17,7 +17,7 @@ const Loader = ({ full = true }) => {
         flex: 1,
         justifyContent: "center",
         ...(full && { height: height }),
-        backgroundColor: themeColors?.bg,
+        ...(!noBg && { backgroundColor: themeColors?.bg }),
       }}
     >
       <ActivityIndicator size={"large"} color={themeColors?.primary} />

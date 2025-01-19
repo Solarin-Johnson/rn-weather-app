@@ -35,7 +35,7 @@ export default function WeatherMain({
           height:
             Platform.OS === "web"
               ? 200
-              : PixelRatio.getPixelSizeForLayoutSize(80),
+              : PixelRatio.getPixelSizeForLayoutSize(wide ? 115 : 80),
           maxHeight: 190,
         }}
         // onPress={() => {

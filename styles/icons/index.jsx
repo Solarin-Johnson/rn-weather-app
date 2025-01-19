@@ -21,7 +21,7 @@ export const HomeIcon = ({ color, fill }) => (
 );
 
 export const BgCloud = () => {
-  const { themeColors } = useTheme();
+  const { themeColors, wide } = useTheme();
   const color = themeColors?.bgFade2;
 
   return (

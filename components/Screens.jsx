@@ -165,15 +165,10 @@ export function Screen({
       Easing.bezier(0.33, 1, 0.68, 1) // Add same easing for consistency
     );
 
-    if (wide && Platform.OS === "web")
-      return {
-        opacity: 0,
-      };
-    else
-      return {
-        opacity,
-        transform: [{ translateY }],
-      };
+    return {
+      opacity,
+      transform: [{ translateY }],
+    };
   });
 
   const handleScrollEnd = (event) => {
@@ -209,7 +204,7 @@ export function Screen({
           maxHeight: height,
         }}
       >
-        {platform === "web" || key ? (
+        {key ? (
           <View
             // {...animatedProps}
             style={{
@@ -247,7 +242,16 @@ export function Screen({
                 >
                   {header}
                   {title && (
-                    <Animated.View style={headerAnimatedStyle}>
+                    <Animated.View
+                      style={[
+                        headerAnimatedStyle,
+                        {
+                          paddingHorizontal: wide
+                            ? calculateClamp(width, 16, "2%", 54)
+                            : 16,
+                        },
+                      ]}
+                    >
                       <ThemeText
                         styles={{
                           fontSize: wide ? 23 : 18,
@@ -259,18 +263,6 @@ export function Screen({
                         {title}
                       </ThemeText>
                     </Animated.View>
-                  )}
-                  {Platform.OS === "web" && wide && (
-                    <ThemeText
-                      styles={{
-                        fontSize: wide ? 23 : 21,
-                        opacity: 0.9,
-                        textAlign: wide ? "start" : "center",
-                        paddingLeft: wide ? 24 : 0,
-                      }}
-                    >
-                      {title}
-                    </ThemeText>
                   )}
                 </Animated.View>
               </>
@@ -306,9 +298,12 @@ export function Screen({
                       height: 180,
                       justifyContent: "flex-end",
                       paddingBottom: 40,
+                      paddingHorizontal: wide
+                        ? calculateClamp(width, 16, "2%", 54)
+                        : 16,
                     }}
                   >
-                    {(!wide || Platform.OS !== "web") && (
+                    {true && (
                       <Animated.View style={animatedStyle}>
                         <ThemeText
                           styles={{
@@ -316,7 +311,9 @@ export function Screen({
                             opacity: 0.9,
                             paddingLeft: 24,
                             textAlign:
-                              Platform.OS === "web" ? "center" : "start",
+                              !wide && Platform.OS === "web"
+                                ? "center"
+                                : "start",
                           }}
                         >
                           {title}
@@ -325,7 +322,7 @@ export function Screen({
                     )}
                   </View>
                 )}
-                {wide && (
+                {wide && !title && (
                   <View
                     style={{
                       height:
@@ -340,6 +337,10 @@ export function Screen({
                     flex: 1,
                     justifyContent: "center",
                     alignContent: "center",
+                    paddingHorizontal: wide
+                      ? calculateClamp(width, 16, "2%", 54)
+                      : 16,
+
                     // backgroundColor: "#ffffff50",
                   }}
                 >
@@ -350,7 +351,7 @@ export function Screen({
 
                 <View
                   style={{
-                    height: Platform.OS === "web" ? 180 : 150,
+                    height: Platform.OS === "web" ? 180 : wide ? 180 : 140,
                     // backgroundColor: "red",
                   }}
                 ></View>

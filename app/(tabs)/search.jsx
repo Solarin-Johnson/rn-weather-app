@@ -47,6 +47,8 @@ import SearchResult from "../../components/SearchResult";
 import Animated, {
   FadeInDown,
   FadeInUp,
+  Layout,
+  LinearTransition,
   runOnJS,
   SlideInDown,
   useAnimatedStyle,
@@ -84,7 +86,6 @@ export default function Tab() {
       <View
         style={{
           flex: 1,
-          paddingHorizontal: wide ? calculateClamp(width, 16, "2%", 54) : 16,
         }}
       >
         {wide && (
@@ -99,7 +100,12 @@ export default function Tab() {
         {q ? (
           <SearchResult />
         ) : (
-          <View>
+          <View
+            style={{
+              flex: 1,
+              gap: 16,
+            }}
+          >
             <Suggestions />
             <PopularCities />
           </View>
@@ -264,7 +270,11 @@ const SearchBox = () => {
 const Suggestions = () => {
   const { themeColors, wide } = useTheme();
   const { q } = useLocalSearchParams();
-  const { searchQuery: query, setSearchQuery: setQuery } = useSearch();
+  const {
+    searchQuery: query,
+    setSearchQuery: setQuery,
+    recentSearches,
+  } = useSearch();
 
   const navigation = useNavigation();
 
@@ -272,19 +282,24 @@ const Suggestions = () => {
     ...{ query, setQuery },
   };
 
-  return (
-    <View
-      style={{
-        width: "100%",
-        alignSelf: "center",
-        // maxWidth: 450,
-      }}
-    >
-      <View>
-        {!query ? <RecentSearches {...config} /> : <AutoComplete {...config} />}
+  if (query || recentSearches.length > 0)
+    return (
+      <View
+        style={{
+          width: "100%",
+          alignSelf: "center",
+          // maxWidth: 450,
+        }}
+      >
+        <View>
+          {!query ? (
+            <RecentSearches {...config} />
+          ) : (
+            <AutoComplete {...config} />
+          )}
+        </View>
       </View>
-    </View>
-  );
+    );
 };
 
 const RecentSearches = ({ query, setQuery, ...props }) => {
@@ -403,13 +418,18 @@ const AutoComplete = ({ ...props }) => {
                 sub: search.sub,
               });
 
+            const handleBtnPress = (e) => {
+              e.stopPropagation();
+              setQ(search.name);
+            };
+
             return (
               <QuickSearch
                 key={i}
                 {...search}
                 icon={ArrowUpRight}
                 onPress={handlePress}
-                onBtnPress={handlePress}
+                onBtnPress={handleBtnPress}
               />
             );
           })}
@@ -504,8 +524,10 @@ const QuickSearch = ({
       </View>
       <Pressable
         style={{
-          padding: 12,
-          alignItems: "flex-end",
+          padding: 16,
+          height: "100%",
+          // backgroundColor: themeColors?.textFade + "25",
+          justifyContent: "center",
         }}
         onPress={onBtnPress}
       >

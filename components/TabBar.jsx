@@ -30,7 +30,7 @@ export const MyTabBar = forwardRef(
     const containerBg = useSharedValue(0);
     const { width } = useWindowDimensions();
     const wide = width > 720;
-    const maskColor = wide ? themeColors?.bgFade2 : themeColors?.bg;
+    const maskColor = wide ? themeColors?.bgFade : themeColors?.bg;
     const [isKeyboardVisible, setKeyboardVisible] = React.useState(false);
 
     React.useEffect(() => {
