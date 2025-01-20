@@ -2,9 +2,9 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Pressable, Text } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import generalStyles from "../styles/styles";
-import { Trash2 } from "lucide-react-native";
+import { ArrowLeft, Trash2 } from "lucide-react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 
 const ModalContent = ({
@@ -22,6 +22,7 @@ const ModalContent = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: !wide,
+      headerShadowVisible: false,
       headerStyle: {
         backgroundColor: themeColors?.bgFade,
         borderBottomColor: themeColors?.text + "25",
@@ -117,7 +118,24 @@ const ModalContent = ({
           ]}
         >
           {wide && (
-            <View>
+            <View
+              style={{
+                width: "100%",
+                justifyContent: "center",
+              }}
+            >
+              <Pressable
+                onPress={() => {
+                  router.back();
+                }}
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  zIndex: 1,
+                }}
+              >
+                <ArrowLeft />
+              </Pressable>
               <ThemeText styles={{ fontSize: 21, textAlign: "center" }}>
                 {title}
               </ThemeText>
@@ -133,11 +151,12 @@ const ModalContent = ({
           >
             <View style={!wide && styles.form}>{renderInputs()}</View>
             <View style={styles.buttonContainer}>
-              {renderButton(
-                <Trash2 strokeWidth={1.5} color={"#fff"} />,
-                onClose,
-                styles.cancelButton
-              )}
+              {renderButton("Cancel", onClose, [
+                styles.cancelButton,
+                {
+                  backgroundColor: themeColors?.text + "cd",
+                },
+              ])}
               {renderButton(
                 submitButtonText,
                 handleSubmit,
@@ -183,13 +202,13 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#000000",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 16.5,
     fontWeight: "500",
   },
 
   cancelButton: {
-    flex: 0.1,
-    backgroundColor: "#FF3B30",
+    // flex: 0.1,
+    // backgroundColor: "#FF3B30",
   },
   wrapper: {
     // flex: 1,

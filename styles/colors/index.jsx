@@ -13,7 +13,7 @@ export const colors = {
   dark: {
     primary: "#F9D65D",
     text: "#ffffff",
-    bg: "#080809",
+    bg: "#101010",
     fg: "#1a1a1a",
     fgAlt: "#101010",
     textFade: "#a2a2a2",
