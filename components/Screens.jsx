@@ -89,12 +89,6 @@ export function Screen({
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollY.value = event.contentOffset.y; // Update the shared value
-      const shouldSnapValue =
-        event.contentOffset.y <= transitHeaderTreshhold + 40;
-      if (shouldSnap.value !== shouldSnapValue) {
-        shouldSnap.value = shouldSnapValue; // Update shared value
-        runOnJS(updateSnapOffsets)(shouldSnapValue); // Call React state setter
-      }
     },
     onEndDrag: () => {},
   });
