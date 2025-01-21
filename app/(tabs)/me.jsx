@@ -16,6 +16,7 @@ import {
   MapPin,
   Paintbrush,
   PenLine,
+  RefreshCcw,
   Thermometer,
 } from "lucide-react-native";
 import { useUser } from "@/context/UserContext";
@@ -26,24 +27,29 @@ import { useWeather } from "@/context/WeatherContext";
 import { Screen } from "@/components/Screens";
 import { ActivityAction, startActivityAsync } from "expo-intent-launcher";
 import { packageName } from "../../functions";
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
+import { useEffect, useState } from "react";
 
 export default function Tab() {
   const { wide } = useTheme();
-  const { location } = useUser();
-  const navigation = useNavigation();
+  const { location, fetchLocation } = useUser();
   const router = useRouter();
+  const [refreshingLocation, setRefreshingLocation] = useState(false);
 
   const handleClusterPress = (route) => {
     router.push(`/settings/${route}`);
   };
 
-  const openLocationSettings = () => {
-    Platform.OS === "ios"
-      ? Linking.openURL("app-settings:")
-      : Platform.OS !== "web" &&
-        startActivityAsync(ActivityAction.APPLICATION_DETAILS_SETTINGS, {
-          data: `package:${packageName}`,
-        });
+  const refreshLocation = async () => {
+    setRefreshingLocation(true);
+    await fetchLocation();
+    setRefreshingLocation(false);
   };
   return (
     <Screen style={styles.container} title={"Profile"}>
@@ -63,7 +69,10 @@ export default function Tab() {
           <ClusterItem
             text={location.name}
             icon={MapPin}
-            onPress={openLocationSettings}
+            iconRight={RefreshCcw}
+            onPress={refreshLocation}
+            loading={refreshingLocation}
+            rotate
           />
           <ClusterItem text={"Units"} icon={Thermometer} />
           <ClusterItem

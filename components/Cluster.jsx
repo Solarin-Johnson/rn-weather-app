@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Pressable, Platform } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import { ChevronRight } from "lucide-react-native";
+import { ChevronRight, RefreshCcw } from "lucide-react-native";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
-import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
+import Animated, {
+  Easing,
+  FadeIn,
+  FadeInDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 import generalStyles from "../styles/styles";
 
 const Cluster = ({ children }) => {
@@ -74,7 +82,14 @@ export const ClusterChild = ({ children, onPress }) => {
   );
 };
 
-export const ClusterItem = ({ text, icon: Icon, iconProps, onPress }) => {
+export const ClusterItem = ({
+  text,
+  icon: Icon,
+  iconRight = ChevronRight,
+  iconProps,
+  onPress,
+  loading,
+}) => {
   return (
     <ClusterChild onPress={onPress}>
       <View style={styles.item}>
@@ -101,15 +116,44 @@ export const ClusterItem = ({ text, icon: Icon, iconProps, onPress }) => {
         >
           {text}
         </ThemeText>
-        <AdaptiveElement
-          styles={{
-            opacity: 0.7,
-          }}
-        >
-          <ChevronRight size={20} />
-        </AdaptiveElement>
+        <IndicatorIcon icon={iconRight} loading={loading} />
       </View>
     </ClusterChild>
+  );
+};
+
+const IndicatorIcon = ({ icon: Icon = RefreshCcw, loading, rotate }) => {
+  const rotation = useSharedValue(0);
+
+  useEffect(() => {
+    if (loading) {
+      rotation.value = withRepeat(
+        withTiming(360, { duration: 1200, easing: Easing.linear }),
+        -1, // Infinite loop
+        false // No reverse
+      );
+    } else {
+      if (rotation.value > 0) {
+        rotation.value = withTiming(360, {
+          duration: 1200,
+          easing: Easing.linear,
+        });
+      }
+    }
+  }, [loading]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ rotate: `${rotation.value}deg` }],
+    };
+  });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <AdaptiveElement styles={{ opacity: 0.7 }}>
+        <Icon size={20} />
+      </AdaptiveElement>
+    </Animated.View>
   );
 };
 
