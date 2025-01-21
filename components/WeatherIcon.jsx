@@ -53,6 +53,7 @@ const WeatherIcon = memo(({ code, absolute, isDay, size, style }) => {
           <Image
             {...imgConfig}
             source={require("../assets/iconPacks/night.png")}
+            cachePolicy={"disk"}
           />
         )
       ) : (

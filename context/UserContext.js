@@ -7,6 +7,7 @@ import {
 } from "react";
 import { getData, getLocation, removeData, storeData } from "../functions";
 import * as Location from "expo-location";
+import { Asset } from "expo-asset";
 // import { getLocation } from "../api";
 
 const UserContext = createContext();
@@ -87,11 +88,32 @@ const UserProvider = ({ children }) => {
       }
     };
     loadUser();
+    preloadAssets();
   }, []);
 
   useEffect(() => {
     storeData("user", JSON.stringify(user));
   }, [user]);
+
+  const icons = {
+    clear: Asset.fromModule(require("../assets/iconPacks/clear.png")),
+    cloudy: Asset.fromModule(require("../assets/iconPacks/cloudy.png")),
+    foggy: Asset.fromModule(require("../assets/iconPacks/foggy.png")),
+    lightPrecipitation: Asset.fromModule(
+      require("../assets/iconPacks/lightPrecipitation.png")
+    ),
+    heavyPrecipitation: Asset.fromModule(
+      require("../assets/iconPacks/heavyPrecipitation.png")
+    ),
+    freezing: Asset.fromModule(require("../assets/iconPacks/freezing.png")),
+    thunderstorms: Asset.fromModule(
+      require("../assets/iconPacks/thunderstorms.png")
+    ),
+    icePellets: Asset.fromModule(require("../assets/iconPacks/icePellets.png")),
+  };
+
+  const preloadAssets = () =>
+    Promise.all(Object.values(icons).map((asset) => asset.downloadAsync()));
 
   // removeData("user");
 

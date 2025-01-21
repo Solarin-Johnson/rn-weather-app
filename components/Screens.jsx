@@ -17,8 +17,6 @@ import Animated, {
   Easing,
   Extrapolation,
   interpolate,
-  runOnJS,
-  runOnUI,
   scrollTo,
   SlideInDown,
   SlideInRight,

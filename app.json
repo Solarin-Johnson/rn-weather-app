@@ -48,6 +48,7 @@
       ],
       "expo-asset"
     ],
+    "assetBundlePatterns": ["./assets/iconPacks/*"],
     "extra": {
       "router": {
         "origin": false,
