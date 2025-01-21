@@ -10,6 +10,8 @@ import { Platform } from "react-native";
 
 export const apiKey = localAPIKey || Constants.expoConfig.extra.API_KEY;
 
+export const packageName = Constants.expoConfig?.android?.package;
+
 export const storeData = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value);

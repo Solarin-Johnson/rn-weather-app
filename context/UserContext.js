@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { getData, getLocation, removeData, storeData } from "../functions";
 import * as Location from "expo-location";
 // import { getLocation } from "../api";
@@ -6,7 +12,9 @@ import * as Location from "expo-location";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    name: "User",
+  });
   const [preferences, setPreferences] = useState({
     metric: true,
     sound: true,
@@ -70,6 +78,22 @@ const UserProvider = ({ children }) => {
   }, []);
 
   // removeData("location");
+
+  useLayoutEffect(() => {
+    const loadUser = async () => {
+      const storedUser = await getData("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    };
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    storeData("user", JSON.stringify(user));
+  }, [user]);
+
+  // removeData("user");
 
   return (
     <UserContext.Provider

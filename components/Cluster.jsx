@@ -58,7 +58,9 @@ export const ClusterChild = ({ children, onPress }) => {
           paddingHorizontal: 14,
           paddingVertical: 16,
           // borderRadius: "inherit",
-          backgroundColor: hovered ? themeColors?.fg : "transparent",
+          backgroundColor: hovered
+            ? themeColors?.textFade + "07"
+            : "transparent",
         },
         pressed && generalStyles.buttonPressed,
       ]}

@@ -99,7 +99,7 @@ const ThemeProvider = ({ children }) => {
     >
       <StatusBar
         style={themeInv}
-        hidden={isLandscape}
+        // hidden={isLandscape}
         hideTransitionAnimation="slide"
         animated={true}
       />

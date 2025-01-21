@@ -181,6 +181,7 @@ export const TabButton = forwardRef(
           },
           styles.tabBarStyle,
         ]}
+      
         {...props}
       >
         {options.tabBarIcon ? (

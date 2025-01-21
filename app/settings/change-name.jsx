@@ -8,14 +8,17 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigation, useRouter } from "expo-router";
 import ModalContent from "../../components/ModalContent";
+import { useUser } from "../../context/UserContext";
 
 export default function EditName() {
-  const [name, setName] = useState("");
+  const { user, setUser } = useUser();
   const router = useRouter();
 
-  const handleSave = () => {
-    // TODO: Implement save functionality
+  const handleSave = (formData) => {
     router.back();
+    if (formData.name.trim() === "") return;
+    if (formData.name.trim() === user.name) return;
+    setUser((prev) => ({ ...prev, name: formData.name.trim() }));
   };
 
   return (
@@ -23,7 +26,7 @@ export default function EditName() {
       title="Change Name"
       onSubmit={handleSave}
       onClose={() => router.back()}
-      initialFormData={{ name: "Dotjs" }}
+      initialFormData={{ name: user.name }}
       submitButtonText="Save Changes"
       cancelButtonText="Cancel"
     />

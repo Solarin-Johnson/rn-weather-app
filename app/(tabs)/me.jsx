@@ -1,9 +1,15 @@
-import { View, Text, StyleSheet, Platform } from "react-native";
-import { Screen } from "../../components/Screens";
-import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
-import generalStyles from "../../styles/styles";
-import { useTheme } from "../../context/ThemeContext";
-import Cluster, { ClusterChild, ClusterItem } from "../../components/Cluster";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  NativeModules,
+  Linking,
+} from "react-native";
+import { AdaptiveElement, ThemeText } from "@/components/ThemeComponents";
+import generalStyles from "@/styles/styles";
+import { useTheme } from "@/context/ThemeContext";
+import Cluster, { ClusterChild, ClusterItem } from "@/components/Cluster";
 import {
   Bell,
   Info,
@@ -12,11 +18,14 @@ import {
   PenLine,
   Thermometer,
 } from "lucide-react-native";
-import { useUser } from "../../context/UserContext";
+import { useUser } from "@/context/UserContext";
 import Svg, { Circle } from "react-native-svg";
 import { useNavigation, useRouter } from "expo-router";
-import WeatherIcon from "../../components/WeatherIcon";
-import { useWeather } from "../../context/WeatherContext";
+import WeatherIcon from "@/components/WeatherIcon";
+import { useWeather } from "@/context/WeatherContext";
+import { Screen } from "@/components/Screens";
+import { ActivityAction, startActivityAsync } from "expo-intent-launcher";
+import { packageName } from "../../functions";
 
 export default function Tab() {
   const { wide } = useTheme();
@@ -26,6 +35,15 @@ export default function Tab() {
 
   const handleClusterPress = (route) => {
     router.push(`/settings/${route}`);
+  };
+
+  const openLocationSettings = () => {
+    Platform.OS === "ios"
+      ? Linking.openURL("app-settings:")
+      : Platform.OS !== "web" &&
+        startActivityAsync(ActivityAction.APPLICATION_DETAILS_SETTINGS, {
+          data: `package:${packageName}`,
+        });
   };
   return (
     <Screen style={styles.container} title={"Profile"}>
@@ -45,7 +63,7 @@ export default function Tab() {
           <ClusterItem
             text={location.name}
             icon={MapPin}
-            onPress={() => handleClusterPress("location")}
+            onPress={openLocationSettings}
           />
           <ClusterItem text={"Units"} icon={Thermometer} />
           <ClusterItem
@@ -69,6 +87,7 @@ export default function Tab() {
 
 const UserCluster = ({ onPress }) => {
   const { themeColors } = useTheme();
+  const { user } = useUser();
   const { currentWeather: current } = useWeather();
   return (
     <ClusterChild onPress={onPress}>
@@ -83,9 +102,18 @@ const UserCluster = ({ onPress }) => {
             alignItems: "center",
           }}
         >
-          <ThemeText>{current?.temp_c}°</ThemeText>
         </View> */}
-        <ThemeText styles={{ fontSize: 21, flex: 1 }}>User</ThemeText>
+        <View style={{ flex: 1, gap: 2 }}>
+          <ThemeText styles={{ fontSize: 21, flex: 1 }}>{user.name}</ThemeText>
+          <ThemeText
+            styles={{
+              fontSize: 12,
+              opacity: 0.6,
+            }}
+          >
+            Change Nickname
+          </ThemeText>
+        </View>
 
         <AdaptiveElement
           styles={{

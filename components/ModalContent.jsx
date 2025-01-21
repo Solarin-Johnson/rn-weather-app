@@ -1,5 +1,12 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { View, TextInput, StyleSheet, Pressable, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  Text,
+  ScrollView,
+} from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
 import { router, useNavigation } from "expo-router";
@@ -14,9 +21,11 @@ const ModalContent = ({
   submitButtonText = "Submit",
   cancelButtonText = "Cancel",
   initialFormData = {},
+  noInput = false,
+  children,
 }) => {
   const [formData, setFormData] = useState(initialFormData);
-  const { themeColors, wide } = useTheme();
+  const { theme, themeColors, wide } = useTheme();
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
@@ -93,19 +102,26 @@ const ModalContent = ({
   return (
     <KeyboardAvoidingView
       behavior="padding"
+      contentContainerStyle={{
+        flex: 1,
+      }}
       style={{
         flex: 1,
         backgroundColor: themeColors?.bgFade,
       }}
       keyboardVerticalOffset={80}
     >
-      <View
-        style={[
+      <ScrollView
+        style={{
+          minHeight: 200,
+        }}
+        contentContainerStyle={[
           styles.container,
           {
             backgroundColor: themeColors?.bgFade,
           },
         ]}
+        keyboardShouldPersistTaps="handled"
       >
         <View
           style={[
@@ -134,7 +150,7 @@ const ModalContent = ({
                   zIndex: 1,
                 }}
               >
-                <ArrowLeft />
+                <ArrowLeft color={themeColors?.text} />
               </Pressable>
               <ThemeText styles={{ fontSize: 21, textAlign: "center" }}>
                 {title}
@@ -149,12 +165,24 @@ const ModalContent = ({
               },
             ]}
           >
-            <View style={!wide && styles.form}>{renderInputs()}</View>
-            <View style={styles.buttonContainer}>
+            {!noInput && (
+              <View style={!wide && styles.form}>{renderInputs()}</View>
+            )}
+            {children}
+            <View
+              style={[
+                styles.buttonContainer,
+                {
+                  borderColor: wide ? "transparent" : themeColors?.text + "20",
+                  padding: wide ? 0 : 20,
+                },
+              ]}
+            >
               {renderButton("Cancel", onClose, [
                 styles.cancelButton,
                 {
-                  backgroundColor: themeColors?.text + "cd",
+                  backgroundColor:
+                    themeColors?.text + (theme === "light" ? "15" : "de"),
                 },
               ])}
               {renderButton(
@@ -168,28 +196,29 @@ const ModalContent = ({
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     flex: 1,
     justifyContent: "center",
   },
   input: {
     borderWidth: 1,
-    padding: 12,
-    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 13,
+    borderRadius: 10,
     marginBottom: 15,
-    fontSize: 18,
+    fontSize: 17,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 16,
+    borderTopWidth: 1,
   },
   button: {
     height: 48,
@@ -223,16 +252,17 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
+    padding: 20,
   },
   centerCard: {
     borderWidth: 1,
     alignSelf: "center",
     maxWidth: 420,
-    padding: 32,
+    padding: 30,
     borderRadius: 14,
   },
   inputField: {
-    gap: 8,
+    gap: 9,
   },
 });
 
