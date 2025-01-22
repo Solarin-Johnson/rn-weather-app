@@ -63,7 +63,7 @@ export default function Tab() {
         ]}
       >
         <Cluster>
-          <UserCluster onPress={() => handleClusterPress("change-name")} />
+          <UserCluster onPress={() => handleClusterPress("name")} />
         </Cluster>
         <Cluster>
           <ClusterItem
@@ -74,7 +74,11 @@ export default function Tab() {
             loading={refreshingLocation}
             rotate
           />
-          <ClusterItem text={"Units"} icon={Thermometer} />
+          <ClusterItem
+            text={"Measurement"}
+            icon={Thermometer}
+            onPress={() => handleClusterPress("measurement")}
+          />
           <ClusterItem
             text={"Notifications"}
             icon={Bell}

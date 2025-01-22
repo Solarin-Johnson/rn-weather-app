@@ -13,6 +13,7 @@ export default function SettingsLayout() {
         },
         headerTintColor: themeColors.text,
         headerTitleAlign: "center",
+        headerShown: false,
       }}
     >
       <Stack.Screen

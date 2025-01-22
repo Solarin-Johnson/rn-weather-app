@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Pressable, Platform } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import { ChevronRight, RefreshCcw } from "lucide-react-native";
+import { ChevronRight, Circle, RefreshCcw } from "lucide-react-native";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
 import Animated, {
   Easing,
@@ -84,7 +84,7 @@ export const ClusterChild = ({ children, onPress }) => {
 
 export const ClusterItem = ({
   text,
-  icon: Icon,
+  icon: Icon = Circle,
   iconRight = ChevronRight,
   iconProps,
   onPress,
@@ -133,11 +133,16 @@ const IndicatorIcon = ({ icon: Icon = RefreshCcw, loading, rotate }) => {
         false // No reverse
       );
     } else {
+      const duration = ((360 - (rotation.value % 360)) * 1200) / 360;
       if (rotation.value > 0) {
         rotation.value = withTiming(360, {
-          duration: 1200,
+          duration: duration,
           easing: Easing.linear,
         });
+
+        return () => {
+          rotation.value = 0;
+        };
       }
     }
   }, [loading]);

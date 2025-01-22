@@ -69,6 +69,9 @@ export default function Tab() {
               <View
                 style={{
                   marginTop: 42,
+                  width: "100%",
+                  maxWidth: 430,
+                  alignSelf: "center",
                 }}
               >
                 <WeatherDetails

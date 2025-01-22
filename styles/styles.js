@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { clamp } from "../functions";
 
 const generalStyles = StyleSheet.create({
@@ -75,7 +75,7 @@ const generalStyles = StyleSheet.create({
     opacity: 0.85,
   },
   buttonPressed: {
-    opacity: 0.7,
+    opacity: Platform.OS === "web" ? 0.7 : 1,
   },
 });
 

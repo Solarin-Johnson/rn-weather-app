@@ -36,10 +36,9 @@ const ModalContent = ({
         backgroundColor: themeColors?.bgFade,
         borderBottomColor: themeColors?.text + "25",
       },
-
       title: title,
     });
-  }, [navigation, wide]);
+  }, [navigation, wide, title, themeColors]);
 
   const handleSubmit = () => {
     onSubmit(formData);
@@ -73,6 +72,7 @@ const ModalContent = ({
             placeholder={`Enter ${key}`}
             value={formData[key]}
             onChangeText={(text) => handleInputChange(key, text)}
+            autoFocus={index === 0}
           />
         </AdaptiveElement>
       </View>
@@ -135,10 +135,13 @@ const ModalContent = ({
         >
           {wide && (
             <View
-              style={{
-                width: "100%",
-                justifyContent: "center",
-              }}
+              style={[
+                styles.header,
+                {
+                  width: "100%",
+                  justifyContent: "center",
+                },
+              ]}
             >
               <Pressable
                 onPress={() => {
@@ -168,32 +171,32 @@ const ModalContent = ({
             {!noInput && (
               <View style={!wide && styles.form}>{renderInputs()}</View>
             )}
-            {children}
-            <View
-              style={[
-                styles.buttonContainer,
-                {
-                  borderColor: wide ? "transparent" : themeColors?.text + "20",
-                  padding: wide ? 0 : 20,
-                },
-              ]}
-            >
-              {renderButton("Cancel", onClose, [
-                styles.cancelButton,
-                {
-                  backgroundColor:
-                    themeColors?.text + (theme === "light" ? "15" : "de"),
-                },
-              ])}
-              {renderButton(
-                submitButtonText,
-                handleSubmit,
-                {},
-                {
-                  color: themeColors?.bg,
-                }
-              )}
-            </View>
+            {children && <View style={{ flex: 1 }}>{children}</View>}
+          </View>
+          <View
+            style={[
+              styles.buttonContainer,
+              {
+                borderColor: wide ? "transparent" : themeColors?.text + "20",
+                padding: wide ? 0 : 20,
+              },
+            ]}
+          >
+            {renderButton("Cancel", onClose, [
+              styles.cancelButton,
+              {
+                backgroundColor:
+                  themeColors?.text + (theme === "light" ? "15" : "de"),
+              },
+            ])}
+            {renderButton(
+              submitButtonText,
+              handleSubmit,
+              {},
+              {
+                color: themeColors?.bg,
+              }
+            )}
           </View>
         </View>
       </ScrollView>
@@ -211,7 +214,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 13,
     borderRadius: 10,
-    marginBottom: 15,
     fontSize: 17,
   },
   buttonContainer: {
@@ -219,6 +221,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 16,
     borderTopWidth: 1,
+    width: "100%",
   },
   button: {
     height: 48,
@@ -227,21 +230,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flex: 1,
   },
-
   buttonText: {
     color: "#000000",
     textAlign: "center",
     fontSize: 16.5,
     fontWeight: "500",
   },
-
+  header: {
+    marginBottom: 24,
+  },
   cancelButton: {
     // flex: 0.1,
     // backgroundColor: "#FF3B30",
   },
   wrapper: {
     // flex: 1,
-    gap: 24,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -249,6 +252,8 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     width: "100%",
+    gap: 16,
+    marginBottom: 16,
   },
   form: {
     flex: 1,

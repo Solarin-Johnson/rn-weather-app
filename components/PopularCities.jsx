@@ -75,7 +75,13 @@ export const PopularCities = () => {
           <Animated.View
             key={i}
             style={{ width: "100%" }}
-            entering={Platform.OS !== "web" ? FadeInDown.delay(30 * i) : FadeIn}
+            entering={
+              Platform.OS !== "web"
+                ? FadeInDown.duration(500).withInitialValues({
+                    transform: [{ translateY: 50 }],
+                  })
+                : FadeIn
+            }
           >
             {loading ? (
               <LoaderCard />
