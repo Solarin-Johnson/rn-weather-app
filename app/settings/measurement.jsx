@@ -11,7 +11,7 @@ import ModalContent from "../../components/ModalContent";
 import { useUser } from "../../context/UserContext";
 import Cluster, { ClusterItem } from "../../components/Cluster";
 
-export default function SelectUnit() {
+export default function Measurement() {
   const { user, setUser } = useUser();
   const router = useRouter();
 

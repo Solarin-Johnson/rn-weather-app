@@ -112,12 +112,10 @@ const ModalContent = ({
       keyboardVerticalOffset={80}
     >
       <ScrollView
-        style={{
-          minHeight: 200,
-        }}
         contentContainerStyle={[
           styles.container,
           {
+            minHeight: "100%",
             backgroundColor: themeColors?.bgFade,
           },
         ]}
@@ -171,7 +169,7 @@ const ModalContent = ({
             {!noInput && (
               <View style={!wide && styles.form}>{renderInputs()}</View>
             )}
-            {children && <View style={{ flex: 1 }}>{children}</View>}
+            {children}
           </View>
           <View
             style={[
@@ -206,7 +204,7 @@ const ModalContent = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
   },
   input: {
