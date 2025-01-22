@@ -2,11 +2,18 @@ import { useState, useEffect } from "react";
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dimensions } from "react-native";
-
 import Constants from "expo-constants";
 import { API_KEY as localAPIKey } from "@env";
 import axios from "axios";
 import { Platform } from "react-native";
+import {
+  AirVent,
+  Clock,
+  CloudRain,
+  Sun,
+  Thermometer,
+  Wind,
+} from "lucide-react-native";
 
 export const apiKey = localAPIKey || Constants.expoConfig.extra.API_KEY;
 
@@ -267,3 +274,62 @@ function getAQILevel(aqi) {
       return "N/A";
   }
 }
+
+export function capitalize(str) {
+  if (!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+export const preferenceIcons = {
+  measurement: {
+    temperatureUnit: Thermometer,
+    windSpeedUnit: Wind,
+    timeFormat: Clock,
+    precipitationUnit: CloudRain,
+  },
+  display: {
+    airQualityIndex: AirVent,
+    uvIndexDisplay: Sun,
+  },
+  notifications: {
+    weatherAlerts: CloudRain,
+    dailySummary: Sun,
+    rainAlerts: CloudRain,
+  },
+};
+
+export const preferenceList = {
+  measurement: {
+    temperatureUnit: {
+      label: "Temperature Unit",
+      options: ["Celsius", "Fahrenheit"],
+    },
+    windSpeedUnit: {
+      label: "Wind Speed Unit",
+      options: ["km/h", "mph", "m/s"],
+    },
+    timeFormat: {
+      label: "Time Format",
+      options: ["12-hour", "24-hour"],
+      selected: "24-hour",
+    },
+    precipitationUnit: {
+      label: "Precipitation Unit",
+      options: ["mm", "in"],
+    },
+  },
+  display: {
+    airQualityIndex: {
+      label: "Air Quality Index",
+      options: ["Show", "Hide"],
+    },
+    uvIndexDisplay: {
+      label: "UV Index Display",
+      options: ["All", "Numeric", "Label"],
+    },
+  },
+  notifications: {
+    label: "Notifications",
+    options: ["weatherAlerts", "dailySummary", "rainAlerts"],
+  },
+};

@@ -27,6 +27,7 @@ const ThemeProvider = ({ children }) => {
   const [themeColors, setThemeColors] = useState(false);
   const width = useWindowDimensions().width;
   const [wide, setWide] = useState(width > 720);
+  const themeEqv = theme === "auto" ? colorScheme : theme;
 
   useEffect(() => {
     setWide(width > 720);
@@ -46,11 +47,11 @@ const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     if (theme === "auto") {
-      setTheme(colorScheme === "dark" ? "dark" : "light");
+      setThemeColors(colors[colorScheme]);
+    } else {
+      setThemeColors(colors[theme]);
     }
     storeData("theme", theme);
-
-    setThemeColors(colors[theme]);
   }, [colorScheme, theme]);
 
   useThemeChange((colorScheme) => {
@@ -61,7 +62,7 @@ const ThemeProvider = ({ children }) => {
 
   if (Platform.OS === "web") {
     const style = document.createElement("style");
-    style.innerHTML = `:root { color-scheme: ${theme}; }`;
+    style.innerHTML = `:root { color-scheme: ${themeEqv} ; }`;
     document.head.appendChild(style);
   }
 
@@ -95,7 +96,13 @@ const ThemeProvider = ({ children }) => {
 
   return (
     <ThemeContext.Provider
-      value={{ theme, setTheme, themeColors, wide, isLandscape }}
+      value={{
+        theme: themeEqv,
+        setTheme,
+        themeColors,
+        wide,
+        isLandscape,
+      }}
     >
       <StatusBar
         style={themeInv}

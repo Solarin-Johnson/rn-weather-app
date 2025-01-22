@@ -14,11 +14,11 @@ import { Circle, PencilRuler, Ruler, Scale } from "lucide-react-native";
 import { useTheme } from "../../context/ThemeContext";
 import { preferenceIcons, preferenceList } from "../../functions";
 
-export default function Measurement() {
+export default function Display() {
   const { preferences, setPreferences } = useUser();
   const { wide } = useTheme();
-  const { measurement: config } = preferenceList;
-  const { measurement } = preferences;
+  const { display: config } = preferenceList;
+  const { display } = preferences;
   const router = useRouter();
 
   const toggleMetric = (bool) => {
@@ -27,7 +27,7 @@ export default function Measurement() {
 
   return (
     <ModalContent
-      title="Measurement"
+      title="Display"
       onClose={() => router.back()}
       submitButtonText="Save Changes"
       cancelButtonText="Cancel"
@@ -38,8 +38,8 @@ export default function Measurement() {
         style={{
           flex: 1,
           paddingHorizontal: wide || 16,
-          gap: 42,
-          paddingVertical: 21,
+          gap: 32,
+          paddingVertical: 16,
         }}
       >
         {Object.entries(config).map(([key, setting]) => (
@@ -57,13 +57,13 @@ export default function Measurement() {
                 onPress={() => {
                   setPreferences({
                     ...preferences,
-                    measurement: {
-                      ...measurement,
+                    display: {
+                      ...display,
                       [key]: option,
                     },
                   });
                 }}
-                radio={(option === measurement[key]).toString()}
+                radio={(option === display[key]).toString()}
               />
             ))}
           </Cluster>

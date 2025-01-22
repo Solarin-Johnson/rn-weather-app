@@ -194,6 +194,9 @@ export function Screen({
           flexDirection: "row",
           justifyContent: "flex-end",
           maxHeight: height,
+          width: "100%",
+          maxWidth: wide ? 550 : "auto",
+          alignSelf: "center",
         }}
       >
         {key ? (

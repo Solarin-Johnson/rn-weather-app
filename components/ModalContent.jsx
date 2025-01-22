@@ -6,6 +6,7 @@ import {
   Pressable,
   Text,
   ScrollView,
+  Platform,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
@@ -21,24 +22,13 @@ const ModalContent = ({
   submitButtonText = "Submit",
   cancelButtonText = "Cancel",
   initialFormData = {},
-  noInput = false,
+  noInput,
+  noBtn,
   children,
 }) => {
   const [formData, setFormData] = useState(initialFormData);
   const { theme, themeColors, wide } = useTheme();
   const navigation = useNavigation();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: !wide,
-      headerShadowVisible: false,
-      headerStyle: {
-        backgroundColor: themeColors?.bgFade,
-        borderBottomColor: themeColors?.text + "25",
-      },
-      title: title,
-    });
-  }, [navigation, wide, title, themeColors]);
 
   const handleSubmit = () => {
     onSubmit(formData);
@@ -99,15 +89,17 @@ const ModalContent = ({
     </Pressable>
   );
 
+  const ModalContainer = Platform.OS !== "web" ? KeyboardAvoidingView : View;
+
   return (
-    <KeyboardAvoidingView
+    <ModalContainer
       behavior="padding"
       contentContainerStyle={{
         flex: 1,
       }}
       style={{
         flex: 1,
-        backgroundColor: themeColors?.bgFade,
+        backgroundColor: themeColors?.bg,
       }}
       keyboardVerticalOffset={80}
     >
@@ -116,7 +108,6 @@ const ModalContent = ({
           styles.container,
           {
             minHeight: "100%",
-            backgroundColor: themeColors?.bgFade,
           },
         ]}
         keyboardShouldPersistTaps="handled"
@@ -163,6 +154,7 @@ const ModalContent = ({
               styles.content,
               {
                 flex: !wide && 1,
+                paddingHorizontal: !wide,
               },
             ]}
           >
@@ -171,34 +163,36 @@ const ModalContent = ({
             )}
             {children}
           </View>
-          <View
-            style={[
-              styles.buttonContainer,
-              {
-                borderColor: wide ? "transparent" : themeColors?.text + "20",
-                padding: wide ? 0 : 20,
-              },
-            ]}
-          >
-            {renderButton("Cancel", onClose, [
-              styles.cancelButton,
-              {
-                backgroundColor:
-                  themeColors?.text + (theme === "light" ? "15" : "de"),
-              },
-            ])}
-            {renderButton(
-              submitButtonText,
-              handleSubmit,
-              {},
-              {
-                color: themeColors?.bg,
-              }
-            )}
-          </View>
+          {!noBtn && (
+            <View
+              style={[
+                styles.buttonContainer,
+                {
+                  borderColor: wide ? "transparent" : themeColors?.text + "20",
+                  padding: wide ? 0 : 20,
+                },
+              ]}
+            >
+              {renderButton("Cancel", onClose, [
+                styles.cancelButton,
+                {
+                  backgroundColor:
+                    themeColors?.text + (theme === "light" ? "15" : "de"),
+                },
+              ])}
+              {renderButton(
+                submitButtonText,
+                handleSubmit,
+                {},
+                {
+                  color: themeColors?.bg,
+                }
+              )}
+            </View>
+          )}
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </ModalContainer>
   );
 };
 
@@ -209,8 +203,8 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    paddingHorizontal: 12,
     paddingVertical: 13,
+    paddingHorizontal: 10,
     borderRadius: 10,
     fontSize: 17,
   },
@@ -220,6 +214,7 @@ const styles = StyleSheet.create({
     gap: 16,
     borderTopWidth: 1,
     width: "100%",
+    marginTop: 16,
   },
   button: {
     height: 48,
@@ -251,7 +246,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     gap: 16,
-    marginBottom: 16,
   },
   form: {
     flex: 1,
@@ -260,7 +254,8 @@ const styles = StyleSheet.create({
   centerCard: {
     borderWidth: 1,
     alignSelf: "center",
-    maxWidth: 420,
+    maxWidth: 480,
+    margin: 54,
     padding: 30,
     borderRadius: 14,
   },

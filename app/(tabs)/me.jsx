@@ -15,8 +15,10 @@ import {
   Info,
   MapPin,
   Paintbrush,
+  PencilRuler,
   PenLine,
   RefreshCcw,
+  Sun,
   Thermometer,
 } from "lucide-react-native";
 import { useUser } from "@/context/UserContext";
@@ -58,7 +60,7 @@ export default function Tab() {
           generalStyles.screen,
           {
             justifyContent: wide ? "center" : "flex-start",
-            gap: 24,
+            gap: 18,
           },
         ]}
       >
@@ -76,8 +78,14 @@ export default function Tab() {
           />
           <ClusterItem
             text={"Measurement"}
-            icon={Thermometer}
+            icon={PencilRuler}
             onPress={() => handleClusterPress("measurement")}
+            iconProps={{ size: 19.5 }}
+          />
+          <ClusterItem
+            text={"Display"}
+            icon={Sun}
+            onPress={() => handleClusterPress("display")}
           />
           <ClusterItem
             text={"Notifications"}

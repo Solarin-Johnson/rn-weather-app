@@ -208,7 +208,6 @@ const SearchBox = () => {
     );
 
   useEffect(() => {
-    console.log(keyboardHide);
 
     if (keyboardHide) {
       if (inputRef.current.isFocused()) inputRef.current.blur();

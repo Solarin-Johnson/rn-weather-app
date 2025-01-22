@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Pressable, Platform } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import { ChevronRight, Circle, RefreshCcw } from "lucide-react-native";
+import {
+  ChevronRight,
+  Circle,
+  CircleDot,
+  RefreshCcw,
+  Thermometer,
+} from "lucide-react-native";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
 import Animated, {
   Easing,
@@ -14,45 +20,82 @@ import Animated, {
 } from "react-native-reanimated";
 import generalStyles from "../styles/styles";
 
-const Cluster = ({ children }) => {
+const Cluster = ({
+  title,
+  titleIcon: Icon,
+  children,
+  config = { transform: [{ translateY: 50 }] },
+}) => {
   const { theme, wide, themeColors } = useTheme();
   return (
-    <Animated.View
-      entering={
-        Platform.OS !== "web"
-          ? FadeInDown.duration(500).withInitialValues({
-              transform: [{ translateY: 50 }],
-            })
-          : FadeIn.duration(500)
-      }
-      style={[
-        styles.cluster,
-        {
-          backgroundColor:
-            wide && theme === "light"
-              ? themeColors?.bg
-              : wide
-                ? themeColors?.fg
-                : themeColors?.fg + "90",
-        },
-      ]}
+    <View
+      style={{
+        gap: 12,
+      }}
     >
-      {React.Children.map(children, (child, index) => (
-        <>
-          {child}
-          {index < React.Children.count(children) - 1 && (
-            <View
-              style={{
-                width: "100%",
-                height: 1,
-                backgroundColor: themeColors?.textFade + "25",
-                borderRadius: 1,
-              }}
-            />
-          )}
-        </>
-      ))}
-    </Animated.View>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          // justifyContent: "space-between",
+          gap: 6,
+          opacity: 0.7,
+        }}
+      >
+        {title && (
+          <ThemeText
+            styles={{
+              fontSize: 18,
+            }}
+          >
+            {title}
+          </ThemeText>
+        )}
+        {/* {Icon && (
+          <AdaptiveElement
+            styles={{
+              paddingHorizontal: 12,
+            }}
+          >
+            <Icon size={19.5} strokeWidth={2} />
+          </AdaptiveElement>
+        )} */}
+      </View>
+      <Animated.View
+        entering={
+          Platform.OS !== "web"
+            ? FadeInDown.duration(500).withInitialValues(config)
+            : FadeIn.duration(200)
+        }
+        style={[
+          styles.cluster,
+          {
+            backgroundColor:
+              wide && theme === "light"
+                ? themeColors?.bg
+                : wide
+                  ? themeColors?.fg
+                  : themeColors?.fg + "90",
+          },
+        ]}
+      >
+        {React.Children.map(children, (child, index) => (
+          <>
+            {child}
+            {index < React.Children.count(children) - 1 && (
+              <View
+                style={{
+                  width: "100%",
+                  height: 1,
+                  backgroundColor: themeColors?.textFade + "25",
+                  borderRadius: 1,
+                }}
+              />
+            )}
+          </>
+        ))}
+      </Animated.View>
+    </View>
   );
 };
 
@@ -85,10 +128,11 @@ export const ClusterChild = ({ children, onPress }) => {
 export const ClusterItem = ({
   text,
   icon: Icon = Circle,
-  iconRight = ChevronRight,
+  iconRight,
   iconProps,
   onPress,
   loading,
+  radio,
 }) => {
   return (
     <ClusterChild onPress={onPress}>
@@ -116,13 +160,20 @@ export const ClusterItem = ({
         >
           {text}
         </ThemeText>
-        <IndicatorIcon icon={iconRight} loading={loading} />
+        <IndicatorIcon {...{ icon: iconRight, loading, radio }} />
       </View>
     </ClusterChild>
   );
 };
 
-const IndicatorIcon = ({ icon: Icon = RefreshCcw, loading, rotate }) => {
+const IndicatorIcon = ({ icon, loading, radio }) => {
+  const Icon =
+    icon ||
+    (radio
+      ? (radio === "true" && CircleDot) || Circle
+      : loading
+        ? RefreshCcw
+        : ChevronRight);
   const rotation = useSharedValue(0);
 
   useEffect(() => {
@@ -155,7 +206,7 @@ const IndicatorIcon = ({ icon: Icon = RefreshCcw, loading, rotate }) => {
 
   return (
     <Animated.View style={animatedStyle}>
-      <AdaptiveElement styles={{ opacity: 0.7 }}>
+      <AdaptiveElement styles={{ opacity: radio ? 0.9 : 0.7 }}>
         <Icon size={20} />
       </AdaptiveElement>
     </Animated.View>

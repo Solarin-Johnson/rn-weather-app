@@ -5,9 +5,16 @@ import {
   useLayoutEffect,
   useState,
 } from "react";
-import { getData, getLocation, removeData, storeData } from "../functions";
+import {
+  getData,
+  getLocation,
+  preferenceList,
+  removeData,
+  storeData,
+} from "../functions";
 import * as Location from "expo-location";
 import { Asset } from "expo-asset";
+
 // import { getLocation } from "../api";
 
 const UserContext = createContext();
@@ -17,9 +24,19 @@ const UserProvider = ({ children }) => {
     name: "User",
   });
   const [preferences, setPreferences] = useState({
-    metric: true,
-    sound: true,
+    measurement: {
+      temperatureUnit: "Celsius",
+      windSpeedUnit: "km/h",
+      timeFormat: "24-hour",
+      precipitationUnit: "mm",
+    },
+    display: {
+      airQualityIndex: "Hide",
+      uvIndexDisplay: "All",
+    },
+    notifications: ["weatherAlerts"],
   });
+
   const [location, setLocation] = useState(null);
 
   const fetchLocation = async () => {
@@ -90,6 +107,28 @@ const UserProvider = ({ children }) => {
     loadUser();
     preloadAssets();
   }, []);
+
+  useLayoutEffect(() => {
+    const loadPreferences = async () => {
+      const storedPreferences = await getData("preferences");
+      if (storedPreferences) {
+        setPreferences(JSON.parse(storedPreferences));
+      }
+    };
+
+    loadPreferences();
+  }, []);
+
+  useEffect(() => {
+    let isSubscribed = true;
+    if (isSubscribed) {
+      storeData("preferences", JSON.stringify(preferences));
+      console.log("Preferences stored");
+    }
+    return () => {
+      isSubscribed = false;
+    };
+  }, [preferences]);
 
   useEffect(() => {
     storeData("user", JSON.stringify(user));
