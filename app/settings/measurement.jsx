@@ -16,7 +16,7 @@ import { preferenceIcons, preferenceList } from "../../functions";
 
 export default function Measurement() {
   const { preferences, setPreferences } = useUser();
-  const { wide } = useTheme();
+  const { theme, themeColors, wide } = useTheme();
   const { measurement: config } = preferenceList;
   const { measurement } = preferences;
   const router = useRouter();
@@ -48,6 +48,7 @@ export default function Measurement() {
             title={setting.label}
             titleIcon={preferenceIcons.measurement[key]}
             config={{ transform: [{ translateY: 15 }] }}
+            backgroundColor={themeColors?.fg + "80"}
           >
             {setting.options.map((option) => (
               <ClusterItem

@@ -74,11 +74,11 @@ export const MyTabBar = forwardRef(
         style={styles.container}
       >
         {!isKeyboardVisible && (
-          <View
+          <Animated.View
             // key={theme}
             entering={FadeIn.duration(200)}
             exiting={FadeOut.duration(200)}
-            style={animatedStyle}
+            style={[animatedStyle]}
           >
             <BlurView
               intensity={60}
@@ -93,15 +93,13 @@ export const MyTabBar = forwardRef(
                 styles.tabBlur,
                 {
                   backgroundColor: themeColors?.fg + "ab",
-                  ...(Platform.OS !== "web" && {
-                    shadowColor: "#000000df",
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 3,
-                  }),
+                  shadowColor: "#000000df",
+                  shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 3,
                   elevation: 1,
                 },
               ]}
@@ -158,7 +156,7 @@ export const MyTabBar = forwardRef(
           })} */}
               {children}
             </BlurView>
-          </View>
+          </Animated.View>
         )}
       </TabBottomGradient>
     );

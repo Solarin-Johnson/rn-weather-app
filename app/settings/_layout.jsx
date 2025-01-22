@@ -18,9 +18,9 @@ export default function SettingsLayout() {
       }}
     >
       <Stack.Screen
-        name="index"
+        name="name"
         options={{
-          title: "Settings",
+          title: "Change Name",
         }}
       />
       <Stack.Screen

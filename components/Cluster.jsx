@@ -25,8 +25,15 @@ const Cluster = ({
   titleIcon: Icon,
   children,
   config = { transform: [{ translateY: 50 }] },
+  backgroundColor,
 }) => {
   const { theme, wide, themeColors } = useTheme();
+  const initBg =
+    wide && theme === "light"
+      ? themeColors?.bg + "ef"
+      : wide
+        ? themeColors?.fg + "90"
+        : themeColors?.fg + "90";
   return (
     <View
       style={{
@@ -70,12 +77,7 @@ const Cluster = ({
         style={[
           styles.cluster,
           {
-            backgroundColor:
-              wide && theme === "light"
-                ? themeColors?.bg
-                : wide
-                  ? themeColors?.fg
-                  : themeColors?.fg + "90",
+            backgroundColor: backgroundColor || initBg,
           },
         ]}
       >
