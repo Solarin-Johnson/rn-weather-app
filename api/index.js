@@ -1,4 +1,5 @@
 import { WEATHER_API_KEY as localWeatherApiKey } from "@env";
+import Constants from "expo-constants";
 import axios from "axios";
 
 export const weatherApiKey =

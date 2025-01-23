@@ -7,7 +7,6 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "your-app-scheme",
-    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -60,7 +59,8 @@
       "eas": {
         "projectId": "2fc26791-9c1b-4675-b9ce-4bdf496447b8"
       },
-      "API_KEY": "@env:API_KEY"
+      "API_KEY": "@env:API_KEY",
+      "WEATHER_API_KEY": "@env:WEATHER_API_KEY"
     }
   }
 }

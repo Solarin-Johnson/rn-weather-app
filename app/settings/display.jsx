@@ -48,7 +48,7 @@ export default function Display() {
             title={setting.label}
             titleIcon={preferenceIcons.measurement[key]}
             config={{ transform: [{ translateY: 15 }] }}
-            backgroundColor={themeColors?.fg + "80"}
+            backgroundColor={themeColors?.fg + "90"}
           >
             {setting.options.map((option) => (
               <ClusterItem
