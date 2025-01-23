@@ -15,17 +15,15 @@ import { useTheme } from "../../context/ThemeContext";
 import { useUser } from "../../context/UserContext";
 import { useBottomSheet } from "../../context/BottomSheetContext";
 import WeatherDetails from "./Details";
+import { calculateUnits } from "../../functions";
 
-export default function WeatherMain({
-  currentWeather: current,
-  futureWeather,
-}) {
+export default function WeatherMain({ currentWeather: current }) {
   const { width } = useWindowDimensions();
-  const { themeColors } = useTheme();
-  const { preferences } = useUser();
+  const { themeColors, wide } = useTheme();
+  const { measurement } = useUser();
   const { condition } = current || {};
-  const { setBottomSheet } = useBottomSheet();
-  const wide = width > 720;
+  const unit =
+    measurement.temperatureUnit.toLowerCase() === "celsius" ? "c" : "f";
 
   return (
     <View
@@ -38,7 +36,6 @@ export default function WeatherMain({
     >
       <Pressable
         style={{
-          // flex: 1,
           height:
             Platform.OS === "web"
               ? 200
@@ -77,7 +74,13 @@ export default function WeatherMain({
         >
           {condition?.text}
         </ThemeText>
-        <View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignSelf: "center",
+            position: "relative",
+          }}
+        >
           <ThemeText
             styles={{
               fontSize: 92,
@@ -85,8 +88,21 @@ export default function WeatherMain({
               textAlign: "center",
             }}
           >
-            {current?.temp_c.toFixed(0)}
+            {parseInt(
+              calculateUnits(current?.temp_c, measurement.temperatureUnit)
+            )}
             <Text style={{ color: themeColors.primary }}>°</Text>
+          </ThemeText>
+          <ThemeText
+            styles={{
+              fontSize: 32, // Smaller font size
+              fontWeight: "600",
+              position: "absolute",
+              bottom: 14,
+              right: 10,
+            }}
+          >
+            {unit.toUpperCase()}
           </ThemeText>
         </View>
       </View>
@@ -139,17 +155,12 @@ export function WeatherSearchMain({ currentWeather: current }) {
 
 const styles = StyleSheet.create({
   body: {
-    // backgroundColor: "red",
     flex: 1,
-    // marginTop: calculateClamp(Dimensions.get("window").height, 0, "4.5%", 80),
     marginTop: PixelRatio.getPixelSizeForLayoutSize(10),
-    // justifyContent: "center",
-    // height: "100%",
     paddingVertical: 16,
   },
   searchBody: {
     flex: 1,
-    // paddingVertical: 16,
   },
   searchReadings: {
     flexDirection: "row",

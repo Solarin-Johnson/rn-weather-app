@@ -13,7 +13,7 @@ import { CloudRain, Sun, Cloud } from "lucide-react-native";
 import { searchCurrentWeather } from "../api";
 import WeatherIcon from "./WeatherIcon";
 import { Link, useFocusEffect } from "expo-router";
-import { calculateAQI, getHighestValue } from "../functions";
+import { calculateAQI, calculateUnits, getHighestValue } from "../functions";
 import generalStyles from "../styles/styles";
 import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native";
 import Animated, {
@@ -21,6 +21,7 @@ import Animated, {
   FadeInDown,
   SlideInDown,
 } from "react-native-reanimated";
+import { useUser } from "../context/UserContext";
 
 const popularCitiesList = [
   { id: 1, name: "London" },
@@ -34,6 +35,7 @@ export const PopularCities = () => {
 
   const [popularCities, setPopularCities] = useState(popularCitiesList);
   const [loading, setLoading] = useState(true);
+  const { measurement } = useUser();
 
   const fetchCitiesWeather = async () => {
     setLoading(true);
@@ -42,7 +44,7 @@ export const PopularCities = () => {
         const weather = await searchCurrentWeather(city.name);
         return {
           ...city,
-          temp: `${Math.round(weather.current.temp_c)}°`,
+          temp: `${Math.round(calculateUnits(weather.current.temp_c, measurement.temperatureUnit))}°`,
           code: weather.current.condition.code,
           isDay: weather.current.is_day,
           country: weather.location.country,

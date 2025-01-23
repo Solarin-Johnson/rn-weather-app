@@ -111,6 +111,7 @@ const ModalContent = ({
           },
         ]}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         <View
           style={[

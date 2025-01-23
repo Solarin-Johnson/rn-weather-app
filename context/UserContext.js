@@ -164,6 +164,8 @@ const UserProvider = ({ children }) => {
         location,
         fetchLocation,
         preferences,
+        measurement: preferences.measurement,
+        display: preferences.display,
         setPreferences,
       }}
     >

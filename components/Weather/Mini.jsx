@@ -11,6 +11,8 @@ import { calculateClamp } from "../../hooks/useClamp";
 import { useTheme } from "../../context/ThemeContext";
 import { extractTime, toEpoch } from "../../api";
 import { useWeather } from "../../context/WeatherContext";
+import { useUser } from "../../context/UserContext";
+import { calculateUnits } from "../../functions";
 
 export default function WeatherMini({
   currentWeather: current,
@@ -22,6 +24,7 @@ export default function WeatherMini({
   const { width } = useWindowDimensions();
   const { themeColors } = useTheme();
   const { condition } = realProps || current || {};
+  const { measurement } = useUser();
 
   return (
     <View style={[styles.body, _styles?.body]}>
@@ -53,7 +56,10 @@ export default function WeatherMini({
           _styles?.temp,
         ]}
       >
-        {realProps?.temp || current?.temp_c.toFixed(0) + "°"}
+        {realProps?.temp ||
+          parseInt(
+            calculateUnits(current?.temp_c, measurement.temperatureUnit)
+          ) + "°"}
       </ThemeText>
     </View>
   );

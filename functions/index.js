@@ -313,10 +313,6 @@ export const preferenceList = {
       options: ["12-hour", "24-hour"],
       selected: "24-hour",
     },
-    precipitationUnit: {
-      label: "Precipitation Unit",
-      options: ["mm", "in"],
-    },
   },
   display: {
     airQualityIndex: {
@@ -332,4 +328,64 @@ export const preferenceList = {
     label: "Notifications",
     options: ["weatherAlerts", "dailySummary", "rainAlerts"],
   },
+};
+
+export const calculateUnits = (value, targetUnit, includeUnit = false) => {
+  if (!value) return value;
+  let result = Math.round(value);
+
+  // Temperature conversions
+  if (targetUnit === "Fahrenheit") {
+    result = Math.round((value * 9) / 5 + 32);
+    return includeUnit ? `${result}°F` : result;
+  }
+  if (targetUnit === "Celsius") {
+    return includeUnit ? `${result}°C` : result;
+  }
+
+  // Wind Speed conversions
+  if (targetUnit === "mph") {
+    result = Math.round(value * 0.621371);
+    return includeUnit ? `${result} mph` : result;
+  }
+  if (targetUnit === "m/s") {
+    result = Math.round(value * 0.277778);
+    return includeUnit ? `${result} m/s` : result;
+  }
+  if (targetUnit === "km/h") {
+    return includeUnit ? `${result} km/h` : result;
+  }
+
+  // Time conversions
+  if (targetUnit === "12-hour") {
+    const period = value >= 12 ? "PM" : "AM";
+    const hour = value % 12 || 12;
+    return includeUnit ? `${hour}${period}` : hour;
+  }
+  if (targetUnit === "24-hour") {
+    return includeUnit ? `${result.toString().padStart(2, "0")}h` : result;
+  }
+
+  // Precipitation conversions
+  if (targetUnit === "in") {
+    result = Math.round(value * 0.0393701);
+    return includeUnit ? `${result} in` : result;
+  }
+  if (targetUnit === "mm") {
+    return includeUnit ? `${result} mm` : result;
+  }
+
+  return result;
+};
+
+export const displayUV = (value, display) => {
+  if (display === "All") {
+    return `${value} (${classifyUV(value)})`;
+  }
+  if (display === "Numeric") {
+    return value;
+  }
+  if (display === "Label") {
+    return classifyUV(value);
+  }
 };

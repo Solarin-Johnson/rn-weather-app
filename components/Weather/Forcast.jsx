@@ -8,7 +8,10 @@ import { useUser } from "../../context/UserContext";
 import { getNextHoursWeather } from "../../api";
 
 const DailyForecast = ({ dailyData }) => {
-  const { preferences } = useUser();
+  const { measurement } = useUser();
+  const unit =
+    measurement.temperatureUnit.toLowerCase() === "celsius" ? "c" : "f";
+
   //   const { avgtemp_c, avgtemp_f, maxtemp_c, maxtemp_f, mintemp_c, mintemp_f, conf } =
   return (
     <View style={styles.container}>
@@ -28,12 +31,8 @@ const DailyForecast = ({ dailyData }) => {
                 is_day,
               } = item.day;
 
-              const maxtemp = parseInt(
-                preferences?.metric ? maxtemp_c : maxtemp_f
-              );
-              const mintemp = parseInt(
-                preferences?.metric ? mintemp_c : mintemp_f
-              );
+              const maxtemp = parseInt(unit === "c" ? maxtemp_c : maxtemp_f);
+              const mintemp = parseInt(unit === "c" ? mintemp_c : mintemp_f);
 
               return (
                 <WeatherMini
@@ -61,27 +60,6 @@ const DailyForecast = ({ dailyData }) => {
             })}
         </ScrollView>
       </View>
-    </View>
-  );
-};
-
-const DailyForecastCard = (props) => {
-  const { day, date } = props;
-  const {
-    avgtemp_c,
-    avgtemp_f,
-    maxtemp_c,
-    maxtemp_f,
-    mintemp_c,
-    mintemp_f,
-    condition,
-  } = day;
-
-  return (
-    <View style={styles.item}>
-      {/* <Text>{title}</Text> */}
-      <Text>{condition}</Text>
-      {/* <Text>{temp_c}°C</Text> */}
     </View>
   );
 };

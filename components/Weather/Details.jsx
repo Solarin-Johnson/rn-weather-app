@@ -17,7 +17,7 @@ import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import { useBottomSheet } from "../../context/BottomSheetContext";
 import generalStyles from "../../styles/styles";
 import { DailyForecast, HourlyForecast } from "./Forcast";
-import { classifyUV } from "../../functions";
+import { calculateUnits, classifyUV, displayUV } from "../../functions";
 
 const WeatherDetails = ({
   weather,
@@ -96,12 +96,9 @@ const WeatherDetailsCard = ({ style, children }) => {
 
 const CommonDetails = ({ weather }) => {
   const { themeColors } = useTheme();
-  const { preferences } = useUser();
-  const { humidity, wind_kph, wind_mph, pressure_mb, uv } = weather;
-  const wind = preferences?.metric
-    ? parseInt(wind_kph) + " km/h"
-    : parseInt(wind_mph) + " mph";
-
+  const { measurement, display } = useUser();
+  const { humidity, wind_kph, pressure_mb, uv } = weather;
+  const wind = calculateUnits(wind_kph, measurement.windSpeedUnit, true);
   return (
     <>
       <View style={styles.cluster}>
@@ -113,7 +110,10 @@ const CommonDetails = ({ weather }) => {
         style={styles.split}
       />
       <View style={styles.cluster}>
-        <DetailsCard title="UV Index" value={`${uv} (${classifyUV(uv)})`} />
+        <DetailsCard
+          title="UV Index"
+          value={displayUV(uv, display.uvIndexDisplay)}
+        />
         <DetailsCard title="Wind" value={wind} />
       </View>
     </>
