@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   button: {
-    height: 48,
+    height: 46,
     minWidth: 50,
     justifyContent: "center",
     borderRadius: 8,
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#000000",
     textAlign: "center",
-    fontSize: 16.5,
+    fontSize: 16,
     fontWeight: "500",
   },
   header: {

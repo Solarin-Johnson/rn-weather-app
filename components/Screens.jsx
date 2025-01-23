@@ -56,20 +56,14 @@ export function Screen({
 }) {
   const { themeColors, isLandscape } = useTheme();
   const platform = getPlatform();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const wide = width > 720;
   const [key, setKey] = useState(false);
   const [screenLayout, setScreenLayout] = useState({
     width: 0,
     height: 0,
   });
-  const { height } = useWindowDimensions();
   const scrollY = useSharedValue(0); // Use useSharedValue
-  const shouldSnap = useSharedValue(true); // Track snapping state
-
-  const [snapOffsets, setSnapOffsets] = useState(
-    !header && title ? [transitHeaderTreshhold + 40] : null
-  );
 
   const scrollViewRef = useAnimatedRef(null);
 
@@ -77,12 +71,9 @@ export function Screen({
     onScroll: (event) => {
       scrollY.value = event.contentOffset.y; // Update the shared value
     },
-    onEndDrag: () => {},
   });
 
   const insets = useSafeAreaInsets();
-
-  const Wrapper = platform === "web" || wide ? View : Animated.View;
 
   useFocusEffect(
     useCallback(() => {
@@ -218,21 +209,19 @@ export function Screen({
                 showsVerticalScrollIndicator={false}
                 style={[
                   {
-                    flex: 1,
-                    maxHeight: height,
+                    // flex: 1,
+                    height: height,
                   },
                 ]}
                 contentContainerStyle={[
                   styles,
                   {
-                    minHeight: alwaysShowHeader ? "100%" : "90%",
+                    minHeight: height - 4,
                   },
                 ]}
                 onScroll={title && scrollHandler} // Attach the animated scroll handler
-                // snapToOffsets={snapOffsets}
                 decelerationRate={"fast"}
                 ref={scrollViewRef}
-                // scrollEventThrottle={16}
                 {...props}
               >
                 {title && (
@@ -279,8 +268,9 @@ export function Screen({
                     paddingHorizontal: wide
                       ? calculateClamp(width, 16, "2%", 54)
                       : 16,
-
-                    // backgroundColor: "#ffffff50",
+                    minHeight:
+                      alwaysShowHeader &&
+                      height - (transitHeaderTreshhold + 190),
                   }}
                 >
                   {React.Children.map(children, (child) =>
@@ -290,8 +280,7 @@ export function Screen({
 
                 <View
                   style={{
-                    height: Platform.OS === "web" ? 180 : wide ? 180 : 140,
-                    // backgroundColor: "red",
+                    height: Platform.OS === "web" ? 180 : wide ? 180 : 150,
                   }}
                 ></View>
               </Animated.ScrollView>
@@ -299,7 +288,6 @@ export function Screen({
           </View>
         </View>
       )}
-      {/* </View> */}
     </ThemeScreen>
   );
 }

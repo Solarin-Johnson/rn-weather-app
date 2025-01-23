@@ -23,18 +23,14 @@ export default function WeatherMini({
   const { themeColors } = useTheme();
   const { condition } = realProps || current || {};
 
-  // console.log(current);
-
-  const wide = width > 720;
-
   return (
     <View style={[styles.body, _styles?.body]}>
       <WeatherIcon
         absolute={absolute}
         code={condition?.code}
         isDay={current?.is_day}
-        size={calculateClamp(width, 0, "13%", _styles?.icon || 60)}
-        style={{ filter: Platform.OS !== "ios" ? "blur(0.5px)" : "" }}
+        size={calculateClamp(width, 50, "14%", _styles?.icon || 60)}
+        style={{ filter: Platform.OS !== "ios" ? "blur(0.51px)" : "" }}
       />
       <ThemeText
         styles={{

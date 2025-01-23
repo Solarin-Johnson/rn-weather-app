@@ -38,7 +38,7 @@ export default function Measurement() {
         style={{
           flex: 1,
           paddingHorizontal: wide || 16,
-          gap: 42,
+          gap: 48,
           paddingVertical: 21,
         }}
       >

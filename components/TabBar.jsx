@@ -1,6 +1,8 @@
-import React, { forwardRef } from "react";
+import React, { Children, forwardRef } from "react";
 import {
   View,
+  TouchableOpacity,
+  Text,
   StyleSheet,
   Pressable,
   useWindowDimensions,
@@ -9,15 +11,35 @@ import {
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { BlurView } from "expo-blur";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import { useFocusEffect, useSegments } from "expo-router";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeInUp,
+  FadeOut,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { router, useFocusEffect, useSegments } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { House } from "lucide-react-native";
 
 export const MyTabBar = forwardRef(({ children }, ref) => {
   const { theme, themeColors } = useTheme();
+  const containerBg = useSharedValue(0);
   const { width } = useWindowDimensions();
   const wide = width > 720;
   const maskColor = wide ? themeColors?.bgFade : themeColors?.bg;
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      // backgroundColor: withTiming(containerBg.value, { duration: 90 }),
+    };
+  });
+
+  useFocusEffect(() => {
+    containerBg.value = themeColors?.bg;
+  });
 
   const TabBottomGradient = Platform.OS !== "ios" ? LinearGradient : View;
 
@@ -27,16 +49,19 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
       colors={["transparent", maskColor + "bc", maskColor, maskColor]}
       style={styles.container}
     >
-      <Animated.View key={theme} entering={FadeIn}>
+      <Animated.View
+        key={theme}
+        entering={FadeIn.duration(500)}
+        style={[animatedStyle]}
+      >
         <BlurView
-          intensity={10}
+          intensity={60}
           tint={
             theme === "dark"
               ? "systemThickMaterialDark"
               : "systemThickMaterialLight"
           }
           blurReductionFactor={0}
-          experimentalBlurMethod="dimezisBlurView"
           style={[
             styles.tabBlur,
             {
@@ -61,7 +86,7 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
 
 export const TabButton = forwardRef(
   ({ options, icon, index, children, style, ...props }, ref) => {
-    const { themeColors } = useTheme();
+    const { theme, themeColors } = useTheme();
     const segments = useSegments();
     const isFocused =
       props.href === "/" + segments[segments.length - 1] ||
@@ -71,7 +96,7 @@ export const TabButton = forwardRef(
       <Pressable
         style={[styles.tabBarStyle]}
         android_ripple={{
-          color: themeColors?.textFade + "25",
+          color: themeColors?.textFade + "40",
           borderless: true,
         }}
         {...props}
@@ -107,11 +132,9 @@ const styles = StyleSheet.create({
   },
   tabBarStyle: {
     paddingVertical: 24,
-    paddingHorizontal: 10,
+    paddingHorizontal: 11,
     borderRadius: 50,
     overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
 

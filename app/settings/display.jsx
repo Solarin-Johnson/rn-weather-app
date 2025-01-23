@@ -38,7 +38,7 @@ export default function Display() {
         style={{
           flex: 1,
           paddingHorizontal: wide || 16,
-          gap: 32,
+          gap: 48,
           paddingVertical: 16,
         }}
       >
