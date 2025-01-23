@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     height: 46,
     minWidth: 50,
     justifyContent: "center",
-    borderRadius: 8,
+    borderRadius: 7,
     flex: 1,
   },
   buttonText: {

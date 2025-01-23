@@ -1,28 +1,20 @@
-import React, { Children, forwardRef } from "react";
+import React, { forwardRef } from "react";
 import {
   View,
-  TouchableOpacity,
-  Text,
   StyleSheet,
   Pressable,
   useWindowDimensions,
-  Keyboard,
   Platform,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { BlurView } from "expo-blur";
 import Animated, {
   FadeIn,
-  FadeInDown,
-  FadeInUp,
-  FadeOut,
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
 } from "react-native-reanimated";
 import { router, useFocusEffect, useSegments } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
-import { House } from "lucide-react-native";
 
 export const MyTabBar = forwardRef(({ children }, ref) => {
   const { theme, themeColors } = useTheme();
@@ -99,6 +91,7 @@ export const TabButton = forwardRef(
           color: themeColors?.textFade + "40",
           borderless: true,
         }}
+        hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
         {...props}
       >
         {options.tabBarIcon &&

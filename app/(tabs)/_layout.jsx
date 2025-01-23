@@ -99,7 +99,6 @@ export default function TabLayout() {
                 left: 0,
                 zIndex: 10,
                 paddingBottom: 5,
-                // backgroundColor: "red",
               }}
             />
             <WebBanner />
@@ -114,60 +113,35 @@ export default function TabLayout() {
         >
           <TabSlot
             style={{ flex: 1, backgroundColor: themeColors?.bg }}
-            render={(props) => <AnimatedScreen {...props} />}
+            render={AnimatedScreen}
           />
 
           <TabList style={{ backgroundColor: "transparent" }} asChild>
             <MyTabBar>
-              {/* Home Tab */}
-              <TabTrigger name="home" href="/" asChild>
-                <TabButton
-                  index={0}
-                  label="(tabs)"
-                  options={{
-                    tabBarIcon: ({ color, fill, size }) => (
-                      <HomeIcon color={color} fill={fill} size={size} />
-                    ),
-                    title: "Home",
-                  }}
-                />
-              </TabTrigger>
-
-              {/* Search Tab */}
-              <TabTrigger name="search" href="/search" asChild>
-                <TabButton
-                  index={1}
-                  options={{
-                    tabBarIcon: ({ color, fill, size }) => (
-                      <Search color={color} fill={fill} size={size} />
-                    ),
-                  }}
-                />
-              </TabTrigger>
-
-              {/* Insights Tab */}
-              <TabTrigger name="insights" href="/insights" asChild>
-                <TabButton
-                  index={2}
-                  options={{
-                    tabBarIcon: ({ color, fill, size }) => (
-                      <CloudRain color={color} fill={fill} size={size} />
-                    ),
-                  }}
-                />
-              </TabTrigger>
-
-              {/* Profile Tab */}
-              <TabTrigger name="me" href="/me" asChild>
-                <TabButton
-                  index={3}
-                  options={{
-                    tabBarIcon: ({ color, fill, size }) => (
-                      <User2 color={color} fill={fill} size={size} />
-                    ),
-                  }}
-                />
-              </TabTrigger>
+              {[
+                { name: "home", href: "/", icon: HomeIcon, title: "Home" },
+                { name: "search", href: "/search", icon: Search },
+                { name: "insights", href: "/insights", icon: CloudRain },
+                { name: "me", href: "/me", icon: User2 },
+              ].map((tab, index) => (
+                <TabTrigger
+                  key={tab.name}
+                  name={tab.name}
+                  href={tab.href}
+                  asChild
+                >
+                  <TabButton
+                    index={index}
+                    label={tab.name === "home" ? "(tabs)" : undefined}
+                    options={{
+                      tabBarIcon: ({ color, fill, size }) => (
+                        <tab.icon color={color} fill={fill} size={size} />
+                      ),
+                      ...(tab.title && { title: tab.title }),
+                    }}
+                  />
+                </TabTrigger>
+              ))}
             </MyTabBar>
           </TabList>
         </Tabs>
