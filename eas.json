@@ -10,10 +10,6 @@
     "preview": {
       "android": {
         "buildType": "apk"
-      },
-      "extra": {
-        "API_KEY": "@env:API_KEY",
-        "WEATHER_API_KEY": "@env:WEATHER_API_KEY"
       }
     },
     "production": {}
