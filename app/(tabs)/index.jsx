@@ -19,7 +19,8 @@ import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
 import { ChevronsDown } from "lucide-react-native";
 import { useBottomSheet } from "../../context/BottomSheetContext";
 import { calculateClamp } from "../../hooks/useClamp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigation } from "expo-router";
 
 export default function Tab() {
   const { themeColors } = useTheme();
@@ -29,6 +30,7 @@ export default function Tab() {
   const { width, height } = useWindowDimensions();
   const [screenDim, setScreenDim] = useState({ width, height });
   const wide = width > 720;
+  const navigation = useNavigation();
 
   const onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout;
@@ -36,7 +38,7 @@ export default function Tab() {
   };
 
   return (
-    <Screen header={<HomeHeader />} onLayout={onLayout}>
+    <Screen header={<HomeHeader />} onLayout={onLayout} reRender={false}>
       <View style={styles.container}>
         {!wide && <CloudBg />}
         <View

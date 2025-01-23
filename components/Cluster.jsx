@@ -209,7 +209,7 @@ const IndicatorIcon = ({ icon, loading, radio }) => {
   return (
     <Animated.View style={animatedStyle}>
       <AdaptiveElement styles={{ opacity: radio ? 0.9 : 0.7 }}>
-        <Icon size={20} />
+        <Icon size={20} strokeWidth={radio ? 2.5 : 2} />
       </AdaptiveElement>
     </Animated.View>
   );

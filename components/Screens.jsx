@@ -51,6 +51,7 @@ export function Screen({
   alwaysShowHeader,
   transitHeader,
   transitHeaderTreshhold = 40,
+  reRender = true,
   ...props
 }) {
   const { themeColors, isLandscape } = useTheme();
@@ -166,8 +167,6 @@ export function Screen({
   const handleScrollEnd = (event) => {
     const contentOffsetY = event.nativeEvent.contentOffset.y;
 
-    console.log(contentOffsetY);
-
     // If the scroll position exceeds 300px, scroll back to 300px
     if (
       contentOffsetY > transitHeaderTreshhold - 10 &&
@@ -188,18 +187,18 @@ export function Screen({
   return (
     <ThemeScreen>
       {/* <View onLayout={onLayout} style={{ flex: 1 }}> */}
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          maxHeight: height,
-          width: "100%",
-          maxWidth: wide ? 550 : "auto",
-          alignSelf: "center",
-        }}
-      >
-        {key ? (
+      {(reRender ? key : true) && (
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            maxHeight: height,
+            width: "100%",
+            maxWidth: wide ? 550 : "auto",
+            alignSelf: "center",
+          }}
+        >
           <View
             // {...animatedProps}
             style={{
@@ -349,10 +348,8 @@ export function Screen({
               </Animated.ScrollView>
             </KeyboardGestureArea>
           </View>
-        ) : (
-          <></>
-        )}
-      </View>
+        </View>
+      )}
       {/* </View> */}
     </ThemeScreen>
   );

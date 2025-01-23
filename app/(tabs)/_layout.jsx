@@ -1,4 +1,9 @@
-import { useFocusEffect, useNavigation, useRouter } from "expo-router";
+import {
+  useFocusEffect,
+  useNavigation,
+  usePathname,
+  useRouter,
+} from "expo-router";
 import {
   Pressable,
   StyleSheet,
@@ -27,6 +32,7 @@ import { Tabs, TabSlot, TabList, TabTrigger } from "expo-router/ui";
 import { TabButton } from "../../components/TabBar";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { HomeIcon } from "../../styles/icons";
+import { useSearch } from "../../context/SearchContext";
 
 const AnimatedScreen = ({ children, style }) => {
   return (
@@ -46,8 +52,14 @@ export default function TabLayout() {
   const { bottomSheet, setBottomSheet } = useBottomSheet();
   const navigation = useNavigation();
   const router = useRouter();
+  const pathname = usePathname();
   const { width, height } = useWindowDimensions();
   const wide = width > 720;
+  const { setSearchQuery } = useSearch();
+
+  // useLayoutEffect(() => {
+  //   setSearchQuery("");
+  // }, [pathname]);
 
   const config = {
     size: 28,
@@ -106,6 +118,7 @@ export default function TabLayout() {
           style={{ flex: 1, backgroundColor: themeColors?.bg }}
           screenOptions={{
             tabBarHideOnKeyboard: true,
+            unmountOnBlur: true,
           }}
         >
           <TabSlot

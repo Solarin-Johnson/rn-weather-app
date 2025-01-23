@@ -88,7 +88,7 @@ export const PopularCities = () => {
             ) : (
               <CityCard
                 city={city}
-                onPress={() => console.log(`Selected ${city.name}`)}
+                // onPress={() => console.log(`Selected ${city.name}`)}
               />
             )}
           </Animated.View>
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     // paddingVertical: 16,
     width: "100%",
     // maxWidth: 450,
-    gap: 16,
+    gap: 20,
     alignSelf: "center",
     // marginTop: 8,
     flex: 1,

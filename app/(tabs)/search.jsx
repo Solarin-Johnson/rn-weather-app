@@ -71,11 +71,11 @@ export default function Tab() {
     q && setSearchQuery(q);
   }, [q]);
 
-  useFocusEffect(
-    useCallback(() => {
-      setSearchQuery("");
-    }, [setSearchQuery])
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setSearchQuery("");
+  //   }, [setSearchQuery])
+  // );
 
   return (
     <Screen
@@ -104,6 +104,7 @@ export default function Tab() {
             style={{
               flex: 1,
               gap: 16,
+              paddingTop: wide ? 0 : 8,
             }}
           >
             <Suggestions />
@@ -208,7 +209,6 @@ const SearchBox = () => {
     );
 
   useEffect(() => {
-
     if (keyboardHide) {
       if (inputRef.current.isFocused()) inputRef.current.blur();
     }
@@ -578,6 +578,7 @@ const styles = StyleSheet.create({
   },
   recentSearches: {
     flex: 1,
+    marginBottom: 12,
     // gap: 6,
     // overflow: "hidden",
 

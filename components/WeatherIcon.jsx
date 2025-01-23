@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { View, StyleSheet, ActivityIndicator, Platform } from "react-native";
 import { getWeatherGroup } from "../functions";
 import { Image } from "expo-image";
@@ -38,22 +38,24 @@ const WeatherIcon = memo(({ code, absolute, isDay, size, style }) => {
     };
   });
 
-  const imgConfig = {
-    style: [styles.image, style, { width: size ? size : "60%" }],
-    contentFit: "contain",
-    cachePolicy: "disk",
-  };
+  const imgConfig = useMemo(
+    () => ({
+      style: [styles.image, style, { width: size || "60%" }],
+      contentFit: "contain",
+      cachePolicy: "disk",
+    }),
+    [style, size]
+  );
 
   return (
     <View style={styles.container}>
       {key ? (
         isDay || absolute ? (
-          <Image {...imgConfig} source={src} />
+          <CachedImage {...imgConfig} source={src} />
         ) : (
-          <Image
+          <CachedImage
             {...imgConfig}
             source={require("../assets/iconPacks/night.png")}
-            cachePolicy={"disk"}
           />
         )
       ) : (
@@ -65,6 +67,8 @@ const WeatherIcon = memo(({ code, absolute, isDay, size, style }) => {
     </View>
   );
 });
+
+const CachedImage = memo((props) => <Image {...props} cachePolicy="disk" />);
 
 const styles = StyleSheet.create({
   container: {

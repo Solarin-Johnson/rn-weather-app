@@ -54,7 +54,7 @@ export default function Tab() {
     setRefreshingLocation(false);
   };
   return (
-    <Screen style={styles.container} title={"Profile"}>
+    <Screen style={styles.container} title={"Profile"} alwaysShowHeader>
       <View
         style={[
           generalStyles.screen,

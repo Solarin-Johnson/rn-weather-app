@@ -18,6 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import useThemeChange from "../hooks/useTheme";
 import { StatusBar } from "expo-status-bar";
 import * as ScreenOrientation from "expo-screen-orientation";
+import * as NavigationBar from "expo-navigation-bar";
 
 const ThemeContext = createContext();
 
@@ -28,6 +29,17 @@ const ThemeProvider = ({ children }) => {
   const width = useWindowDimensions().width;
   const [wide, setWide] = useState(width > 720);
   const themeEqv = theme === "auto" ? colorScheme : theme;
+
+  const updateNavigationBar = async () => {
+    if (Platform.OS === "android" && themeColors) {
+      try {
+        await NavigationBar.setPositionAsync("absolute");
+        await NavigationBar.setBackgroundColorAsync(themeColors?.bg);
+      } catch (error) {
+        console.warn("Failed to update navigation bar:", error);
+      }
+    }
+  };
 
   useEffect(() => {
     setWide(width > 720);
@@ -52,7 +64,8 @@ const ThemeProvider = ({ children }) => {
       setThemeColors(colors[theme]);
     }
     storeData("theme", theme);
-  }, [colorScheme, theme]);
+    updateNavigationBar();
+  }, [colorScheme, theme, updateNavigationBar]);
 
   useThemeChange((colorScheme) => {
     setTheme(colorScheme);
@@ -109,6 +122,7 @@ const ThemeProvider = ({ children }) => {
         // hidden={isLandscape}
         hideTransitionAnimation="slide"
         animated={true}
+        translucent
       />
       {children}
     </ThemeContext.Provider>
