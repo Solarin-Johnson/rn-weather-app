@@ -57,10 +57,6 @@ export default function TabLayout() {
   const wide = width > 720;
   const { setSearchQuery } = useSearch();
 
-  // useLayoutEffect(() => {
-  //   setSearchQuery("");
-  // }, [pathname]);
-
   const config = {
     size: 28,
     strokeWidth: 1.9,
@@ -80,12 +76,7 @@ export default function TabLayout() {
     }, 0);
   }, [navigation]);
 
-  const TabBtnStyle = {
-    padding: 10,
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  };
+  const TabBtnStyle = {};
 
   if (location !== "denied") {
     return (
@@ -129,7 +120,7 @@ export default function TabLayout() {
           <TabList style={{ backgroundColor: "transparent" }} asChild>
             <MyTabBar>
               {/* Home Tab */}
-              <TabTrigger name="home" href="/" style={TabBtnStyle} asChild>
+              <TabTrigger name="home" href="/" asChild>
                 <TabButton
                   index={0}
                   label="(tabs)"
@@ -143,12 +134,7 @@ export default function TabLayout() {
               </TabTrigger>
 
               {/* Search Tab */}
-              <TabTrigger
-                name="search"
-                href="/search"
-                style={TabBtnStyle}
-                asChild
-              >
+              <TabTrigger name="search" href="/search" asChild>
                 <TabButton
                   index={1}
                   options={{
@@ -160,12 +146,7 @@ export default function TabLayout() {
               </TabTrigger>
 
               {/* Insights Tab */}
-              <TabTrigger
-                name="insights"
-                href="/insights"
-                style={TabBtnStyle}
-                asChild
-              >
+              <TabTrigger name="insights" href="/insights" asChild>
                 <TabButton
                   index={2}
                   options={{
@@ -177,7 +158,7 @@ export default function TabLayout() {
               </TabTrigger>
 
               {/* Profile Tab */}
-              <TabTrigger name="me" href="/me" style={TabBtnStyle} asChild>
+              <TabTrigger name="me" href="/me" asChild>
                 <TabButton
                   index={3}
                   options={{

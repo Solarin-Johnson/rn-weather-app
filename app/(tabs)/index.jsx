@@ -67,7 +67,7 @@ export default function Tab() {
             <WeatherFuture
               {...{ futureWeather, currentWeather, currentWeatherLoc }}
             />
-            {wide && (
+            {
               <View
                 style={{
                   marginTop: 42,
@@ -82,7 +82,7 @@ export default function Tab() {
                   hasMargin
                 />
               </View>
-            )}
+            }
           </View>
         </View>
       </View>

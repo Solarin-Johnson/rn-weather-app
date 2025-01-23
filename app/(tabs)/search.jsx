@@ -545,7 +545,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
-    paddingTop: Platform.OS === "web" ? 20 : 10,
+    paddingTop: Platform.OS === "web" ? 20 : 15,
     opacity: 0.9,
     gap: 14,
     // maxWidth: 450,

@@ -73,18 +73,6 @@ export function Screen({
 
   const scrollViewRef = useAnimatedRef(null);
 
-  const snapTo = (target) => {
-    scrollViewRef.current?.scrollTo({ y: target, animated: true });
-  };
-
-  const updateSnapOffsets = (shouldSnapValue) => {
-    if (shouldSnapValue) {
-      // setSnapOffsets([0, transitHeaderTreshhold + 40]); // Restore snap points
-    } else {
-      // setSnapOffsets(); // Clear snap points
-    }
-  };
-
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       scrollY.value = event.contentOffset.y; // Update the shared value
@@ -92,25 +80,9 @@ export function Screen({
     onEndDrag: () => {},
   });
 
-  // const derivedScrollY = useDerivedValue(() => scrollY.value);
-
-  // console.log("derivedScrollY", derivedScrollY);
-
   const insets = useSafeAreaInsets();
 
   const Wrapper = platform === "web" || wide ? View : Animated.View;
-
-  const animatedProps =
-    platform === "web"
-      ? {}
-      : {
-          entering: SlideInRight.duration(400)
-            .easing(Easing.bezier(0.01, 1, 0.01, 1))
-            .withInitialValues({
-              transform: [{ translateX: 10 ** 53 }],
-              opacity: 0,
-            }),
-        };
 
   useFocusEffect(
     useCallback(() => {
@@ -164,29 +136,8 @@ export function Screen({
     };
   });
 
-  const handleScrollEnd = (event) => {
-    const contentOffsetY = event.nativeEvent.contentOffset.y;
-
-    // If the scroll position exceeds 300px, scroll back to 300px
-    if (
-      contentOffsetY > transitHeaderTreshhold - 10 &&
-      contentOffsetY < transitHeaderTreshhold + 15
-    ) {
-      scrollViewRef.current.scrollTo({
-        x: transitHeaderTreshhold + 15,
-        animated: true,
-      });
-    } else if (contentOffsetY < transitHeaderTreshhold - 25) {
-      scrollViewRef.current.scrollTo({
-        x: 0,
-        animated: true,
-      });
-    }
-  };
-
   return (
     <ThemeScreen>
-      {/* <View onLayout={onLayout} style={{ flex: 1 }}> */}
       {(reRender ? key : true) && (
         <View
           style={{
@@ -200,7 +151,6 @@ export function Screen({
           }}
         >
           <View
-            // {...animatedProps}
             style={{
               flex: 1,
               justifyContent: "flex-start",
@@ -217,7 +167,6 @@ export function Screen({
                         ? themeColors?.bgFade
                         : themeColors?.bg,
                       width: "100%",
-                      // maxHeight: PixelRatio.getPixelSizeForLayoutSize(40),
                       ...(wide
                         ? {
                             height: 60 + calculateClamp(width, 10, "2%", 45),
@@ -279,7 +228,7 @@ export function Screen({
                     minHeight: alwaysShowHeader ? "100%" : "90%",
                   },
                 ]}
-                onScroll={scrollHandler} // Attach the animated scroll handler
+                onScroll={title && scrollHandler} // Attach the animated scroll handler
                 // snapToOffsets={snapOffsets}
                 decelerationRate={"fast"}
                 ref={scrollViewRef}
