@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
   wrapper: {
     gap: 24,
     overflow: "hidden",
-    // width: "100%",
   },
   container: {
     margin: 6,
@@ -176,7 +175,6 @@ const styles = StyleSheet.create({
   },
   detail: {
     alignItems: "center",
-    // alignSelf: "center",
     overflow: "hidden",
     gap: 6,
     flex: 1,
@@ -192,7 +190,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   details: {
-    // marginHorizontal: 24,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

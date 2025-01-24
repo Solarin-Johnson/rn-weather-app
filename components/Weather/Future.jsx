@@ -18,8 +18,6 @@ const WeatherFuture = ({
     }
   }, [futureWeather]);
 
-  // console.log(next3HoursWeather);
-
   return (
     <View style={styles.container}>
       <WeatherMini currentWeather={currentWeather} now />

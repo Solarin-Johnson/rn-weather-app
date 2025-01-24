@@ -178,7 +178,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   user: {
-    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
     gap: 14,

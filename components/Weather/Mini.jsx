@@ -50,7 +50,6 @@ export default function WeatherMini({
         styles={[
           {
             fontSize: 18,
-            //   lineHeight: 108,
             textAlign: "center",
           },
           _styles?.temp,
@@ -67,10 +66,6 @@ export default function WeatherMini({
 
 const styles = StyleSheet.create({
   body: {
-    // backgroundColor: "red",
     flex: 1,
-    // alignSelf: "center",
-    // height: "100%",
-    // paddingBottom: 24,
   },
 });

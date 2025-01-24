@@ -73,12 +73,6 @@ export default function Tab() {
     q && setSearchQuery(q);
   }, [q]);
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setSearchQuery("");
-  //   }, [setSearchQuery])
-  // );
-
   return (
     <Screen
       style={styles.container}
@@ -227,7 +221,6 @@ const SearchBox = () => {
         width: "100%",
         alignSelf: "center",
         paddingHorizontal: wide ? 0 : 16,
-        // maxWidth: 450,
       }}
     >
       <Pressable
@@ -256,7 +249,6 @@ const SearchBox = () => {
                 value={query}
                 onChangeText={setQuery}
                 placeholderTextColor={themeColors?.textFade}
-                // autoFocus
                 onFocus={handleFocus}
                 onBlur={handleBlur}
               />
@@ -289,7 +281,6 @@ const Suggestions = () => {
         style={{
           width: "100%",
           alignSelf: "center",
-          // maxWidth: 450,
         }}
       >
         <View>
@@ -530,7 +521,6 @@ const QuickSearch = ({
         style={{
           padding: 16,
           height: "100%",
-          // backgroundColor: themeColors?.textFade + "25",
           justifyContent: "center",
         }}
         onPress={onBtnPress}
@@ -548,14 +538,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    // height: 300,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
     paddingTop: Platform.OS === "web" ? 20 : 15,
     opacity: 0.9,
     gap: 14,
-    // maxWidth: 450,
     width: "100%",
     alignSelf: "center",
   },
@@ -564,12 +552,10 @@ const styles = StyleSheet.create({
   },
   searchBoxContainer: {
     width: "100%",
-    // paddingHorizontal: 14,
     marginBottom: 6,
   },
   searchBoxContent: {
     width: "100%",
-    // maxWidth: 450,
     alignSelf: "center",
     flexDirection: "column",
     alignItems: "center",
@@ -586,14 +572,9 @@ const styles = StyleSheet.create({
   recentSearches: {
     flex: 1,
     marginBottom: 12,
-    // gap: 6,
-    // overflow: "hidden",
-
-    // paddingHorizontal: 16,
   },
   textInput: {
     flex: 1,
-    // height: "100%",
     height: 50,
     fontSize: 16,
     borderWidth: 0,

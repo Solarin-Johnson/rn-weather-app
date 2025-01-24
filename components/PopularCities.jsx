@@ -98,14 +98,7 @@ export const PopularCities = forwardRef((props, ref) => {
             style={{ width: "100%" }}
             entering={defaultAnimation(i, FadeIn, FadeInDown)}
           >
-            {loading ? (
-              <LoaderCard />
-            ) : (
-              <CityCard
-                city={city}
-                // onPress={() => console.log(`Selected ${city.name}`)}
-              />
-            )}
+            {loading ? <LoaderCard /> : <CityCard city={city} />}
           </Animated.View>
         ))}
       </View>
@@ -170,14 +163,10 @@ const LoaderCard = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    // paddingVertical: 16,
     width: "100%",
-    // maxWidth: 450,
     gap: 20,
     alignSelf: "center",
-    // marginTop: 8,
     flex: 1,
-    // paddingBottom: 400,
   },
   cardContainer: {
     padding: 18,

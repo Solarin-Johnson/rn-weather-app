@@ -1,46 +1,25 @@
 import {
   View,
-  Text,
   useWindowDimensions,
-  ScrollView,
   Platform,
-  PixelRatio,
   RefreshControl,
 } from "react-native";
-import React, {
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-  useEffect,
-} from "react";
+import React, { useCallback, useState } from "react";
 import Animated, {
   Easing,
   Extrapolation,
   interpolate,
-  scrollTo,
-  SlideInDown,
-  SlideInRight,
-  SlideOutLeft,
   useAnimatedRef,
   useAnimatedScrollHandler,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
-import { useFocusEffect, usePathname } from "expo-router";
-import { getPlatform } from "../functions";
-// import HomeHeader from "./HomeHeader";
-import WebBanner from "./webBanner";
+import { useFocusEffect } from "expo-router";
 import { calculateClamp } from "../hooks/useClamp";
 import { useTheme } from "../context/ThemeContext";
 import { ThemeScreen, ThemeText } from "./ThemeComponents";
-import HomeHeader from "./HomeHeader";
-import CloudBg from "./CloudBg";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardGestureArea } from "react-native-keyboard-controller";
 import { useWeather } from "../context/WeatherContext";
 

@@ -118,7 +118,6 @@ const customStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    // marginVertical: 10,
   },
   label: {
     fontSize: 16,
@@ -154,8 +153,6 @@ const customStyles = StyleSheet.create({
     alignSelf: "center",
     margin: 3.5,
     zIndex: -1,
-    // left: 4,
-    // top: 4,
   },
   thumbEnabled: {
     right: 0,

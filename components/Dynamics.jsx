@@ -11,7 +11,6 @@ export const DynamicText = ({ min, preferred, max, children, style }) => {
         style,
         {
           fontSize: clampedValue,
-          // lineHeight: clampedValue * 1.4,
         },
       ]}
     >

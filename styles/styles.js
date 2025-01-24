@@ -26,7 +26,6 @@ const generalStyles = StyleSheet.create({
   },
   padded: {
     padding: clamp(16, "4%", 20000000),
-    // padding: "4%",
   },
   header: {
     fontSize: 24,
@@ -51,7 +50,6 @@ const generalStyles = StyleSheet.create({
     width: "100%",
     height: "100%",
     right: 0,
-    // flex: 1,
     zIndex: 1000,
   },
   btSheetContentContainer: {
@@ -67,7 +65,6 @@ const generalStyles = StyleSheet.create({
     backgroundColor: "#00000070",
   },
   bottomCard: {
-    // padding: 12,
     borderRadius: 28,
   },
   title: {

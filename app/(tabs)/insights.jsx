@@ -82,6 +82,5 @@ const styles = StyleSheet.create({
   container: {},
   header: {
     maxHeight: "100%",
-    // height: 64,
   },
 });

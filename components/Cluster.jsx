@@ -46,7 +46,6 @@ const Cluster = ({
         style={{
           flexDirection: "row",
           alignItems: "center",
-          // justifyContent: "space-between",
           gap: 6,
           opacity: 0.75,
         }}
@@ -60,15 +59,6 @@ const Cluster = ({
             {title}
           </ThemeText>
         )}
-        {/* {Icon && (
-          <AdaptiveElement
-            styles={{
-              paddingHorizontal: 12,
-            }}
-          >
-            <Icon size={19.5} strokeWidth={2} />
-          </AdaptiveElement>
-        )} */}
       </View>
       <Animated.View
         entering={defaultAnimation(index, FadeIn, FadeInDown)}
@@ -108,7 +98,6 @@ export const ClusterChild = ({ children, onPress }) => {
           flex: 1,
           paddingHorizontal: 14,
           paddingVertical: 16,
-          // borderRadius: "inherit",
           backgroundColor: hovered
             ? themeColors?.textFade + "07"
             : "transparent",

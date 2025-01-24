@@ -24,9 +24,7 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
   const maskColor = wide ? themeColors?.bgFade : themeColors?.bg;
 
   const animatedStyle = useAnimatedStyle(() => {
-    return {
-      // backgroundColor: withTiming(containerBg.value, { duration: 90 }),
-    };
+    return {};
   });
 
   useFocusEffect(() => {

@@ -5,17 +5,9 @@ import {
   useLayoutEffect,
   useState,
 } from "react";
-import {
-  getData,
-  getLocation,
-  preferenceList,
-  removeData,
-  storeData,
-} from "../functions";
+import { getData, getLocation, storeData } from "../functions";
 import * as Location from "expo-location";
 import { Asset } from "expo-asset";
-
-// import { getLocation } from "../api";
 
 const UserContext = createContext();
 
@@ -40,8 +32,6 @@ const UserProvider = ({ children }) => {
   const [location, setLocation] = useState(null);
 
   const fetchLocation = async () => {
-    // console.log("Fetching location");
-
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {

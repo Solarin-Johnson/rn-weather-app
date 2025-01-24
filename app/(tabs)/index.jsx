@@ -132,10 +132,7 @@ const DetailsBtn = ({ onPress, style }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // minHeight: "100%",
-    // flexDirection: "row",
     justifyContent: "center",
-    // paddingBottom: 42,
   },
   details: {
     marginHorizontal: 24,
@@ -144,7 +141,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
     padding: 18,
-    // paddingBottom: 48,
     borderRadius: 50,
     maxWidth: 300,
     width: "100%",

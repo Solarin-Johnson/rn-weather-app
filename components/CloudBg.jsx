@@ -39,12 +39,10 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     opacity: 0.8,
-    // top: -20,
     left: 0,
     flex: 1,
     width: "100%",
     aspectRatio: 4 / 2.5,
-    // height: "100%",
     alignItems: "center",
     justifyContent: "center",
     zIndex: -1,

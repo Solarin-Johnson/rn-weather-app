@@ -7,7 +7,6 @@ const Modal = ({ modalVisible, setModalVisible }) => {
     <RNModal
       animationType="fade"
       transparent={true}
-      // backdropColor="blue"
       visible={modalVisible}
       statusBarTranslucent={true}
       onRequestClose={() => {
@@ -44,7 +43,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // marginTop: 22,
   },
   modalView: {
     margin: 20,

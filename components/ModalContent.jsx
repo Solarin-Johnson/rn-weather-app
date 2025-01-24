@@ -199,7 +199,6 @@ const ModalContent = ({
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     justifyContent: "center",
   },
   input: {
@@ -233,12 +232,8 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 24,
   },
-  cancelButton: {
-    // flex: 0.1,
-    // backgroundColor: "#FF3B30",
-  },
+  cancelButton: {},
   wrapper: {
-    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
