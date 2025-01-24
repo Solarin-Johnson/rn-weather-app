@@ -39,21 +39,20 @@ const Cluster = ({
   return (
     <View
       style={{
-        gap: 8,
+        gap: 10.5,
       }}
     >
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
-          gap: 6,
-          opacity: 0.75,
+          opacity: 0.65,
         }}
       >
         {title && (
           <ThemeText
             styles={{
-              fontSize: 15,
+              fontSize: 19.5,
             }}
           >
             {title}

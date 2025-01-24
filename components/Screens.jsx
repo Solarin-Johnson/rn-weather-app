@@ -188,7 +188,7 @@ export function Screen({
                   ]}
                 >
                   <Animated.View
-                    style={[{}, title && !wide && headerTitleAnimatedStyle]}
+                    style={[{}, title && headerTitleAnimatedStyle]}
                   >
                     {header}
                     {title && (

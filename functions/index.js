@@ -301,11 +301,11 @@ export const preferenceIcons = {
 export const preferenceList = {
   measurement: {
     temperatureUnit: {
-      label: "Temperature Unit",
+      label: "Temperature ",
       options: ["Celsius", "Fahrenheit"],
     },
     windSpeedUnit: {
-      label: "Wind Speed Unit",
+      label: "Wind Speed",
       options: ["km/h", "mph", "m/s"],
     },
     timeFormat: {
