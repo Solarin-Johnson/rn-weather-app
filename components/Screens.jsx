@@ -12,7 +12,10 @@ import Animated, {
   useAnimatedRef,
   useAnimatedScrollHandler,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
+  withSpring,
+  withTiming,
 } from "react-native-reanimated";
 import { useFocusEffect } from "expo-router";
 import { calculateClamp } from "../hooks/useClamp";
@@ -31,7 +34,7 @@ export function Screen({
   styles,
   alwaysShowHeader,
   transitHeader,
-  transitHeaderTreshhold = 40,
+  transitHeaderTreshhold = 35,
   reRender = true,
   refresh = true,
   refreshAction,
@@ -49,6 +52,10 @@ export function Screen({
   });
   const { fetchWeather } = useWeather();
   const scrollY = useSharedValue(0); // Use useSharedValue
+
+  const springConfig = {
+    overshootClamping: true,
+  };
 
   const scrollViewRef = useAnimatedRef(null);
 
@@ -79,36 +86,43 @@ export function Screen({
   const animatedStyle = useAnimatedStyle(() => {
     const opacity = interpolate(
       scrollY.value, // The value to interpolate
-      [0, transitHeaderTreshhold + 28], // The range of scrollY (0 to 100)
+      [0, transitHeaderTreshhold - 5], // The range of scrollY (0 to 100)
       [1, 0], // The range of opacity (1 to 0)
       Extrapolation.CLAMP // Prevent values from going out of range
     );
 
     return {
-      opacity, // Apply the calculated opacity
+      opacity: withSpring(opacity, springConfig), // Apply the calculated opacity
+    };
+  });
+
+  const headerTitleAnimatedStyle = useAnimatedStyle(() => {
+    const isAboveThreshold = scrollY.value > transitHeaderTreshhold + 4;
+
+    return {
+      opacity: withTiming(isAboveThreshold ? 1 : 0, {
+        duration: isAboveThreshold && 200,
+        easing: Easing.ease,
+      }),
+      transform: [
+        {
+          translateY: withTiming(isAboveThreshold ? 0 : 6, {
+            duration: 200,
+            easing: Easing.ease,
+          }),
+        },
+      ],
     };
   });
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      scrollY.value,
-      [0, transitHeaderTreshhold + 28, transitHeaderTreshhold + 40],
-      [0, 0, 1],
-      Extrapolation.CLAMP,
-      Easing.bezier(0.33, 1, 0.68, 1) // Add easeOutCubic easing
-    );
-
-    const translateY = interpolate(
-      scrollY.value,
-      [0, transitHeaderTreshhold + 28, transitHeaderTreshhold + 40],
-      [28, 5, 0],
-      Extrapolation.CLAMP,
-      Easing.bezier(0.33, 1, 0.68, 1) // Add same easing for consistency
-    );
-
     return {
-      opacity,
-      transform: [{ translateY }],
+      backgroundColor:
+        scrollY.value > 0
+          ? wide
+            ? themeColors.bgFade
+            : themeColors.bg
+          : "transparent",
     };
   });
 
@@ -155,11 +169,6 @@ export function Screen({
                 <Animated.View
                   style={[
                     {
-                      paddingTop: insets.top,
-                      backgroundColor: wide
-                        ? themeColors?.bgFade
-                        : themeColors?.bg,
-                      width: "100%",
                       ...(wide
                         ? {
                             height: 60 + calculateClamp(width, 10, "2%", 45),
@@ -171,35 +180,41 @@ export function Screen({
                             justifyContent: "center",
                           }),
                       position: title ? "absolute" : "relative",
+                      paddingTop: insets.top,
+                      width: "100%",
                       zIndex: 100,
                     },
-                    title && !wide && headerAnimatedStyle,
+                    headerAnimatedStyle,
                   ]}
                 >
-                  {header}
-                  {title && (
-                    <Animated.View
-                      style={[
-                        headerAnimatedStyle,
-                        {
-                          paddingHorizontal: wide
-                            ? calculateClamp(width, 16, "2%", 54)
-                            : 16,
-                        },
-                      ]}
-                    >
-                      <ThemeText
-                        styles={{
-                          fontSize: wide ? 23 : 18,
-                          opacity: 0.9,
-                          textAlign: wide ? "start" : "center",
-                          paddingLeft: wide ? 8 : 0,
-                        }}
+                  <Animated.View
+                    style={[{}, title && !wide && headerTitleAnimatedStyle]}
+                  >
+                    {header}
+                    {title && (
+                      <Animated.View
+                        style={[
+                          headerAnimatedStyle,
+                          {
+                            paddingHorizontal: wide
+                              ? calculateClamp(width, 16, "2%", 54)
+                              : 16,
+                          },
+                        ]}
                       >
-                        {title}
-                      </ThemeText>
-                    </Animated.View>
-                  )}
+                        <ThemeText
+                          styles={{
+                            fontSize: wide ? 23 : 18,
+                            opacity: 0.9,
+                            textAlign: wide ? "start" : "center",
+                            paddingLeft: wide ? 8 : 0,
+                          }}
+                        >
+                          {title}
+                        </ThemeText>
+                      </Animated.View>
+                    )}
+                  </Animated.View>
                 </Animated.View>
               </>
             )}
@@ -241,9 +256,9 @@ export function Screen({
                 {title && (
                   <View
                     style={{
-                      height: 180,
+                      height: 165,
                       justifyContent: "flex-end",
-                      paddingBottom: 40,
+                      paddingBottom: 35,
                       paddingHorizontal: wide
                         ? calculateClamp(width, 16, "2%", 54)
                         : 16,
