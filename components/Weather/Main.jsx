@@ -93,17 +93,19 @@ export default function WeatherMain({ currentWeather: current }) {
             )}
             <Text style={{ color: themeColors.primary }}>°</Text>
           </ThemeText>
-          <ThemeText
-            styles={{
-              fontSize: 32, // Smaller font size
-              fontWeight: "600",
-              position: "absolute",
-              bottom: 14,
-              right: 10,
-            }}
-          >
-            {unit.toUpperCase()}
-          </ThemeText>
+          {/* {unit === "f" && (
+            <ThemeText
+              styles={{
+                fontSize: 92, // Smaller font size
+                lineHeight: 115,
+                opacity: 0.85,
+                // fontWeight: "700",
+                // lineHeight: PixelRatio.getPixelSizeForLayoutSize(45),
+              }}
+            >
+              {unit.toUpperCase()}
+            </ThemeText>
+          )} */}
         </View>
       </View>
     </View>

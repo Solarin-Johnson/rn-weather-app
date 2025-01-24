@@ -27,7 +27,8 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.dotjs.rnweatherapp"
+      "package": "com.dotjs.rnweatherapp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -53,6 +54,14 @@
           "android": {
             "kotlinVersion": "1.6.21"
           }
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "defaultChannel": "default",
+          "color": "#AF7215"
         }
       ]
     ],

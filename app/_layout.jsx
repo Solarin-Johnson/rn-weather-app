@@ -21,6 +21,7 @@ import { Tabs, TabList, TabTrigger, TabSlot } from "expo-router/ui";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SearchProvider } from "../context/SearchContext";
+import { NotificationProvider } from "../context/NotificationContext";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -47,17 +48,19 @@ export default function Layout() {
   return (
     <KeyboardProvider>
       <SafeAreaProvider>
-        <ThemeProvider>
-          <UserProvider>
-            <WeatherProvider>
-              <SearchProvider>
-                <BottomSheetProvider>
-                  <CustomTabs />
-                </BottomSheetProvider>
-              </SearchProvider>
-            </WeatherProvider>
-          </UserProvider>
-        </ThemeProvider>
+        <NotificationProvider>
+          <ThemeProvider>
+            <UserProvider>
+              <WeatherProvider>
+                <SearchProvider>
+                  <BottomSheetProvider>
+                    <CustomTabs />
+                  </BottomSheetProvider>
+                </SearchProvider>
+              </WeatherProvider>
+            </UserProvider>
+          </ThemeProvider>
+        </NotificationProvider>
       </SafeAreaProvider>
     </KeyboardProvider>
   );

@@ -21,6 +21,8 @@ import { useBottomSheet } from "../../context/BottomSheetContext";
 import { calculateClamp } from "../../hooks/useClamp";
 import { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
+import { useNotification } from "../../context/NotificationContext";
+import NotificationExample from "../test";
 
 export default function Tab() {
   const { themeColors } = useTheme();
@@ -30,7 +32,13 @@ export default function Tab() {
   const { width, height } = useWindowDimensions();
   const [screenDim, setScreenDim] = useState({ width, height });
   const wide = width > 720;
-  const navigation = useNavigation();
+  const { sendNotification } = useNotification();
+
+  useEffect(() => {
+    setTimeout(() => {
+      sendNotification("Hello", "This is a test notification", {});
+    }, 2000);
+  }, []);
 
   const onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout;
@@ -57,6 +65,7 @@ export default function Tab() {
               themeColors,
             }}
           />
+          {/* <NotificationExample /> */}
           <View
             style={{
               flex: 1,
