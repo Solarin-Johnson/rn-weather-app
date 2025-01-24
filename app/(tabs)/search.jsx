@@ -66,6 +66,8 @@ export default function Tab() {
   const { futureWeather, currentWeather, currentWeatherLoc } = useWeather();
   const { q } = useLocalSearchParams();
   const { searchQuery, setSearchQuery } = useSearch();
+  const resultRef = useRef(null);
+  const popularCitiesRef = useRef(null);
 
   useEffect(() => {
     q && setSearchQuery(q);
@@ -82,6 +84,11 @@ export default function Tab() {
       style={styles.container}
       fixed={Platform.OS !== "web"}
       header={<SearchHeader />}
+      refreshAction={() => {
+        q
+          ? resultRef.current?.fetchWeather()
+          : popularCitiesRef.current?.fetchCitiesWeather();
+      }}
     >
       <View
         style={{
@@ -98,7 +105,7 @@ export default function Tab() {
           </View>
         )}
         {q ? (
-          <SearchResult />
+          <SearchResult ref={resultRef} />
         ) : (
           <View
             style={{
@@ -108,7 +115,7 @@ export default function Tab() {
             }}
           >
             <Suggestions />
-            <PopularCities />
+            <PopularCities ref={popularCitiesRef} />
           </View>
         )}
         {/* <ThemeText>Tab Search</ThemeText> */}

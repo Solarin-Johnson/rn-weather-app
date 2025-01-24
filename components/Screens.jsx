@@ -5,6 +5,7 @@ import {
   ScrollView,
   Platform,
   PixelRatio,
+  RefreshControl,
 } from "react-native";
 import React, {
   useCallback,
@@ -41,6 +42,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { KeyboardGestureArea } from "react-native-keyboard-controller";
+import { useWeather } from "../context/WeatherContext";
 
 export function Screen({
   children,
@@ -52,17 +54,21 @@ export function Screen({
   transitHeader,
   transitHeaderTreshhold = 40,
   reRender = true,
+  refresh = true,
+  refreshAction,
+  refreshProps,
   ...props
 }) {
   const { themeColors, isLandscape } = useTheme();
-  const platform = getPlatform();
   const { width, height } = useWindowDimensions();
   const wide = width > 720;
   const [key, setKey] = useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [screenLayout, setScreenLayout] = useState({
     width: 0,
     height: 0,
   });
+  const { fetchWeather } = useWeather();
   const scrollY = useSharedValue(0); // Use useSharedValue
 
   const scrollViewRef = useAnimatedRef(null);
@@ -126,6 +132,23 @@ export function Screen({
       transform: [{ translateY }],
     };
   });
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      if (refreshAction) {
+        await refreshAction();
+      } else {
+        await fetchWeather();
+      }
+    } catch (error) {
+      console.warn("Refresh failed:", error);
+    } finally {
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 2500);
+    }
+  }, [refreshAction, fetchWeather]);
 
   return (
     <ThemeScreen>
@@ -209,7 +232,6 @@ export function Screen({
                 showsVerticalScrollIndicator={false}
                 style={[
                   {
-                    // flex: 1,
                     height: height,
                   },
                 ]}
@@ -222,6 +244,19 @@ export function Screen({
                 onScroll={title && scrollHandler} // Attach the animated scroll handler
                 decelerationRate={"fast"}
                 ref={scrollViewRef}
+                refreshControl={
+                  refresh && (
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      progressViewOffset={-20}
+                      progressBackgroundColor={themeColors?.primary}
+                      colors={[themeColors?.bg]}
+                      tintColor={[themeColors?.bg]}
+                      {...refreshProps}
+                    />
+                  )
+                }
                 {...props}
               >
                 {title && (

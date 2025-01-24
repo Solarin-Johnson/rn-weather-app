@@ -53,8 +53,59 @@ export default function Tab() {
     await fetchLocation();
     setRefreshingLocation(false);
   };
+  const clusterItems = [
+    [
+      {
+        component: UserCluster,
+        props: { onPress: () => handleClusterPress("name") },
+      },
+    ],
+    [
+      {
+        text: location.name,
+        icon: MapPin,
+        iconRight: RefreshCcw,
+        onPress: refreshLocation,
+        loading: refreshingLocation,
+        rotate: true,
+      },
+      {
+        text: "Measurement",
+        icon: PencilRuler,
+        onPress: () => handleClusterPress("measurement"),
+        iconProps: { size: 19.5 },
+      },
+      {
+        text: "Display",
+        icon: Sun,
+        onPress: () => handleClusterPress("display"),
+      },
+      {
+        text: "Notifications",
+        icon: Bell,
+        iconProps: { size: 21 },
+      },
+    ],
+    [
+      {
+        text: "About App",
+        icon: Info,
+        iconProps: { size: 21 },
+      },
+      {
+        text: "Clear data",
+        icon: Paintbrush,
+      },
+    ],
+  ];
+
   return (
-    <Screen style={styles.container} title={"Profile"} alwaysShowHeader>
+    <Screen
+      style={styles.container}
+      title={"Profile"}
+      alwaysShowHeader
+      refresh={false}
+    >
       <View
         style={[
           generalStyles.screen,
@@ -64,43 +115,17 @@ export default function Tab() {
           },
         ]}
       >
-        <Cluster>
-          <UserCluster onPress={() => handleClusterPress("name")} />
-        </Cluster>
-        <Cluster>
-          <ClusterItem
-            text={location.name}
-            icon={MapPin}
-            iconRight={RefreshCcw}
-            onPress={refreshLocation}
-            loading={refreshingLocation}
-            rotate
-          />
-          <ClusterItem
-            text={"Measurement"}
-            icon={PencilRuler}
-            onPress={() => handleClusterPress("measurement")}
-            iconProps={{ size: 19.5 }}
-          />
-          <ClusterItem
-            text={"Display"}
-            icon={Sun}
-            onPress={() => handleClusterPress("display")}
-          />
-          <ClusterItem
-            text={"Notifications"}
-            icon={Bell}
-            iconProps={{ size: 21 }}
-          />
-        </Cluster>
-        <Cluster>
-          <ClusterItem
-            text={"About App"}
-            icon={Info}
-            iconProps={{ size: 21 }}
-          />
-          <ClusterItem text={"Clear data"} icon={Paintbrush} />
-        </Cluster>
+        {clusterItems.map((cluster, index) => (
+          <Cluster key={index} index={index}>
+            {cluster.map((item, i) =>
+              item.component ? (
+                <item.component key={i} {...item.props} />
+              ) : (
+                <ClusterItem key={i} {...item} />
+              )
+            )}
+          </Cluster>
+        ))}
       </View>
     </Screen>
   );

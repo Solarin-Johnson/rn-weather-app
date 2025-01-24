@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { BackHandler, PixelRatio, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "expo-router";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Platform } from "react-native";
 import { ThemeText } from "./ThemeComponents";
 import { useWeather } from "../context/WeatherContext";
@@ -15,7 +15,7 @@ import { getFutureWeather, searchFutureWeather } from "../api";
 import CloudBg from "./CloudBg";
 import Loader from "./Loader";
 
-export default function SearchResult() {
+export default forwardRef(function SearchResult({ callback }, ref) {
   const { q, cords } = useLocalSearchParams();
   const [currentWeather, setCurrentWeather] = useState(null);
   const [futureWeather, setFutureWeather] = useState(null);
@@ -24,17 +24,20 @@ export default function SearchResult() {
   const navigation = useNavigation();
   const { wide } = useTheme();
 
-  const { themeColors } = useTheme();
-
   const fetchWeather = async () => {
     searchFutureWeather(cords || q)
       .then((data) => {
         setFutureWeather(data.forecast);
         setCurrentWeather(data.current);
         setCurrentWeatherLoc(data.location);
+        console.log("Search Weather data fetched:");
       })
       .catch((error) => console.error("Error fetching future weather:", error));
   };
+
+  useImperativeHandle(ref, () => ({
+    fetchWeather,
+  }));
 
   useEffect(() => {
     const interval = setInterval(fetchWeather, 10 * 60 * 1000); // Update every 10 minutes
@@ -111,7 +114,7 @@ export default function SearchResult() {
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

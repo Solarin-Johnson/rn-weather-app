@@ -1,4 +1,10 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useState,
+} from "react";
 import {
   View,
   StyleSheet,
@@ -13,7 +19,12 @@ import { CloudRain, Sun, Cloud } from "lucide-react-native";
 import { searchCurrentWeather } from "../api";
 import WeatherIcon from "./WeatherIcon";
 import { Link, useFocusEffect } from "expo-router";
-import { calculateAQI, calculateUnits, getHighestValue } from "../functions";
+import {
+  calculateAQI,
+  calculateUnits,
+  defaultAnimation,
+  getHighestValue,
+} from "../functions";
 import generalStyles from "../styles/styles";
 import ContentLoader, { Rect, Circle, Path } from "react-content-loader/native";
 import Animated, {
@@ -30,14 +41,18 @@ const popularCitiesList = [
   { id: 4, name: "Tokyo" },
 ];
 
-export const PopularCities = () => {
+export const PopularCities = forwardRef((props, ref) => {
   const { themeColors } = useTheme();
 
-  const [popularCities, setPopularCities] = useState(popularCitiesList);
+  const [popularCities, setPopularCities] = useState([]);
   const [loading, setLoading] = useState(true);
   const { measurement } = useUser();
 
   const fetchCitiesWeather = async () => {
+    setPopularCities([]);
+    setTimeout(() => {
+      setPopularCities(popularCitiesList);
+    }, 0);
     setLoading(true);
     const cities = await Promise.all(
       popularCitiesList.map(async (city) => {
@@ -60,6 +75,10 @@ export const PopularCities = () => {
     fetchCitiesWeather();
   }, []);
 
+  useImperativeHandle(ref, () => ({
+    fetchCitiesWeather,
+  }));
+
   return (
     <View style={styles.container}>
       <ThemeText
@@ -77,13 +96,7 @@ export const PopularCities = () => {
           <Animated.View
             key={i}
             style={{ width: "100%" }}
-            entering={
-              Platform.OS !== "web"
-                ? FadeInDown.duration(500).withInitialValues({
-                    transform: [{ translateY: 50 }],
-                  })
-                : FadeIn
-            }
+            entering={defaultAnimation(i, FadeIn, FadeInDown)}
           >
             {loading ? (
               <LoaderCard />
@@ -98,7 +111,7 @@ export const PopularCities = () => {
       </View>
     </View>
   );
-};
+});
 
 const CityCard = ({ city, onPress }) => {
   const { themeColors } = useTheme();

@@ -17,7 +17,12 @@ import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import { useBottomSheet } from "../../context/BottomSheetContext";
 import generalStyles from "../../styles/styles";
 import { DailyForecast, HourlyForecast } from "./Forcast";
-import { calculateUnits, classifyUV, displayUV } from "../../functions";
+import {
+  calculateUnits,
+  classifyUV,
+  defaultAnimation,
+  displayUV,
+} from "../../functions";
 
 const WeatherDetails = ({
   weather,
@@ -53,13 +58,7 @@ const WeatherDetails = ({
         <Animated.View
           key={index}
           style={{ width: "100%" }}
-          entering={
-            Platform.OS !== "web"
-              ? FadeInDown.duration(500).withInitialValues({
-                  transform: [{ translateY: 50 }],
-                })
-              : FadeIn
-          }
+          entering={defaultAnimation(index, FadeIn, FadeInDown)}
         >
           <WeatherDetailsCard hasBg={isBottomSheet}>
             {card.content}

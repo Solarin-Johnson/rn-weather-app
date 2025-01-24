@@ -11,17 +11,22 @@ import { useEffect, useState } from "react";
 export default function Tab() {
   const [screenScrollY, setScreenScrollY] = useState(0);
   const { width } = useWindowDimensions();
+  const { fetchWeather } = useWeather();
   const wide = width > 720;
 
-  // console.log(screenScrollY);
+  const refreshAction = async () => {
+    await fetchWeather();
+  };
 
   return (
     <Screen
       style={styles.container}
-      // title={<InsightHeader {...{ wide }} />}
       title={"Weather Insights"}
       alwaysShowHeader
       transitHeader
+      refreshProps={{
+        progressViewOffset: 20,
+      }}
     >
       <InsightBody {...{ setScreenScrollY, wide }} />
     </Screen>
@@ -30,13 +35,6 @@ export default function Tab() {
 
 const InsightBody = ({ screenScrollY, setScreenScrollY, wide }) => {
   const { futureWeather, currentWeather, currentWeatherLoc } = useWeather();
-
-  // const derivedScrollY = useDerivedValue(() => screenScrollY.value);
-  const derivedScrollY = useDerivedValue(() => {
-    // Pass updates to React state using runOnJS
-    runOnJS(setScreenScrollY)(screenScrollY.value);
-    return screenScrollY.value;
-  });
 
   return (
     <View

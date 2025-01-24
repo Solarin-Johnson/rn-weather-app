@@ -45,6 +45,10 @@ export default function Tab() {
     setScreenDim({ width, height });
   };
 
+  const refreshAction = async () => {
+    await fetchWeather();
+  };
+
   return (
     <Screen header={<HomeHeader />} onLayout={onLayout} reRender={false}>
       <View style={styles.container}>

@@ -19,6 +19,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import generalStyles from "../styles/styles";
+import { defaultAnimation } from "../functions";
 
 const Cluster = ({
   title,
@@ -26,6 +27,7 @@ const Cluster = ({
   children,
   config = { transform: [{ translateY: 50 }] },
   backgroundColor,
+  index = 0,
 }) => {
   const { theme, wide, themeColors } = useTheme();
   const initBg =
@@ -69,11 +71,7 @@ const Cluster = ({
         )} */}
       </View>
       <Animated.View
-        entering={
-          Platform.OS !== "web"
-            ? FadeInDown.duration(500).withInitialValues(config)
-            : FadeIn.duration(200)
-        }
+        entering={defaultAnimation(index, FadeIn, FadeInDown)}
         style={[
           styles.cluster,
           {

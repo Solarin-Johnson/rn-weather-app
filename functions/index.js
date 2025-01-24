@@ -389,3 +389,17 @@ export const displayUV = (value, display) => {
     return classifyUV(value);
   }
 };
+
+export const defaultAnimation = (index = 0, FadeIn, FadeInDown) => {
+  if (!FadeIn || !FadeInDown) return null;
+
+  const mobileAnimation = FadeInDown.duration(500)
+    .withInitialValues({
+      transform: [{ translateY: 50 }],
+    })
+    .delay(index * 30);
+
+  const webAnimation = FadeIn.duration(300);
+
+  return Platform.OS !== "web" ? mobileAnimation : webAnimation;
+};
