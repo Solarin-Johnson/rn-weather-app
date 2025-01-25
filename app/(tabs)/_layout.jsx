@@ -5,6 +5,7 @@ import {
   useRouter,
 } from "expo-router";
 import {
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -18,7 +19,6 @@ import { useUser } from "@/context/UserContext";
 import generalStyles from "@/styles/styles";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import WebBanner from "../../components/webBanner";
 import HomeHeader from "../../components/HomeHeader";
 import { useBottomSheet } from "../../context/BottomSheetContext";
 import BottomSheet, {
@@ -33,6 +33,8 @@ import { TabButton } from "../../components/TabBar";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { HomeIcon } from "../../styles/icons";
 import { useSearch } from "../../context/SearchContext";
+import WebBanner from "../../components/Banner/webBanner";
+import { LinearGradient } from "expo-linear-gradient";
 
 const AnimatedScreen = ({ children, style }) => {
   return (
@@ -76,11 +78,13 @@ export default function TabLayout() {
     }, 0);
   }, [navigation]);
 
-  const TabBtnStyle = {};
+  const TabBottomGradient = Platform.OS !== "ios" ? LinearGradient : View;
+  const maskColor = wide ? themeColors?.bgFade : themeColors?.bg;
 
   if (location !== "denied") {
     return (
       <View
+        // colors={[themeColors?.primary, themeColors?.bg]}
         style={[
           {
             flex: 1,
@@ -105,16 +109,13 @@ export default function TabLayout() {
           </>
         )}
         <Tabs
-          style={{ flex: 1, backgroundColor: themeColors?.bg }}
+          style={{ flex: 1 }}
           screenOptions={{
             tabBarHideOnKeyboard: true,
             unmountOnBlur: true,
           }}
         >
-          <TabSlot
-            style={{ flex: 1, backgroundColor: themeColors?.bg }}
-            render={AnimatedScreen}
-          />
+          <TabSlot style={{ flex: 1 }} render={AnimatedScreen} />
 
           <TabList style={{ backgroundColor: "transparent" }} asChild>
             <MyTabBar>

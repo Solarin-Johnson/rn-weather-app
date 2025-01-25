@@ -3,21 +3,11 @@ import { useEffect, useState } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { UserProvider } from "@/context/UserContext";
 import { getData } from "@/functions";
-import { Home } from "lucide-react-native";
-import HomeHeader from "../components/HomeHeader";
 import { Platform, useWindowDimensions, View } from "react-native";
 import { getPlatform } from "../functions";
-import WebBanner from "../components/webBanner";
 import { WeatherProvider } from "../context/WeatherContext";
-import { BgCloud } from "../styles/icons";
 import { BottomSheetProvider } from "../context/BottomSheetContext";
-import {
-  NavigationContainer,
-  DefaultTheme,
-  NavigationIndependentTree,
-} from "@react-navigation/native";
 import { useTheme } from "../context/ThemeContext";
-import { Tabs, TabList, TabTrigger, TabSlot } from "expo-router/ui";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SearchProvider } from "../context/SearchContext";

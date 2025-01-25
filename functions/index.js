@@ -13,6 +13,17 @@ import {
   Sun,
   Thermometer,
   Wind,
+  CloudSun,
+  Cloud,
+  Cloudy,
+  CloudFog,
+  CloudDrizzle,
+  CloudSnow,
+  CloudHail,
+  CloudSleet,
+  CloudLightning,
+  Snowflake,
+  Question,
 } from "lucide-react-native";
 
 export const apiKey = localAPIKey || Constants.expoConfig.extra.API_KEY;
@@ -408,3 +419,95 @@ export const defaultAnimation = (
 
   return Platform.OS !== "web" ? mobileAnimation : webAnimation;
 };
+
+export function formatDate(input) {
+  const fullDays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const date = new Date(input.replace(" ", "T")); // Parse ISO-like input
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const fullDayName = fullDays[date.getDay()];
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const yearShort = String(date.getFullYear()).slice(-2);
+
+  return `${hours}:${minutes} - ${fullDayName}, ${day} ${month} '${yearShort}`;
+}
+
+const weatherIcons = {
+  1000: Sun, // Sunny/Clear
+  1003: CloudSun, // Partly cloudy
+  1006: Cloud, // Cloudy
+  1009: Cloudy, // Overcast
+  1030: CloudFog, // Mist
+  1063: CloudDrizzle, // Patchy rain possible
+  1066: CloudSnow, // Patchy snow possible
+  1069: CloudHail, // Patchy sleet possible
+  1072: CloudSleet, // Patchy freezing drizzle possible
+  1087: CloudLightning, // Thundery outbreaks possible
+  1114: Snowflake, // Blowing snow
+  1117: Snowflake, // Blizzard
+  1135: CloudFog, // Fog
+  1147: CloudFog, // Freezing fog
+  1150: CloudDrizzle, // Patchy light drizzle
+  1153: CloudDrizzle, // Light drizzle
+  1168: CloudHail, // Freezing drizzle
+  1171: CloudHail, // Heavy freezing drizzle
+  1180: CloudRain, // Patchy light rain
+  1183: CloudRain, // Light rain
+  1186: CloudRain, // Moderate rain at times
+  1189: CloudRain, // Moderate rain
+  1192: CloudRain, // Heavy rain at times
+  1195: CloudRain, // Heavy rain
+  1198: CloudHail, // Light freezing rain
+  1201: CloudHail, // Moderate or heavy freezing rain
+  1204: CloudHail, // Light sleet
+  1207: CloudHail, // Moderate or heavy sleet
+  1210: CloudSnow, // Patchy light snow
+  1213: CloudSnow, // Light snow
+  1216: CloudSnow, // Patchy moderate snow
+  1219: CloudSnow, // Moderate snow
+  1222: CloudSnow, // Patchy heavy snow
+  1225: CloudSnow, // Heavy snow
+  1237: CloudHail, // Ice pellets
+  1240: CloudRain, // Light rain shower
+  1243: CloudRain, // Moderate or heavy rain shower
+  1246: CloudRain, // Torrential rain shower
+  1249: CloudHail, // Light sleet showers
+  1252: CloudHail, // Moderate or heavy sleet showers
+  1255: CloudSnow, // Light snow showers
+  1258: CloudSnow, // Moderate or heavy snow showers
+  1261: CloudHail, // Light showers of ice pellets
+  1264: CloudHail, // Moderate or heavy showers of ice pellets
+  1273: CloudLightning, // Patchy light rain with thunder
+  1276: CloudLightning, // Moderate or heavy rain with thunder
+  1279: CloudSnow, // Patchy light snow with thunder
+  1282: CloudSnow, // Moderate or heavy snow with thunder
+};
+
+export function getWeatherIcon({ code, ...props }) {
+  const IconComponent = weatherIcons[code] || Question; // Default to Question icon if code not found
+  return <IconComponent {...props} />; // Return the Lucide React component
+}

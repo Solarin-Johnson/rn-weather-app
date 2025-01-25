@@ -1,11 +1,9 @@
 "use dom";
 
-export default function IAmHere() {
-  console.log("HomeComponent");
+import WebView from "react-native-webview";
 
-  return (
-    <>
-      <p style={{ fontSize: "40px" }}>I am here</p>
-    </>
-  );
+export default function DOMComponent({ name }) {
+  console.log("Dom here");
+
+  return <WebView source={{ html: "<h1>Hello, world!</h1>" }} />;
 }

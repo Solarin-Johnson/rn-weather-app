@@ -38,11 +38,15 @@ export function ThemeScreen({ children }) {
   );
 }
 
-export function ThemeText({ children, styles, ...props }) {
+export function ThemeText({ inv, children, styles, ...props }) {
   const { themeColors } = useTheme();
   return (
     <Text
-      style={[generalStyles.text, styles, { color: themeColors?.text }]}
+      style={[
+        generalStyles.text,
+        styles,
+        { color: inv ? themeColors?.bg : themeColors?.text },
+      ]}
       {...props}
     >
       {children}
@@ -50,12 +54,16 @@ export function ThemeText({ children, styles, ...props }) {
   );
 }
 
-export function AdaptiveElement({ children, styles }) {
+export function AdaptiveElement({ children, inv, styles }) {
   const { themeColors } = useTheme();
 
   const clonedChildren = React.Children.map(children, (child) =>
     React.cloneElement(child, {
-      style: [child.props?.style, styles, { color: themeColors?.text }],
+      style: [
+        child.props?.style,
+        styles,
+        { color: inv ? themeColors?.bg : themeColors?.text },
+      ],
     })
   );
   return <>{clonedChildren}</>;

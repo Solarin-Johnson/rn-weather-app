@@ -1,21 +1,28 @@
 import useClamp from "@/hooks/useClamp";
 import { useWindowDimensions, View } from "react-native";
 import { calculateClamp } from "../hooks/useClamp";
+import { ThemeText } from "./ThemeComponents";
 
-export const DynamicText = ({ min, preferred, max, children, style }) => {
-  const clampedValue = useClamp(min, preferred, max);
+export const DynamicText = ({
+  clamp = [14, "2%", 50],
+  children,
+  style,
+  styles,
+}) => {
+  const { width } = useWindowDimensions();
+  const clampedValue = calculateClamp(width, ...clamp);
 
   return (
-    <Text
-      style={[
-        style,
+    <ThemeText
+      styles={[
         {
           fontSize: clampedValue,
         },
+        styles,
       ]}
     >
       {children}
-    </Text>
+    </ThemeText>
   );
 };
 

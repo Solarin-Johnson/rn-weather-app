@@ -231,7 +231,7 @@ export function Screen({
               contentContainerStyle={[
                 styles,
                 {
-                  minHeight: height - 4,
+                  minHeight: alwaysShowHeader && height - 4,
                 },
               ]}
               onScroll={title && scrollHandler} // Attach the animated scroll handler
@@ -252,12 +252,12 @@ export function Screen({
               }
               {...props}
             >
-              {title && (
+              {
                 <View
                   style={{
-                    height: 165,
+                    height: title ? 165 : height > 1024 ? height / 20 : 0,
                     justifyContent: "flex-end",
-                    paddingBottom: 35,
+                    paddingBottom: title && 35,
                     paddingHorizontal: wide
                       ? calculateClamp(width, 16, "2%", 54)
                       : 16,
@@ -277,7 +277,7 @@ export function Screen({
                     </ThemeText>
                   </Animated.View>
                 </View>
-              )}
+              }
               {wide && !title && (
                 <View
                   style={{
