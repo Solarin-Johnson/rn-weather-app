@@ -218,102 +218,99 @@ export function Screen({
                 </Animated.View>
               </>
             )}
-            <KeyboardGestureArea style={{ flex: 1 }}>
-              <Animated.ScrollView
-                keyboardShouldPersistTaps="handled"
-                overScrollMode="always"
-                bounces={true}
-                showsVerticalScrollIndicator={false}
-                style={[
-                  {
-                    height: height,
-                  },
-                ]}
-                contentContainerStyle={[
-                  styles,
-                  {
-                    minHeight: height - 4,
-                  },
-                ]}
-                onScroll={title && scrollHandler} // Attach the animated scroll handler
-                decelerationRate={"fast"}
-                ref={scrollViewRef}
-                refreshControl={
-                  refresh && (
-                    <RefreshControl
-                      refreshing={refreshing}
-                      onRefresh={onRefresh}
-                      progressViewOffset={-20}
-                      progressBackgroundColor={themeColors?.primary}
-                      colors={[themeColors?.bg]}
-                      tintColor={[themeColors?.bg]}
-                      {...refreshProps}
-                    />
-                  )
-                }
-                {...props}
-              >
-                {title && (
-                  <View
-                    style={{
-                      height: 165,
-                      justifyContent: "flex-end",
-                      paddingBottom: 35,
-                      paddingHorizontal: wide
-                        ? calculateClamp(width, 16, "2%", 54)
-                        : 16,
-                    }}
-                  >
-                    <Animated.View style={animatedStyle}>
-                      <ThemeText
-                        styles={{
-                          fontSize: 29.5,
-                          opacity: 0.9,
-                          paddingLeft: wide ? 8 : 0,
-                          textAlign:
-                            !wide && Platform.OS === "web" ? "center" : "start",
-                        }}
-                      >
-                        {title}
-                      </ThemeText>
-                    </Animated.View>
-                  </View>
-                )}
-                {wide && !title && (
-                  <View
-                    style={{
-                      height:
-                        wide && Platform.OS === "web"
-                          ? 60 + calculateClamp(width, 10, "3%", 50) + 5
-                          : 20,
-                    }}
+            <Animated.ScrollView
+              keyboardShouldPersistTaps="handled"
+              overScrollMode="always"
+              bounces={true}
+              showsVerticalScrollIndicator={false}
+              style={[
+                {
+                  height: height,
+                },
+              ]}
+              contentContainerStyle={[
+                styles,
+                {
+                  minHeight: height - 4,
+                },
+              ]}
+              onScroll={title && scrollHandler} // Attach the animated scroll handler
+              decelerationRate={"fast"}
+              ref={scrollViewRef}
+              refreshControl={
+                refresh && (
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    progressViewOffset={-20}
+                    progressBackgroundColor={themeColors?.primary}
+                    colors={[themeColors?.bg]}
+                    tintColor={[themeColors?.bg]}
+                    {...refreshProps}
                   />
-                )}
+                )
+              }
+              {...props}
+            >
+              {title && (
                 <View
                   style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignContent: "center",
+                    height: 165,
+                    justifyContent: "flex-end",
+                    paddingBottom: 35,
                     paddingHorizontal: wide
                       ? calculateClamp(width, 16, "2%", 54)
                       : 16,
-                    minHeight:
-                      alwaysShowHeader &&
-                      height - (transitHeaderTreshhold + 190),
                   }}
                 >
-                  {React.Children.map(children, (child) =>
-                    React.cloneElement(child, { screenScrollY: scrollY })
-                  )}
+                  <Animated.View style={animatedStyle}>
+                    <ThemeText
+                      styles={{
+                        fontSize: 29.5,
+                        opacity: 0.9,
+                        paddingLeft: wide ? 8 : 0,
+                        textAlign:
+                          !wide && Platform.OS === "web" ? "center" : "start",
+                      }}
+                    >
+                      {title}
+                    </ThemeText>
+                  </Animated.View>
                 </View>
-
+              )}
+              {wide && !title && (
                 <View
                   style={{
-                    height: Platform.OS === "web" ? 180 : wide ? 180 : 150,
+                    height:
+                      wide && Platform.OS === "web"
+                        ? 60 + calculateClamp(width, 10, "3%", 50) + 5
+                        : 20,
                   }}
-                ></View>
-              </Animated.ScrollView>
-            </KeyboardGestureArea>
+                />
+              )}
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignContent: "center",
+                  paddingHorizontal: wide
+                    ? calculateClamp(width, 16, "2%", 54)
+                    : 16,
+                  minHeight:
+                    alwaysShowHeader && height - (transitHeaderTreshhold + 190),
+                }}
+              >
+                {React.Children.map(children, (child) =>
+                  React.cloneElement(child, { screenScrollY: scrollY })
+                )}
+              </View>
+
+              <View
+                style={{
+                  height: Platform.OS === "web" ? 180 : wide ? 180 : 150,
+                }}
+              ></View>
+            </Animated.ScrollView>
           </View>
         </View>
       )}
