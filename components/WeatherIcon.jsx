@@ -59,16 +59,17 @@ const WeatherIcon = memo(({ code, absolute, isDay, size, style }) => {
           />
         )
       ) : (
-        <ActivityIndicator
-          color={themeColors?.primary}
-          style={{ width: size ? size : "60%", aspectRatio: 1 }}
-        />
+        <View style={{ width: size ? size : "60%", aspectRatio: 1 }}>
+          {/* <ActivityIndicator color={themeColors?.primary} /> */}
+        </View>
       )}
     </View>
   );
 });
 
-const CachedImage = memo((props) => <Image {...props} cachePolicy="disk" />);
+const CachedImage = memo((props) => (
+  <Image {...props} cachePolicy="disk" transition={500} />
+));
 
 const styles = StyleSheet.create({
   container: {

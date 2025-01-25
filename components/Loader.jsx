@@ -5,7 +5,6 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { Screen } from "./Screens";
 import { useTheme } from "../context/ThemeContext";
 
 const Loader = ({ full = true, noBg }) => {

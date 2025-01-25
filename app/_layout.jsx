@@ -23,6 +23,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SearchProvider } from "../context/SearchContext";
 import { NotificationProvider } from "../context/NotificationContext";
 import * as SplashScreen from "expo-splash-screen";
+import { Asset } from "expo-asset";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -72,12 +73,40 @@ SplashScreen.preventAutoHideAsync();
 
 // Set the animation options. This is optional.
 SplashScreen.setOptions({
-  duration: 1000,
+  duration: 500,
   fade: true,
 });
 
 const CustomTabs = () => {
   const { themeColors } = useTheme();
+
+  const icons = {
+    clear: Asset.fromModule(require("../assets/iconPacks/clear.png")),
+    cloudy: Asset.fromModule(require("../assets/iconPacks/cloudy.png")),
+    foggy: Asset.fromModule(require("../assets/iconPacks/foggy.png")),
+    lightPrecipitation: Asset.fromModule(
+      require("../assets/iconPacks/lightPrecipitation.png")
+    ),
+    heavyPrecipitation: Asset.fromModule(
+      require("../assets/iconPacks/heavyPrecipitation.png")
+    ),
+    freezing: Asset.fromModule(require("../assets/iconPacks/freezing.png")),
+    thunderstorms: Asset.fromModule(
+      require("../assets/iconPacks/thunderstorms.png")
+    ),
+    icePellets: Asset.fromModule(require("../assets/iconPacks/icePellets.png")),
+  };
+
+  const preloadAssets = async () =>
+    Promise.all(Object.values(icons).map((asset) => asset.downloadAsync()));
+
+  useEffect(() => {
+    preloadAssets().then(() => {
+      if (themeColors) {
+        SplashScreen.hideAsync();
+      }
+    });
+  }, [themeColors, preloadAssets]);
 
   return (
     <View

@@ -47,7 +47,7 @@ export default function Display() {
             key={key}
             title={setting.label}
             titleIcon={preferenceIcons.measurement[key]}
-            config={{ transform: [{ translateY: 30 }] }}
+            // config={{ transform: [{ translateY: 30 }] }}
             backgroundColor={themeColors?.fg + "90"}
             index={key}
             animateParent

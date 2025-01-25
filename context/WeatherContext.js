@@ -41,7 +41,8 @@ const WeatherProvider = ({ children }) => {
     fetchWeather();
   }, [location]);
 
-  if (currentWeather === null || location === null) return <Loader />;
+  if (currentWeather === null || futureWeather === null || location === null)
+    return <Loader />;
 
   return (
     <WeatherContext.Provider
