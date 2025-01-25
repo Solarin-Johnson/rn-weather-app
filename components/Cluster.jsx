@@ -52,7 +52,7 @@ const Cluster = ({
         {title && (
           <ThemeText
             styles={{
-              fontSize: 19.5,
+              fontSize: 19,
             }}
           >
             {title}

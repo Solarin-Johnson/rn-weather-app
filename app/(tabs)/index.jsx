@@ -34,11 +34,11 @@ export default function Tab() {
   const wide = width > 720;
   const { sendNotification } = useNotification();
 
-  useEffect(() => {
-    setTimeout(() => {
-      sendNotification("Hello", "This is a test notification", {});
-    }, 2000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     sendNotification("Hello", "This is a test notification", {});
+  //   }, 2000);
+  // }, []);
 
   const onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout;

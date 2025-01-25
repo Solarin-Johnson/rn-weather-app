@@ -26,7 +26,7 @@ export default function SettingsLayout() {
       <Stack.Screen
         name="measurement"
         options={{
-          title: "Measurement",
+          title: "Measurements",
         }}
       />
       <Stack.Screen

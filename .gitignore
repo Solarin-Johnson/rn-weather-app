@@ -18,7 +18,7 @@ android/
 *.mobileprovision
 *.env
 credentials.json
-google-services.json
+# google-services.json
 firebase-adminsdk*
 
 # Metro
