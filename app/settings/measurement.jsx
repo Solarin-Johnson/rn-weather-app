@@ -47,8 +47,10 @@ export default function Measurement() {
             key={key}
             title={setting.label}
             titleIcon={preferenceIcons.measurement[key]}
-            config={{ transform: [{ translateY: 15 }] }}
+            config={{ transform: [{ translateY: 30 }] }}
             backgroundColor={themeColors?.fg + "80"}
+            index={key}
+            animateParent
           >
             {setting.options.map((option) => (
               <ClusterItem

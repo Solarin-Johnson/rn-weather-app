@@ -28,6 +28,7 @@ const Cluster = ({
   config = { transform: [{ translateY: 50 }] },
   backgroundColor,
   index = 0,
+  animateParent,
 }) => {
   const { theme, wide, themeColors } = useTheme();
   const initBg =
@@ -37,7 +38,8 @@ const Cluster = ({
         ? themeColors?.fg + "90"
         : themeColors?.fg + "90";
   return (
-    <View
+    <Animated.View
+      entering={animateParent && defaultAnimation(index, FadeIn, FadeInDown)}
       style={{
         gap: 10.5,
       }}
@@ -60,7 +62,9 @@ const Cluster = ({
         )}
       </View>
       <Animated.View
-        entering={defaultAnimation(index, FadeIn, FadeInDown)}
+        entering={
+          !animateParent && defaultAnimation(index, FadeIn, FadeInDown, config)
+        }
         style={[
           styles.cluster,
           {
@@ -84,7 +88,7 @@ const Cluster = ({
           </>
         ))}
       </Animated.View>
-    </View>
+    </Animated.View>
   );
 };
 

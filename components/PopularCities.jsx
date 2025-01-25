@@ -50,9 +50,12 @@ export const PopularCities = forwardRef((props, ref) => {
 
   const fetchCitiesWeather = async () => {
     setPopularCities([]);
-    setTimeout(() => {
-      setPopularCities(popularCitiesList);
-    }, 0);
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        setPopularCities(popularCitiesList);
+        resolve();
+      }, 0);
+    });
     setLoading(true);
     const cities = await Promise.all(
       popularCitiesList.map(async (city) => {

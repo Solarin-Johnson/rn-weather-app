@@ -245,7 +245,8 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   centerCard: {
     borderWidth: 1,

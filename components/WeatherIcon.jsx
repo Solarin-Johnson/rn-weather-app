@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    filter: Platform.OS !== "ios" ? "blur(0.51px)" : "",
+    // filter: Platform.OS !== "ios" ? "blur(0.51px)" : "",
     aspectRatio: 1,
   },
 });

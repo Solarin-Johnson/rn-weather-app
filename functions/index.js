@@ -390,13 +390,18 @@ export const displayUV = (value, display) => {
   }
 };
 
-export const defaultAnimation = (index = 0, FadeIn, FadeInDown) => {
+export const defaultAnimation = (
+  index = 0,
+  FadeIn,
+  FadeInDown,
+  initials = {
+    transform: [{ translateY: 50 }],
+  }
+) => {
   if (!FadeIn || !FadeInDown) return null;
 
   const mobileAnimation = FadeInDown.duration(500)
-    .withInitialValues({
-      transform: [{ translateY: 50 }],
-    })
+    .withInitialValues(initials)
     .delay(index * 30);
 
   const webAnimation = FadeIn.duration(300);

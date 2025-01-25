@@ -22,6 +22,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SearchProvider } from "../context/SearchContext";
 import { NotificationProvider } from "../context/NotificationContext";
+import * as SplashScreen from "expo-splash-screen";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -66,8 +67,18 @@ export default function Layout() {
   );
 }
 
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+
+// Set the animation options. This is optional.
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
+
 const CustomTabs = () => {
   const { themeColors } = useTheme();
+
   return (
     <View
       style={{
