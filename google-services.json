@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "483205943279",
+    "project_id": "rn-weather-app-d21b6",
+    "storage_bucket": "rn-weather-app-d21b6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483205943279:android:25dba18197301e7e06701a",
+        "android_client_info": {
+          "package_name": "com.dotjs.rnweatherapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD01WPggWfdMyuWoWou7Sst-vBwmYbxdKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

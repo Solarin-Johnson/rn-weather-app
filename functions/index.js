@@ -315,6 +315,10 @@ export const preferenceList = {
       label: "Temperature ",
       options: ["Celsius", "Fahrenheit"],
     },
+    precipitationUnit: {
+      label: "Precipitation",
+      options: ["mm", "in"],
+    },
     windSpeedUnit: {
       label: "Wind Speed",
       options: ["km/h", "mph", "m/s"],
@@ -322,7 +326,6 @@ export const preferenceList = {
     timeFormat: {
       label: "Time Format",
       options: ["12-hour", "24-hour"],
-      selected: "24-hour",
     },
   },
   display: {
@@ -343,11 +346,11 @@ export const preferenceList = {
 
 export const calculateUnits = (value, targetUnit, includeUnit = false) => {
   if (!value) return value;
-  let result = Math.round(value);
+  let result = +parseFloat(value).toFixed(1);
 
   // Temperature conversions
   if (targetUnit === "Fahrenheit") {
-    result = Math.round((value * 9) / 5 + 32);
+    result = +((value * 9) / 5 + 32).toFixed(1);
     return includeUnit ? `${result}°F` : result;
   }
   if (targetUnit === "Celsius") {
@@ -356,11 +359,11 @@ export const calculateUnits = (value, targetUnit, includeUnit = false) => {
 
   // Wind Speed conversions
   if (targetUnit === "mph") {
-    result = Math.round(value * 0.621371);
+    result = +(value * 0.621371).toFixed(1);
     return includeUnit ? `${result} mph` : result;
   }
   if (targetUnit === "m/s") {
-    result = Math.round(value * 0.277778);
+    result = +(value * 0.277778).toFixed(1);
     return includeUnit ? `${result} m/s` : result;
   }
   if (targetUnit === "km/h") {
@@ -379,7 +382,7 @@ export const calculateUnits = (value, targetUnit, includeUnit = false) => {
 
   // Precipitation conversions
   if (targetUnit === "in") {
-    result = Math.round(value * 0.0393701);
+    result = +(value * 0.0393701).toFixed(1);
     return includeUnit ? `${result} in` : result;
   }
   if (targetUnit === "mm") {

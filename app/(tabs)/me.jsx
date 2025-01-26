@@ -100,12 +100,7 @@ export default function Tab() {
   ];
 
   return (
-    <Screen
-      style={styles.container}
-      title={"Profile"}
-      alwaysShowHeader
-      refresh={false}
-    >
+    <Screen title={"Profile"} alwaysShowHeader refresh={false}>
       <View
         style={[
           generalStyles.screen,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -23,6 +23,7 @@ import {
   defaultAnimation,
   displayUV,
 } from "../../functions";
+import { useFocusEffect } from "expo-router";
 
 const WeatherDetails = ({
   weather,
@@ -55,25 +56,20 @@ const WeatherDetails = ({
       ]}
     >
       {cards.map((card, index) => (
-        <Animated.View
-          key={index}
-          style={{ width: "100%" }}
-          entering={defaultAnimation(index, FadeIn, FadeInDown)}
-        >
-          <WeatherDetailsCard hasBg={isBottomSheet}>
-            {card.content}
-          </WeatherDetailsCard>
-        </Animated.View>
+        <WeatherDetailsCard hasBg={isBottomSheet} index={index} key={index}>
+          {card.content}
+        </WeatherDetailsCard>
       ))}
     </View>
   );
 };
 
-const WeatherDetailsCard = ({ style, children }) => {
+const WeatherDetailsCard = ({ style, children, index }) => {
   const { themeColors, theme, wide } = useTheme();
 
   return (
-    <View
+    <Animated.View
+      entering={defaultAnimation(index, FadeIn, FadeInDown)}
       style={[
         styles.container,
         generalStyles.bottomCard,
@@ -89,20 +85,29 @@ const WeatherDetailsCard = ({ style, children }) => {
       ]}
     >
       {children}
-    </View>
+    </Animated.View>
   );
 };
 
 const CommonDetails = ({ weather }) => {
   const { themeColors } = useTheme();
   const { measurement, display } = useUser();
-  const { humidity, wind_kph, pressure_mb, uv } = weather;
+  const { humidity, wind_kph, pressure_mb, precip_mm, uv } = weather;
   const wind = calculateUnits(wind_kph, measurement.windSpeedUnit, true);
+  const precip = calculateUnits(
+    precip_mm.toString(),
+    measurement.precipitationUnit,
+    true
+  );
+
+  console.log(measurement.precipitationUnit);
+
   return (
     <>
       <View style={styles.cluster}>
         <DetailsCard title="Humidity" value={`${humidity}%`} />
-        <DetailsCard title="Pressure" value={`${pressure_mb} hPa`} />
+        <DetailsCard title="Pressure" value={precip} />
+        {/* <DetailsCard title="Pressure" value={`${pressure_mb} hPa`} /> */}
       </View>
       <LinearGradient
         colors={["transparent", themeColors?.text + "55", "transparent"]}

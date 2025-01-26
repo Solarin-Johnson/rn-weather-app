@@ -50,7 +50,7 @@ export default function Tab() {
   };
 
   return (
-    <Screen header={<HomeHeader />} onLayout={onLayout} reRender={false}>
+    <Screen header={<HomeHeader />} reRender={false}>
       <View style={styles.container}>
         {!wide && <CloudBg />}
         <View

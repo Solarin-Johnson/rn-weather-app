@@ -36,11 +36,8 @@ export default function WeatherMain({ currentWeather: current }) {
     >
       <Pressable
         style={{
-          height:
-            Platform.OS === "web"
-              ? 200
-              : PixelRatio.getPixelSizeForLayoutSize(wide ? 115 : 80),
-          maxHeight: 190,
+          height: Platform.OS === "web" ? 200 : wide ? 170 : 160,
+          // maxHeight: 190,
         }}
         // onPress={() => {
         //   !wide &&
@@ -56,7 +53,11 @@ export default function WeatherMain({ currentWeather: current }) {
         <WeatherIcon
           code={condition?.code}
           isDay={current?.is_day}
-          size={wide ? 200 : calculateClamp(width, 0, "60%", 210)}
+          size={
+            wide
+              ? calculateClamp(width, 210, "20%", 240)
+              : calculateClamp(width, 0, "60%", 210)
+          }
         />
       </Pressable>
       <View
@@ -145,7 +146,6 @@ export function WeatherSearchMain({ currentWeather: current }) {
           styles={{
             fontSize: 21,
             opacity: 0.9,
-            textAlign: "center",
           }}
         >
           {condition?.text}
