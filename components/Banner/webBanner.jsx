@@ -25,10 +25,10 @@ const WebBanner = () => {
     <ScrollView
       style={{
         maxWidth: width - calculateClamp(width, 340, "42%", 620),
-        minHeight: 800,
       }}
       contentContainerStyle={{
         height: "100%",
+        minHeight: 280,
       }}
       showsVerticalScrollIndicator={false}
     >
@@ -62,7 +62,7 @@ const BannerLantern = () => {
     <View
       style={{
         alignItems: width > 1024 ? "flex-end" : "center",
-        paddingLeft: width > 1024 && calculateClamp(width, 320, "25%", 480),
+        paddingLeft: width > 1024 && calculateClamp(width, 320, "24%", 485),
         paddingVertical: 15,
         // height: 320,
       }}
@@ -115,7 +115,7 @@ const BannerDetails = () => {
         </Text>
       </DynamicText>
       <BannerDetailsCard
-        topText={currentWeatherLoc.name}
+        topText={currentWeatherLoc.region}
         bottomText={formatDate(currentWeatherLoc?.localtime)}
       />
       <BannerDetailsCard
@@ -124,6 +124,7 @@ const BannerDetails = () => {
             {getWeatherIcon({
               code: currentWeather?.condition?.code,
               size: calculateClamp(width, 30, "3%", 40),
+              strokeWidth: 1.8,
             })}
           </AdaptiveElement>
         }

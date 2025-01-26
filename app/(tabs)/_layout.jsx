@@ -84,7 +84,7 @@ export default function TabLayout() {
   if (location !== "denied") {
     return (
       <View
-        // colors={[themeColors?.primary, themeColors?.bg]}
+        colors={[themeColors?.primary, themeColors?.bg]}
         style={[
           {
             flex: 1,
@@ -115,7 +115,7 @@ export default function TabLayout() {
             unmountOnBlur: true,
           }}
         >
-          <TabSlot style={{ flex: 1 }} render={AnimatedScreen} />
+          <TabSlot style={{ flex: 1 }} />
 
           <TabList style={{ backgroundColor: "transparent" }} asChild>
             <MyTabBar>

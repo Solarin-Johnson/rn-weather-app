@@ -75,7 +75,6 @@ export default function Tab() {
 
   return (
     <Screen
-      style={styles.container}
       fixed={Platform.OS !== "web"}
       header={<SearchHeader />}
       refreshAction={() => {
