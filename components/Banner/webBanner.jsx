@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   View,
   Text,
@@ -15,44 +15,54 @@ import { AdaptiveElement, ThemeText } from "../ThemeComponents";
 import { useWeather } from "../../context/WeatherContext";
 import { calculateUnits, formatDate, getWeatherIcon } from "../../functions";
 import { useUser } from "../../context/UserContext";
-import { Image } from "expo-image";
+import { Image, ImageBackground } from "expo-image";
 
 const WebBanner = () => {
   const { width, height } = useWindowDimensions();
   const { themeColors } = useTheme();
+  const { currentWeather: current } = useWeather();
+  const src = current.is_day
+    ? require("../../assets/nature_day.webp")
+    : require("../../assets/nature.webp");
 
   return (
-    <ScrollView
+    <ImageBackground
+      source={src}
+      // contentFit="fill"
+      contentPosition="right bottom"
       style={{
-        maxWidth: width - calculateClamp(width, 340, "42%", 620),
+        width: width - calculateClamp(width, 340, "42%", 620),
       }}
-      contentContainerStyle={{
-        height: "100%",
-        minHeight: 280,
-      }}
-      showsVerticalScrollIndicator={false}
     >
-      <DynamicView
-        style={[
-          styles.banner,
-          {
-            paddingTop: 60 + calculateClamp(width, 10, "3%", 60) + 5,
-            // alignItems: "flex-start",
-            justifyContent: "center",
-          },
-        ]}
+      <ScrollView
+        contentContainerStyle={{
+          height: "100%",
+          minHeight: 280,
+        }}
+        showsVerticalScrollIndicator={false}
       >
-        <View
-          style={{
-            paddingBottom: calculateClamp(height, 10, "15%", 100),
-            paddingRight: calculateClamp(width, 20, "5%", 100),
-          }}
+        <DynamicView
+          style={[
+            styles.banner,
+            {
+              paddingTop: 60 + calculateClamp(width, 10, "3%", 60) + 5,
+              // alignItems: "flex-start",
+              justifyContent: "center",
+            },
+          ]}
         >
-          <BannerLantern />
-          <BannerDetails />
-        </View>
-      </DynamicView>
-    </ScrollView>
+          <View
+            style={{
+              paddingBottom: calculateClamp(height, 10, "15%", 100),
+              paddingRight: calculateClamp(width, 20, "5%", 100),
+            }}
+          >
+            <BannerLantern />
+            <BannerDetails />
+          </View>
+        </DynamicView>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 
@@ -84,8 +94,16 @@ const BannerLantern = () => {
 const BannerDetails = () => {
   const { currentWeather, currentWeatherLoc } = useWeather();
   const { measurement } = useUser();
-  const { themeColors } = useTheme();
+  const { themeColors, wide } = useTheme();
   const { width } = useWindowDimensions();
+
+  const config = useMemo(() => {
+    if (wide)
+      return {
+        color: "#ffffff",
+      };
+  });
+
   return (
     <View
       style={{
@@ -101,6 +119,7 @@ const BannerDetails = () => {
           textAlign: "center",
           marginBottom: -calculateClamp(width, 0, "1.1%", 28),
         }}
+        style={{ ...config }}
       >
         {parseInt(
           calculateUnits(currentWeather?.temp_c, measurement.temperatureUnit)
@@ -117,28 +136,26 @@ const BannerDetails = () => {
       <BannerDetailsCard
         topText={currentWeatherLoc.region}
         bottomText={formatDate(currentWeatherLoc?.localtime)}
+        config={config}
       />
       <BannerDetailsCard
-        topText={
-          <AdaptiveElement>
-            {getWeatherIcon({
-              code: currentWeather?.condition?.code,
-              size: calculateClamp(width, 30, "3%", 40),
-              strokeWidth: 1.8,
-            })}
-          </AdaptiveElement>
-        }
+        topText={getWeatherIcon({
+          code: currentWeather?.condition?.code,
+          size: calculateClamp(width, 30, "3%", 40),
+          strokeWidth: 1.8,
+        })}
         bottomText={currentWeather?.condition?.text}
         style={{
           marginLeft: calculateClamp(width, 10, "1%", 20),
           alignItems: "center",
         }}
+        config={config}
       />
     </View>
   );
 };
 
-const BannerDetailsCard = ({ topText, bottomText, style }) => {
+const BannerDetailsCard = ({ topText, bottomText, style, config }) => {
   return (
     <View
       style={[
@@ -148,10 +165,10 @@ const BannerDetailsCard = ({ topText, bottomText, style }) => {
         style,
       ]}
     >
-      <DynamicText clamp={[20, "2.4%", 42]} styles={styles.text}>
+      <DynamicText clamp={[20, "2.4%", 42]} style={(styles.text, config)}>
         {topText}
       </DynamicText>
-      <DynamicText clamp={[15, "1%", 20]} styles={styles.bottomText}>
+      <DynamicText clamp={[15, "1%", 20]} style={(styles.bottomText, config)}>
         {bottomText}
       </DynamicText>
     </View>

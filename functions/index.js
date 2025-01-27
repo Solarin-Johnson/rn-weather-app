@@ -514,3 +514,21 @@ export function getWeatherIcon({ code, ...props }) {
   const IconComponent = weatherIcons[code] || Question; // Default to Question icon if code not found
   return <IconComponent {...props} />; // Return the Lucide React component
 }
+
+export function getWeatherSummary({
+  locationName, // e.g., "Lagos"
+  conditionText, // e.g., "Patchy rain nearby"
+  maxTempC, // e.g., 29.6
+  minTempC, // e.g., 27.1
+  precipitationMm, // e.g., 0.0
+  humidityPercent, // e.g., 75
+}) {
+  // Determine precipitation phrasing
+  const precipitationPhrase =
+    precipitationMm === 0
+      ? "little or no precipitation"
+      : "little precipitation";
+
+  // Generate the summary sentence
+  return `Weather today in ${locationName} will be ${conditionText.toLowerCase()}. The daytime temperature is going to reach ${maxTempC}°C and the temperature is going to dip to ${minTempC}°C at night. It will be mostly dry with ${precipitationPhrase}. The humidity will be around ${humidityPercent}%.`;
+}

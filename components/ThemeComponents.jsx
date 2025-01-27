@@ -38,14 +38,22 @@ export function ThemeScreen({ children }) {
   );
 }
 
-export function ThemeText({ inv, children, styles, ...props }) {
+export function ThemeText({ inv, children, shadow, styles, style, ...props }) {
   const { themeColors } = useTheme();
   return (
     <Text
       style={[
         generalStyles.text,
         styles,
-        { color: inv ? themeColors?.bg : themeColors?.text },
+        {
+          color: inv ? themeColors?.bg : themeColors?.text,
+          // textShadowColor: shadow ? "#00000099" : "transparent",
+          // textShadowOffset: shadow
+          //   ? { width: 0, height: 0 }
+          //   : { width: 0, height: 0 },
+          // textShadowRadius: shadow ? 50 : 0,
+        },
+        style,
       ]}
       {...props}
     >
@@ -54,7 +62,7 @@ export function ThemeText({ inv, children, styles, ...props }) {
   );
 }
 
-export function AdaptiveElement({ children, inv, styles }) {
+export function AdaptiveElement({ children, inv, styles, style }) {
   const { themeColors } = useTheme();
 
   const clonedChildren = React.Children.map(children, (child) =>
@@ -63,6 +71,7 @@ export function AdaptiveElement({ children, inv, styles }) {
         child.props?.style,
         styles,
         { color: inv ? themeColors?.bg : themeColors?.text },
+        style,
       ],
     })
   );

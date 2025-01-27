@@ -30,14 +30,21 @@ export default function WeatherMain({ currentWeather: current }) {
       style={[
         styles.body,
         {
-          maxHeight: 1160 - PixelRatio.getPixelSizeForLayoutSize(300),
+          maxHeight: wide
+            ? 380
+            : 1160 - PixelRatio.getPixelSizeForLayoutSize(270),
         },
       ]}
     >
       <Pressable
         style={{
-          height: Platform.OS === "web" ? 200 : wide ? 170 : 160,
-          // maxHeight: 190,
+          height:
+            Platform.OS === "web"
+              ? wide
+                ? 210
+                : 180
+              : PixelRatio.getPixelSizeForLayoutSize(wide ? 145 : 80),
+          maxHeight: wide && 205,
         }}
         // onPress={() => {
         //   !wide &&
