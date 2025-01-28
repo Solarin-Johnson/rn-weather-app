@@ -14,11 +14,12 @@ export const DynamicText = ({
 
   return (
     <ThemeText
-      styles={[
+      style={[
         {
           fontSize: clampedValue,
         },
         styles,
+        style,
       ]}
     >
       {children}

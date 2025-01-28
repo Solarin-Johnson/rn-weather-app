@@ -110,7 +110,7 @@ export const PopularCities = forwardRef((props, ref) => {
 });
 
 const CityCard = ({ city, onPress }) => {
-  const { themeColors } = useTheme();
+  const { themeColors, wide } = useTheme();
   const { width } = useWindowDimensions();
 
   return (
@@ -123,7 +123,7 @@ const CityCard = ({ city, onPress }) => {
       style={[
         styles.cardContainer,
         {
-          backgroundColor: themeColors.textFade + "10",
+          backgroundColor: wide ? themeColors?.bg + "40" : themeColors?.fg,
         },
       ]}
     >
@@ -143,7 +143,7 @@ const CityCard = ({ city, onPress }) => {
 };
 
 const LoaderCard = (props) => {
-  const { themeColors } = useTheme();
+  const { themeColors, wide } = useTheme();
   const { length = 1 } = props;
   return (
     <>
@@ -153,8 +153,8 @@ const LoaderCard = (props) => {
           speed={2}
           width={"100%"}
           height={94}
-          backgroundColor={themeColors.fg}
-          foregroundColor={themeColors.bg + "20"}
+          backgroundColor={themeColors.fg + (wide ? "40" : "")}
+          foregroundColor={themeColors.bg + "10"}
           {...props}
         >
           <Rect x="0" y="0" rx="12" ry="12" width="100%" height={80} />

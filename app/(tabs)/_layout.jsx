@@ -13,11 +13,18 @@ import {
   View,
 } from "react-native";
 import MyTabBar from "@/components/TabBar";
-import { CloudRain, Home, Search, Sparkles, User2 } from "lucide-react-native";
+import {
+  CloudRain,
+  Home,
+  House,
+  Search,
+  Sparkles,
+  User2,
+} from "lucide-react-native";
 import { useTheme } from "@/context/ThemeContext";
 import { useUser } from "@/context/UserContext";
 import generalStyles from "@/styles/styles";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomeHeader from "../../components/HomeHeader";
 import { useBottomSheet } from "../../context/BottomSheetContext";
@@ -35,6 +42,10 @@ import { HomeIcon } from "../../styles/icons";
 import { useSearch } from "../../context/SearchContext";
 import WebBanner from "../../components/Banner/webBanner";
 import { LinearGradient } from "expo-linear-gradient";
+import { useWeather } from "../../context/WeatherContext";
+import { getBrightness, getHours } from "../../functions";
+import { ImageBackground } from "expo-image";
+import React from "react";
 
 const AnimatedScreen = ({ children, style }) => {
   return (
@@ -49,15 +60,19 @@ const AnimatedScreen = ({ children, style }) => {
 };
 
 export default function TabLayout() {
-  const { themeColors } = useTheme();
+  const { themeColors, fullScreen } = useTheme();
   const { location } = useUser();
+  const { currentWeather: current, currentWeatherLoc } = useWeather();
   const { bottomSheet, setBottomSheet } = useBottomSheet();
   const navigation = useNavigation();
   const router = useRouter();
   const pathname = usePathname();
   const { width, height } = useWindowDimensions();
-  const wide = width > 720;
+  const wide = width > 760;
   const { setSearchQuery } = useSearch();
+  const hour = parseInt(getHours(currentWeatherLoc.localtime));
+
+  const src = require("../../assets/nature_day.webp");
 
   const config = {
     size: 28,
@@ -83,71 +98,85 @@ export default function TabLayout() {
 
   if (location !== "denied") {
     return (
-      <View
-        colors={[themeColors?.primary, themeColors?.bg]}
-        style={[
-          {
-            flex: 1,
-            flexDirection: "row",
-            height: height,
-            backgroundColor: themeColors?.bg,
-          },
-        ]}
+      <ImageBackground
+        source={wide ? src : ""}
+        contentFit="fill"
+        contentPosition="left top"
+        style={{
+          flex: 1,
+          height: Platform.OS === "web" && height,
+          overflow: "hidden",
+          backgroundColor: themeColors?.bg,
+        }}
+        imageStyle={{
+          filter: `contrast(1.2) brightness(${getBrightness(hour)})`,
+        }}
       >
-        {wide && (
-          <>
-            <HomeHeader
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 10,
-                paddingBottom: 5,
-              }}
-            />
-            <WebBanner />
-          </>
-        )}
-        <Tabs
-          style={{ flex: 1 }}
-          screenOptions={{
-            tabBarHideOnKeyboard: true,
-            unmountOnBlur: true,
-          }}
+        <View
+          style={[
+            {
+              flex: 1,
+              flexDirection: "row",
+              height: height,
+              // backgroundColor: "red",
+            },
+          ]}
         >
-          <TabSlot style={{ flex: 1 }} />
+          {wide && (
+            <>
+              <HomeHeader
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  zIndex: 10,
+                  paddingBottom: 5,
+                }}
+              />
+              <WebBanner />
+            </>
+          )}
+          <Tabs
+            // style={{ flex: 1 }}
+            screenOptions={{
+              tabBarHideOnKeyboard: true,
+              unmountOnBlur: true,
+            }}
+          >
+            <TabSlot style={{ flex: 1 }} />
 
-          <TabList style={{ backgroundColor: "transparent" }} asChild>
-            <MyTabBar>
-              {[
-                { name: "home", href: "/", icon: HomeIcon, title: "Home" },
-                { name: "search", href: "/search", icon: Search },
-                { name: "insights", href: "/insights", icon: CloudRain },
-                { name: "me", href: "/me", icon: User2 },
-              ].map((tab, index) => (
-                <TabTrigger
-                  key={tab.name}
-                  name={tab.name}
-                  href={tab.href}
-                  asChild
-                >
-                  <TabButton
-                    index={index}
-                    label={tab.name === "home" ? "(tabs)" : undefined}
-                    options={{
-                      tabBarIcon: ({ color, fill, size }) => (
-                        <tab.icon color={color} fill={fill} size={size} />
-                      ),
-                      ...(tab.title && { title: tab.title }),
-                    }}
-                  />
-                </TabTrigger>
-              ))}
-            </MyTabBar>
-          </TabList>
-        </Tabs>
-        {bottomSheet && <BottomSheetContent />}
-      </View>
+            <TabList style={{ backgroundColor: "transparent" }} asChild>
+              <MyTabBar>
+                {[
+                  { name: "home", href: "/", icon: House, title: "Home" },
+                  { name: "search", href: "/search", icon: Search },
+                  { name: "insights", href: "/insights", icon: CloudRain },
+                  { name: "me", href: "/me", icon: User2 },
+                ].map((tab, index) => (
+                  <TabTrigger
+                    key={tab.name}
+                    name={tab.name}
+                    href={tab.href}
+                    asChild
+                  >
+                    <TabButton
+                      index={index}
+                      label={tab.name === "home" ? "(tabs)" : undefined}
+                      options={{
+                        tabBarIcon: ({ color, fill, size }) => (
+                          <tab.icon color={color} fill={fill} size={size} />
+                        ),
+                        ...(tab.title && { title: tab.title }),
+                      }}
+                    />
+                  </TabTrigger>
+                ))}
+              </MyTabBar>
+            </TabList>
+          </Tabs>
+          {bottomSheet && <BottomSheetContent />}
+        </View>
+      </ImageBackground>
     );
   }
 }
@@ -157,7 +186,7 @@ const BottomSheetContent = () => {
   const { themeColors } = useTheme();
   const { bottomSheet, setBottomSheet } = useBottomSheet();
   const { width } = useWindowDimensions();
-  const wide = width > 720;
+  const wide = width > 760;
 
   const handleSheetChanges = (index) => {
     if (index < 0) {

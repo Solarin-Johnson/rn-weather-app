@@ -26,8 +26,9 @@ const ThemeProvider = ({ children }) => {
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useState("auto");
   const [themeColors, setThemeColors] = useState(false);
+  const [fullScreen, setFullScreen] = useState(false);
   const width = useWindowDimensions().width;
-  const [wide, setWide] = useState(width > 720);
+  const [wide, setWide] = useState(width > 760);
   const themeEqv = theme === "auto" ? colorScheme : theme;
 
   const updateNavigationBar = async () => {
@@ -42,7 +43,7 @@ const ThemeProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    setWide(width > 720);
+    setWide(width > 760);
   }, [width]);
 
   useLayoutEffect(() => {
@@ -114,6 +115,8 @@ const ThemeProvider = ({ children }) => {
         setTheme,
         themeColors,
         wide,
+        fullScreen,
+        setFullScreen,
         isLandscape,
       }}
     >

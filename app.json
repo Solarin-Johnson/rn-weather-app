@@ -6,7 +6,7 @@
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "scheme": "your-app-scheme",
+    "scheme": "rn-weatherapp",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-dark.png",
@@ -31,7 +31,9 @@
       "googleServicesFile": "./google-services.json"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "output": "static",
+      "bundler": "metro"
     },
     "plugins": [
       "expo-router",

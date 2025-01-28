@@ -14,6 +14,7 @@ import { SearchProvider } from "../context/SearchContext";
 import { NotificationProvider } from "../context/NotificationContext";
 import * as SplashScreen from "expo-splash-screen";
 import { Asset } from "expo-asset";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -63,7 +64,7 @@ SplashScreen.preventAutoHideAsync();
 
 // Set the animation options. This is optional.
 SplashScreen.setOptions({
-  duration: 500,
+  duration: 200,
   fade: true,
 });
 

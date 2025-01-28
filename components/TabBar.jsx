@@ -20,8 +20,11 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
   const { theme, themeColors } = useTheme();
   const containerBg = useSharedValue(0);
   const { width } = useWindowDimensions();
-  const wide = width > 720;
+  const wide = width > 760;
   const maskColor = wide ? themeColors?.bgFade : themeColors?.bg;
+  const colorStops = wide
+    ? ["transparent", maskColor + "70", maskColor]
+    : ["transparent", maskColor, maskColor];
 
   const animatedStyle = useAnimatedStyle(() => {
     return {};
@@ -34,11 +37,7 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
   const TabBottomGradient = Platform.OS !== "ios" ? LinearGradient : View;
 
   return (
-    <TabBottomGradient
-      ref={ref}
-      colors={["transparent", maskColor + "bc", maskColor, maskColor]}
-      style={styles.container}
-    >
+    <TabBottomGradient ref={ref} colors={colorStops} style={styles.container}>
       <Animated.View
         key={theme}
         entering={FadeIn.duration(500)}

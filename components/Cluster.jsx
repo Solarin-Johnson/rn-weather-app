@@ -32,8 +32,10 @@ const Cluster = ({
 }) => {
   const { theme, wide, themeColors } = useTheme();
   const initBg =
-    wide && theme === "light"
-      ? themeColors?.bg + "ef"
+    theme === "light"
+      ? wide
+        ? themeColors?.bg + "40"
+        : themeColors?.bgFade
       : wide
         ? themeColors?.fg + "90"
         : themeColors?.fg + "90";

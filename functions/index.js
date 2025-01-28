@@ -168,15 +168,14 @@ export function extractCityAndCountry(response) {
 }
 
 export const getLocation = async (cord) => {
+  const { latitude, longitude } = cord;
   try {
     const response = await axios.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${cord.latitude},${cord.longitude}&key=${apiKey}`
+      `https://ycvo5lcmhjkpdkbfzknkjrdk3e0bjhgd.lambda-url.us-east-1.on.aws/api/v1/location/${longitude}/${latitude}`
     );
 
-    if (response.data.results.length > 0) {
-      console.log(extractCityAndCountry(response.data));
-
-      return extractCityAndCountry(response.data);
+    if (response.data.data.results.length > 0) {
+      return extractCityAndCountry(response.data.data);
     }
   } catch (error) {
     console.error("Error getting location or address:", error);
@@ -514,3 +513,35 @@ export function getWeatherIcon({ code, ...props }) {
   const IconComponent = weatherIcons[code] || Question; // Default to Question icon if code not found
   return <IconComponent {...props} />; // Return the Lucide React component
 }
+
+export function getWeatherSummary({
+  locationName, // e.g., "Lagos"
+  conditionText, // e.g., "Patchy rain nearby"
+  maxTempC, // e.g., 29.6
+  minTempC, // e.g., 27.1
+  precipitationMm, // e.g., 0.0
+  humidityPercent, // e.g., 75
+}) {
+  // Determine precipitation phrasing
+  const precipitationPhrase =
+    precipitationMm === 0
+      ? "little or no precipitation"
+      : "little precipitation";
+
+  // Generate the summary sentence
+  return `Weather today in ${locationName} will be ${conditionText.toLowerCase()}. The daytime temperature is going to reach ${maxTempC}°C and the temperature is going to dip to ${minTempC}°C at night. It will be mostly dry with ${precipitationPhrase}. The humidity will be around ${humidityPercent}%.`;
+}
+
+export const getHours = (input) => {
+  const date = new Date(input.replace(" ", "T"));
+  return date.getHours();
+};
+
+export const getBrightness = (hour) => {
+  if (hour >= 18) return 0.35;
+  if (hour <= 6) return 0.35;
+  if (hour > 6 && hour < 10) return Math.min(0.7 + (hour - 6) * 0.175, 1); // morning transition
+  if (hour > 16 && hour < 18) return Math.max(1 - (hour - 16) * 0.1, 0.35); // evening transition
+
+  return 1; // daytime
+};

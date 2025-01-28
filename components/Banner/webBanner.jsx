@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   useWindowDimensions,
   PixelRatio,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { DynamicText, DynamicView } from "../Dynamics";
 import useClamp, { calculateClamp } from "../../hooks/useClamp";
@@ -13,46 +14,96 @@ import CloudBg from "../CloudBg";
 import { useTheme } from "../../context/ThemeContext";
 import { AdaptiveElement, ThemeText } from "../ThemeComponents";
 import { useWeather } from "../../context/WeatherContext";
-import { calculateUnits, formatDate, getWeatherIcon } from "../../functions";
+import {
+  calculateUnits,
+  formatDate,
+  getBrightness,
+  getHours,
+  getWeatherIcon,
+} from "../../functions";
 import { useUser } from "../../context/UserContext";
-import { Image } from "expo-image";
+import { Image, ImageBackground } from "expo-image";
+import { Maximize2, Minimize2 } from "lucide-react-native";
+import generalStyles from "../../styles/styles";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 const WebBanner = () => {
   const { width, height } = useWindowDimensions();
-  const { themeColors } = useTheme();
+  const { themeColors, fullScreen, setFullScreen } = useTheme();
+  const animatedWidth = useSharedValue(
+    fullScreen ? width : width - calculateClamp(width, 340, "42%", 620)
+  );
+
+  useEffect(() => {
+    animatedWidth.value = withSpring(
+      fullScreen ? width : width - calculateClamp(width, 340, "42%", 620),
+      { damping: 15, stiffness: 100 }
+    );
+  }, [fullScreen]);
+
+  useEffect(() => {
+    animatedWidth.value = fullScreen
+      ? width
+      : width - calculateClamp(width, 340, "42%", 620);
+  }, [width]);
+
+  const fullScreenTransition = useAnimatedStyle(() => {
+    return {
+      width: animatedWidth.value,
+    };
+  });
+
+  const ToggleIcon = fullScreen ? Minimize2 : Maximize2;
 
   return (
-    <ScrollView
-      style={{
-        maxWidth: width - calculateClamp(width, 340, "42%", 620),
-      }}
-      contentContainerStyle={{
-        height: "100%",
-        minHeight: 280,
-      }}
-      showsVerticalScrollIndicator={false}
-    >
-      <DynamicView
-        style={[
-          styles.banner,
-          {
-            paddingTop: 60 + calculateClamp(width, 10, "3%", 60) + 5,
-            // alignItems: "flex-start",
-            justifyContent: "center",
-          },
-        ]}
+    <Animated.View style={fullScreenTransition}>
+      <ScrollView
+        contentContainerStyle={{
+          height: "100%",
+          minHeight: 280,
+          flex: 1,
+        }}
+        showsVerticalScrollIndicator={false}
       >
-        <View
-          style={{
-            paddingBottom: calculateClamp(height, 10, "15%", 100),
-            paddingRight: calculateClamp(width, 20, "5%", 100),
-          }}
+        <DynamicView
+          style={[
+            styles.banner,
+            {
+              paddingTop: 60 + calculateClamp(width, 10, "3%", 60) + 5,
+              // alignItems: "flex-start",
+              justifyContent: "center",
+            },
+          ]}
         >
-          <BannerLantern />
-          <BannerDetails />
-        </View>
-      </DynamicView>
-    </ScrollView>
+          <View
+            style={{
+              paddingBottom: calculateClamp(height, 10, "15%", 100),
+              paddingRight: calculateClamp(width, 20, "5%", 100),
+            }}
+          >
+            <BannerLantern />
+            <BannerDetails />
+          </View>
+        </DynamicView>
+      </ScrollView>
+      <Pressable
+        style={({ pressed, hovered }) => [
+          styles.button(hovered ? themeColors?.bgFade : themeColors?.bg),
+          pressed && generalStyles.buttonPressed,
+        ]}
+        onPress={() => {
+          setFullScreen(!fullScreen);
+        }}
+      >
+        <AdaptiveElement>
+          <ToggleIcon size={20} />
+        </AdaptiveElement>
+      </Pressable>
+    </Animated.View>
   );
 };
 
@@ -69,7 +120,7 @@ const BannerLantern = () => {
     >
       <Image
         style={{
-          width: calculateClamp(width, 200, "25%", 480),
+          width: calculateClamp(width, 200, "26%", 480),
           aspectRatio: 1,
         }}
         source={require("../../assets/hot-air-balloon.png")}
@@ -84,8 +135,16 @@ const BannerLantern = () => {
 const BannerDetails = () => {
   const { currentWeather, currentWeatherLoc } = useWeather();
   const { measurement } = useUser();
-  const { themeColors } = useTheme();
+  const { themeColors, wide } = useTheme();
   const { width } = useWindowDimensions();
+
+  const config = useMemo(() => {
+    if (wide)
+      return {
+        color: "#ffffff",
+      };
+  });
+
   return (
     <View
       style={{
@@ -96,11 +155,12 @@ const BannerDetails = () => {
       }}
     >
       <DynamicText
-        clamp={[54, "6%", 130]}
+        clamp={[54, "6.5%", 130]}
         styles={{
           textAlign: "center",
-          marginBottom: -calculateClamp(width, 0, "1.1%", 28),
+          marginBottom: -calculateClamp(width, 0, "1.3%", 28),
         }}
+        style={{ ...config }}
       >
         {parseInt(
           calculateUnits(currentWeather?.temp_c, measurement.temperatureUnit)
@@ -117,11 +177,12 @@ const BannerDetails = () => {
       <BannerDetailsCard
         topText={currentWeatherLoc.region}
         bottomText={formatDate(currentWeatherLoc?.localtime)}
+        config={config}
       />
       {width > 1024 && (
         <BannerDetailsCard
           topText={
-            <AdaptiveElement>
+            <AdaptiveElement style={config}>
               {getWeatherIcon({
                 code: currentWeather?.condition?.code,
                 size: calculateClamp(width, 30, "3%", 40),
@@ -134,13 +195,14 @@ const BannerDetails = () => {
             marginLeft: calculateClamp(width, 10, "1%", 20),
             alignItems: "center",
           }}
+        config={config}
         />
       )}
     </View>
   );
 };
 
-const BannerDetailsCard = ({ topText, bottomText, style }) => {
+const BannerDetailsCard = ({ topText, bottomText, style, config }) => {
   return (
     <View
       style={[
@@ -150,10 +212,10 @@ const BannerDetailsCard = ({ topText, bottomText, style }) => {
         style,
       ]}
     >
-      <DynamicText clamp={[20, "2.4%", 42]} styles={styles.text}>
+      <DynamicText clamp={[20, "2.8%", 42]} style={(styles.text, config)}>
         {topText}
       </DynamicText>
-      <DynamicText clamp={[15, "1%", 20]} styles={styles.bottomText}>
+      <DynamicText clamp={[15, "1.1%", 20]} style={(styles.bottomText, config)}>
         {bottomText}
       </DynamicText>
     </View>
@@ -175,6 +237,15 @@ const styles = StyleSheet.create({
     opacity: 0.85,
     // fontSize: 18,
   },
+  button: (bg) => ({
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    padding: 14,
+    zIndex: 10,
+    borderRadius: 50,
+    backgroundColor: bg + "ab",
+  }),
 });
 
 export default WebBanner;

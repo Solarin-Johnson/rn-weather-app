@@ -74,12 +74,9 @@ const WeatherDetailsCard = ({ style, children, index }) => {
         styles.container,
         generalStyles.bottomCard,
         {
-          backgroundColor:
-            wide && theme === "light"
-              ? themeColors?.bg
-              : wide
-                ? themeColors?.fg
-                : themeColors?.fg + "90",
+          backgroundColor: wide
+            ? themeColors?.bg + (theme === "light" ? "60" : "90")
+            : themeColors?.fg + (theme === "light" ? "" : "90"),
         },
         style,
       ]}

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { PixelRatio, StyleSheet, Text, View } from "react-native";
+import React, { useMemo } from "react";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
 import { getDate, getWords } from "../functions";
 import { MapPin, Moon, Sun } from "lucide-react-native";
@@ -8,20 +8,37 @@ import Switch from "./Switch";
 import { useTheme } from "../context/ThemeContext";
 import generalStyles from "../styles/styles";
 import { DynamicView } from "./Dynamics";
+import { useWeather } from "../context/WeatherContext";
 
 const HomeHeader = ({ style }) => {
   const { location } = useUser();
-  const { theme, setTheme } = useTheme();
+  const { currentWeather: current } = useWeather();
+  const { theme, setTheme, wide } = useTheme();
   const { name, country } = location || {};
+
+  const config = useMemo(() => {
+    if (wide)
+      return {
+        color: "#ffffff",
+      };
+  });
 
   return (
     <DynamicView style={[styles.container, style]} clamp={[10, "2.5%", 50]}>
       <View style={styles.subContainer}>
-        <ThemeText styles={{ fontSize: 17, opacity: 0.8 }}>
+        <ThemeText
+          style={{ fontSize: 17, opacity: wide ? 1 : 0.8, ...config }}
+          shadow
+        >
           {getDate()}
         </ThemeText>
         <View style={styles.locationSection}>
-          <AdaptiveElement>
+          <AdaptiveElement
+            style={{
+              ...config,
+              marginTop: -PixelRatio.getPixelSizeForLayoutSize(1),
+            }}
+          >
             <MapPin
               size={20}
               style={{
@@ -30,21 +47,23 @@ const HomeHeader = ({ style }) => {
             />
           </AdaptiveElement>
           <ThemeText
-            styles={{
+            style={{
               fontSize: 16,
-              height: 24,
+              // height: 24,
               textTransform: "uppercase",
               textAlignVertical: "bottom",
+              ...config,
             }}
           >
             {name ? getWords(name) + ", " : "..."}
           </ThemeText>
           <ThemeText
-            styles={{
+            style={{
               fontSize: 14,
               height: "90%",
               textAlignVertical: "bottom",
-              opacity: 0.8,
+              opacity: wide ? 1 : 0.8,
+              ...config,
             }}
           >
             {country && getWords(country)}

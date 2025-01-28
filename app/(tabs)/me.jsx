@@ -37,6 +37,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useEffect, useState } from "react";
+import { InsightBody } from "./insights";
 
 export default function Tab() {
   const { wide } = useTheme();
@@ -100,7 +101,7 @@ export default function Tab() {
   ];
 
   return (
-    <Screen title={"Profile"} alwaysShowHeader refresh={false}>
+    <Screen title={"Profile"} alwaysShowHeader refresh={Platform.OS === "web"}>
       <View
         style={[
           generalStyles.screen,
