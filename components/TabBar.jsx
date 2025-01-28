@@ -20,7 +20,7 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
   const { theme, themeColors } = useTheme();
   const containerBg = useSharedValue(0);
   const { width } = useWindowDimensions();
-  const wide = width > 720;
+  const wide = width > 760;
   const maskColor = wide ? themeColors?.bgFade : themeColors?.bg;
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -36,7 +36,7 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
   return (
     <TabBottomGradient
       ref={ref}
-      colors={["transparent", maskColor + "bc", maskColor, maskColor]}
+      colors={["transparent", maskColor + "90", maskColor]}
       style={styles.container}
     >
       <Animated.View

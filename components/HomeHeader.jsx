@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { PixelRatio, StyleSheet, Text, View } from "react-native";
 import React, { useMemo } from "react";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
 import { getDate, getWords } from "../functions";
@@ -33,7 +33,12 @@ const HomeHeader = ({ style }) => {
           {getDate()}
         </ThemeText>
         <View style={styles.locationSection}>
-          <AdaptiveElement style={{ ...config }} shadow>
+          <AdaptiveElement
+            style={{
+              ...config,
+              marginTop: -PixelRatio.getPixelSizeForLayoutSize(1),
+            }}
+          >
             <MapPin
               size={20}
               style={{
@@ -44,12 +49,11 @@ const HomeHeader = ({ style }) => {
           <ThemeText
             style={{
               fontSize: 16,
-              height: 24,
+              // height: 24,
               textTransform: "uppercase",
               textAlignVertical: "bottom",
               ...config,
             }}
-            shadow
           >
             {name ? getWords(name) + ", " : "..."}
           </ThemeText>
@@ -61,7 +65,6 @@ const HomeHeader = ({ style }) => {
               opacity: wide ? 1 : 0.8,
               ...config,
             }}
-            shadow
           >
             {country && getWords(country)}
           </ThemeText>

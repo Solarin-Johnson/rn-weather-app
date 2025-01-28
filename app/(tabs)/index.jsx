@@ -31,7 +31,7 @@ export default function Tab() {
   const { futureWeather, currentWeather, currentWeatherLoc } = useWeather();
   const { width, height } = useWindowDimensions();
   const [screenDim, setScreenDim] = useState({ width, height });
-  const wide = width > 720;
+  const wide = width > 740;
   const { sendNotification } = useNotification();
 
   // useEffect(() => {

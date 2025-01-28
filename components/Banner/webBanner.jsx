@@ -6,6 +6,7 @@ import {
   useWindowDimensions,
   PixelRatio,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { DynamicText, DynamicView } from "../Dynamics";
 import useClamp, { calculateClamp } from "../../hooks/useClamp";
@@ -13,31 +14,38 @@ import CloudBg from "../CloudBg";
 import { useTheme } from "../../context/ThemeContext";
 import { AdaptiveElement, ThemeText } from "../ThemeComponents";
 import { useWeather } from "../../context/WeatherContext";
-import { calculateUnits, formatDate, getWeatherIcon } from "../../functions";
+import {
+  calculateUnits,
+  formatDate,
+  getBrightness,
+  getHours,
+  getWeatherIcon,
+} from "../../functions";
 import { useUser } from "../../context/UserContext";
 import { Image, ImageBackground } from "expo-image";
+import { Maximize2, Minimize2 } from "lucide-react-native";
+import generalStyles from "../../styles/styles";
 
 const WebBanner = () => {
   const { width, height } = useWindowDimensions();
-  const { themeColors } = useTheme();
-  const { currentWeather: current } = useWeather();
-  const src = current.is_day
-    ? require("../../assets/nature_day.webp")
-    : require("../../assets/nature.webp");
+  const { themeColors, fullScreen, setFullScreen } = useTheme();
+  const { currentWeather: current, currentWeatherLoc } = useWeather();
+
+  const ToggleIcon = fullScreen ? Minimize2 : Maximize2;
 
   return (
-    <ImageBackground
-      source={src}
-      // contentFit="fill"
-      contentPosition="right bottom"
+    <View
       style={{
-        width: width - calculateClamp(width, 340, "42%", 620),
+        width: fullScreen
+          ? "100%"
+          : width - calculateClamp(width, 340, "42%", 620),
       }}
     >
       <ScrollView
         contentContainerStyle={{
           height: "100%",
           minHeight: 280,
+          flex: 1,
         }}
         showsVerticalScrollIndicator={false}
       >
@@ -62,7 +70,20 @@ const WebBanner = () => {
           </View>
         </DynamicView>
       </ScrollView>
-    </ImageBackground>
+      <Pressable
+        style={({ pressed, hovered }) => [
+          styles.button(hovered ? themeColors?.bgFade : themeColors?.bg),
+          pressed && generalStyles.buttonPressed,
+        ]}
+        onPress={() => {
+          setFullScreen(!fullScreen);
+        }}
+      >
+        <AdaptiveElement>
+          <ToggleIcon size={20} />
+        </AdaptiveElement>
+      </Pressable>
+    </View>
   );
 };
 
@@ -190,6 +211,15 @@ const styles = StyleSheet.create({
     opacity: 0.85,
     // fontSize: 18,
   },
+  button: (bg) => ({
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    padding: 14,
+    zIndex: 10,
+    borderRadius: 50,
+    backgroundColor: bg + "ab",
+  }),
 });
 
 export default WebBanner;

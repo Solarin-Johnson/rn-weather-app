@@ -67,7 +67,7 @@ const TitleView = memo(({ title, animatedStyle }) => {
   const { wide } = useTheme();
 
   return (
-    <View style={styles.titleView(title, wide, height, width)}>
+    <View style={styles.titleView(title, wide, width, height)}>
       <Animated.View style={animatedStyle}>
         <ThemeText styles={styles.animatedTitleText(wide)}>{title}</ThemeText>
       </Animated.View>
@@ -154,12 +154,12 @@ export const Screen = memo(
 
     const headerAnimatedStyle = useAnimatedStyle(() => {
       return {
-        backgroundColor:
-          scrollY.value > 0
-            ? wide
-              ? themeColors.bgFade
-              : themeColors.bg
-            : "transparent",
+        // backgroundColor:
+        //   scrollY.value > 0
+        //     ? wide
+        //       ? themeColors.bgFade
+        //       : themeColors.bg
+        //     : "transparent",
       };
     });
 
@@ -223,8 +223,10 @@ export const Screen = memo(
                 }
                 {...props}
               >
-                <TitleView title={title} animatedStyle={animatedStyle} />
-                {wide && !title && <View style={styles.spacer(wide)} />}
+                {title && (
+                  <TitleView title={title} animatedStyle={animatedStyle} />
+                )}
+                {wide && !title && <View style={styles.spacer(wide, width)} />}
                 <View
                   style={styles.contentContainer(
                     wide,
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     width: "100%",
-    maxHeight: height,
+    // maxHeight: height,
     maxWidth: wide ? 550 : "auto",
     alignSelf: "center",
   }),
@@ -274,13 +276,13 @@ const styles = StyleSheet.create({
           height: calculateClamp(height, 80, "10%", 120),
           justifyContent: "center",
         }),
-    position: title ? "absolute" : "relative",
+    // position: title ? "absolute" : "relative",
     paddingTop: insets.top,
     width: "100%",
     zIndex: 100,
   }),
-  titleView: (title, wide, width, height) => ({
-    height: title ? 165 : height > 1024 ? height / 20 : 0,
+  titleView: (title, wide, width, alwaysShowHeader) => ({
+    // height: title ? 165 : height > 1024 ? height / 20 : 0,
     justifyContent: "flex-end",
     paddingBottom: title && 35,
     paddingHorizontal: wide ? calculateClamp(width, 16, "2%", 54) : 16,
@@ -313,7 +315,7 @@ const styles = StyleSheet.create({
   spacer: (wide, width) => ({
     height:
       wide && Platform.OS === "web"
-        ? 60 + calculateClamp(width, 10, "3%", 50) + 5
+        ? 60 + calculateClamp(width, 10, "2%", 40) + 5
         : 20,
   }),
   footer: (wide) => ({

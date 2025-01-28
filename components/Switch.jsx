@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -17,101 +17,93 @@ import Animated, {
 } from "react-native-reanimated";
 import { useFocusEffect } from "expo-router";
 
-const Switch = ({
-  initialValue = false,
-  onValueChange = () => {},
-  toggleComponent,
-}) => {
-  const { themeColors } = useTheme();
-  const [isEnabled, setIsEnabled] = useState(initialValue);
-  const { leftIcon = null, rightIcon = null } = toggleComponent || {};
-  const [switchWidth, setSwitchWidth] = useState(80);
-  const switchTransform = useSharedValue(
-    initialValue ? switchWidth / 2 - 2 : 0
-  );
+const Switch = memo(
+  ({ initialValue = false, onValueChange = () => {}, toggleComponent }) => {
+    const { themeColors } = useTheme();
+    const [isEnabled, setIsEnabled] = useState(initialValue);
+    const { leftIcon = null, rightIcon = null } = toggleComponent || {};
+    const [switchWidth, setSwitchWidth] = useState(80);
+    const switchTransform = useSharedValue(initialValue ? switchWidth / 2 : 0);
 
-  const onLayout = (event) => {
-    const { width } = event.nativeEvent.layout;
-    setSwitchWidth(width);
-  };
-
-  const config = {
-    mass: 0.6,
-    damping: 18,
-    stiffness: 150,
-    overshootClamping: false,
-    restDisplacementThreshold: 0.01,
-    restSpeedThreshold: 2,
-    reduceMotion: ReduceMotion.System,
-  };
-
-  const toggleSwitch = () => {
-    setIsEnabled((previousState) => !previousState);
-    onValueChange(!isEnabled);
-  };
-
-  useFocusEffect(() => {
-    switchTransform.value = withSpring(
-      initialValue ? switchWidth / 2 - 2 : 0,
-      config
-    );
-  });
-
-  useLayoutEffect(() => {
-    switchTransform.value = initialValue ? switchWidth / 2 - 2 : 0;
-  }, []);
-
-  const animatedStyles = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX: switchTransform.value,
-        },
-      ],
+    const onLayout = (event) => {
+      const { width } = event.nativeEvent.layout;
+      setSwitchWidth(width);
     };
-  });
 
-  return (
-    <View style={customStyles.container}>
-      <Pressable
-        style={[
-          customStyles.switch,
+    const config = {
+      mass: 0.6,
+      damping: 18,
+      stiffness: 150,
+      overshootClamping: false,
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 2,
+      reduceMotion: ReduceMotion.System,
+    };
+
+    const toggleSwitch = () => {
+      setIsEnabled((previousState) => !previousState);
+      onValueChange(!isEnabled);
+    };
+
+    useEffect(() => {
+      switchTransform.value = withSpring(
+        initialValue ? switchWidth / 2 : 0,
+        config
+      );
+    }, [isEnabled]);
+
+    const animatedStyles = useAnimatedStyle(() => {
+      return {
+        transform: [
           {
-            borderColor: themeColors?.textFade + "50",
-            backgroundColor: themeColors?.bg,
+            translateX: switchTransform.value,
           },
-        ]}
-        onPress={toggleSwitch}
-        onLayout={onLayout}
-      >
-        {leftIcon && (
-          <View style={customStyles.switchNode}>
-            {leftIcon({
-              color: "#ffffff",
-            })}
-          </View>
-        )}
+        ],
+      };
+    });
 
-        {rightIcon && (
-          <View style={customStyles.switchNode}>
-            {rightIcon({ color: "#000000" })}
-          </View>
-        )}
-
-        <Animated.View
+    return (
+      <View style={customStyles.container}>
+        <Pressable
           style={[
-            customStyles.thumb,
-            animatedStyles,
+            customStyles.switch,
             {
-              width: switchWidth / 2 - 8,
-              backgroundColor: themeColors?.primary,
+              borderColor: themeColors?.textFade + "50",
+              backgroundColor: themeColors?.bg,
             },
           ]}
-        />
-      </Pressable>
-    </View>
-  );
-};
+          onPress={toggleSwitch}
+          onLayout={onLayout}
+        >
+          {leftIcon && (
+            <View style={customStyles.switchNode}>
+              {leftIcon({
+                color: "#ffffff",
+              })}
+            </View>
+          )}
+
+          {rightIcon && (
+            <View style={customStyles.switchNode}>
+              {rightIcon({ color: "#000000" })}
+            </View>
+          )}
+
+          <Animated.View
+            style={[
+              customStyles.thumb,
+              animatedStyles,
+              {
+                width: switchWidth / 2 - 8,
+                backgroundColor: themeColors?.primary,
+              },
+            ]}
+          />
+        </Pressable>
+      </View>
+    );
+  }
+);
 
 const customStyles = StyleSheet.create({
   container: {

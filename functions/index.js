@@ -532,3 +532,17 @@ export function getWeatherSummary({
   // Generate the summary sentence
   return `Weather today in ${locationName} will be ${conditionText.toLowerCase()}. The daytime temperature is going to reach ${maxTempC}°C and the temperature is going to dip to ${minTempC}°C at night. It will be mostly dry with ${precipitationPhrase}. The humidity will be around ${humidityPercent}%.`;
 }
+
+export const getHours = (input) => {
+  const date = new Date(input.replace(" ", "T"));
+  return date.getHours();
+};
+
+export const getBrightness = (hour) => {
+  if (hour >= 18) return 0.35;
+  if (hour <= 6) return 0.35;
+  if (hour > 6 && hour < 10) return Math.min(0.7 + (hour - 6) * 0.175, 1); // morning transition
+  if (hour > 16 && hour < 18) return Math.max(1 - (hour - 16) * 0.1, 0.35); // evening transition
+
+  return 1; // daytime
+};

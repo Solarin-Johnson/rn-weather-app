@@ -126,7 +126,7 @@ export function WeatherSearchMain({ currentWeather: current }) {
   const { preferences } = useUser();
   const { condition } = current || {};
   const { setBottomSheet } = useBottomSheet();
-  const wide = width > 720;
+  const wide = width > 760;
 
   return (
     <View style={styles.searchBody}>
@@ -154,6 +154,7 @@ export function WeatherSearchMain({ currentWeather: current }) {
             fontSize: 21,
             opacity: 0.9,
           }}
+          numberOfLines={1}
         >
           {condition?.text}
         </ThemeText>
@@ -176,5 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
+    maxWidth: "90%",
+    alignSelf: "center",
   },
 });

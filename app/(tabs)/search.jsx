@@ -13,6 +13,7 @@ import {
   UIManager,
   ScrollView,
   ActivityIndicator,
+  PixelRatio,
 } from "react-native";
 import { Screen } from "../../components/Screens";
 import { AdaptiveElement, ThemeText } from "../../components/ThemeComponents";
@@ -122,6 +123,7 @@ const SearchHeader = () => {
   const { wide } = useTheme();
   const { q } = useLocalSearchParams();
   const { setSearchQuery } = useSearch();
+  const { height } = useWindowDimensions();
 
   return (
     <View
@@ -129,6 +131,7 @@ const SearchHeader = () => {
         styles.header,
         {
           paddingBottom: Platform.OS === "web" && wide ? 20 : 0,
+          // paddingTop: wide ? calculateClamp(height, 80, "10%", 120) : 20,
         },
       ]}
     >
@@ -232,9 +235,7 @@ const SearchBox = () => {
           style={[
             styles.searchBoxContent,
             {
-              backgroundColor: wide
-                ? themeColors?.textFade + 24
-                : themeColors?.fg,
+              backgroundColor: wide ? themeColors?.bg + "70" : themeColors?.fg,
             },
           ]}
         >

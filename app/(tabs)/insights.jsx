@@ -7,12 +7,13 @@ import { useWeather } from "../../context/WeatherContext";
 import WeatherDetails from "../../components/Weather/Details";
 import Animated, { runOnJS, useDerivedValue } from "react-native-reanimated";
 import { useEffect, useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Tab() {
   const [screenScrollY, setScreenScrollY] = useState(0);
   const { width } = useWindowDimensions();
   const { fetchWeather } = useWeather();
-  const wide = width > 720;
+  const wide = width > 760;
 
   const refreshAction = async () => {
     await fetchWeather();
@@ -33,8 +34,9 @@ export default function Tab() {
   );
 }
 
-const InsightBody = ({ screenScrollY, setScreenScrollY, wide }) => {
+export const InsightBody = ({ screenScrollY, setScreenScrollY }) => {
   const { futureWeather, currentWeather, currentWeatherLoc } = useWeather();
+  const { wide } = useTheme();
 
   return (
     <View

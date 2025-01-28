@@ -22,14 +22,15 @@ export function ThemeView({ children, styles }) {
 export function ThemeScreen({ children }) {
   const { themeColors } = useTheme();
   const { width } = useWindowDimensions();
-  const wide = width > 720;
+  const wide = width > 760;
 
   return (
     <View
       style={[
         generalStyles.stack,
         {
-          backgroundColor: wide ? themeColors?.bgFade : themeColors?.bg,
+          backgroundColor: wide ? themeColors?.bgFade + "90" : themeColors?.bg,
+          backdropFilter: wide ? "blur(20px)" : "none",
         },
       ]}
     >
