@@ -118,22 +118,24 @@ const BannerDetails = () => {
         topText={currentWeatherLoc.region}
         bottomText={formatDate(currentWeatherLoc?.localtime)}
       />
-      <BannerDetailsCard
-        topText={
-          <AdaptiveElement>
-            {getWeatherIcon({
-              code: currentWeather?.condition?.code,
-              size: calculateClamp(width, 30, "3%", 40),
-              strokeWidth: 1.8,
-            })}
-          </AdaptiveElement>
-        }
-        bottomText={currentWeather?.condition?.text}
-        style={{
-          marginLeft: calculateClamp(width, 10, "1%", 20),
-          alignItems: "center",
-        }}
-      />
+      {width > 1024 && (
+        <BannerDetailsCard
+          topText={
+            <AdaptiveElement>
+              {getWeatherIcon({
+                code: currentWeather?.condition?.code,
+                size: calculateClamp(width, 30, "3%", 40),
+                strokeWidth: 1.8,
+              })}
+            </AdaptiveElement>
+          }
+          bottomText={currentWeather?.condition?.text}
+          style={{
+            marginLeft: calculateClamp(width, 10, "1%", 20),
+            alignItems: "center",
+          }}
+        />
+      )}
     </View>
   );
 };
