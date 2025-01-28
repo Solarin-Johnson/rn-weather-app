@@ -174,10 +174,8 @@ export const getLocation = async (cord) => {
       `https://ycvo5lcmhjkpdkbfzknkjrdk3e0bjhgd.lambda-url.us-east-1.on.aws/api/v1/location/${longitude}/${latitude}`
     );
 
-    if (response.data.results.length > 0) {
-      console.log(extractCityAndCountry(response.data));
-
-      return extractCityAndCountry(response.data);
+    if (response.data.data.results.length > 0) {
+      return extractCityAndCountry(response.data.data);
     }
   } catch (error) {
     console.error("Error getting location or address:", error);

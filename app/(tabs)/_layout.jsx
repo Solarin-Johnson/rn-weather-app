@@ -99,13 +99,14 @@ export default function TabLayout() {
   if (location !== "denied") {
     return (
       <ImageBackground
-        source={src}
+        source={wide ? src : ""}
         contentFit="fill"
         contentPosition="left top"
         style={{
           flex: 1,
-          maxHeight: Platform.OS === "web" && height,
+          height: Platform.OS === "web" && height,
           overflow: "hidden",
+          backgroundColor: themeColors?.bg,
         }}
         imageStyle={{
           filter: `contrast(1.2) brightness(${getBrightness(hour)})`,
@@ -117,7 +118,6 @@ export default function TabLayout() {
               flex: 1,
               flexDirection: "row",
               height: height,
-              // backgroundColor: themeColors?.bg,
               // backgroundColor: "red",
             },
           ]}
