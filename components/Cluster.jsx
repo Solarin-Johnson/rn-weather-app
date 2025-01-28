@@ -34,8 +34,8 @@ const Cluster = ({
   const initBg =
     theme === "light"
       ? wide
-        ? themeColors?.bg + "60"
-        : themeColors?.bg + "ef"
+        ? themeColors?.bg + "40"
+        : themeColors?.bgFade
       : wide
         ? themeColors?.fg + "90"
         : themeColors?.fg + "90";

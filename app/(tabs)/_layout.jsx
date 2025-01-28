@@ -104,7 +104,7 @@ export default function TabLayout() {
         contentPosition="left top"
         style={{
           flex: 1,
-          maxHeight: height,
+          maxHeight: Platform.OS === "web" && height,
           overflow: "hidden",
         }}
         imageStyle={{

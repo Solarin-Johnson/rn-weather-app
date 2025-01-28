@@ -1,5 +1,5 @@
 import { View, Text, useWindowDimensions } from "react-native";
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import generalStyles from "../styles/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,17 +20,35 @@ export function ThemeView({ children, styles }) {
 }
 
 export function ThemeScreen({ children }) {
-  const { themeColors } = useTheme();
+  const { themeColors, fullscreen } = useTheme();
   const { width } = useWindowDimensions();
   const wide = width > 760;
+  const screenRef = useRef(null);
+  const [layoutWidth, setLayoutWidth] = useState(0);
+
+  useEffect(() => {
+    let mounted = true;
+    if (screenRef.current) {
+      screenRef.current.measure((x, y, width) => {
+        if (mounted) {
+          setLayoutWidth(width);
+        }
+      });
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [fullscreen]);
 
   return (
     <View
+      ref={screenRef}
       style={[
         generalStyles.stack,
         {
           backgroundColor: wide ? themeColors?.bgFade + "90" : themeColors?.bg,
           backdropFilter: wide ? "blur(20px)" : "none",
+          minWidth: Math.min(550, layoutWidth),
         },
       ]}
     >

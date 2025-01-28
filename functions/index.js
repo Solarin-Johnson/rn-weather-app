@@ -168,9 +168,10 @@ export function extractCityAndCountry(response) {
 }
 
 export const getLocation = async (cord) => {
+  const { latitude, longitude } = cord;
   try {
     const response = await axios.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${cord.latitude},${cord.longitude}&key=${apiKey}`
+      `https://ycvo5lcmhjkpdkbfzknkjrdk3e0bjhgd.lambda-url.us-east-1.on.aws/api/v1/location/${longitude}/${latitude}`
     );
 
     if (response.data.results.length > 0) {

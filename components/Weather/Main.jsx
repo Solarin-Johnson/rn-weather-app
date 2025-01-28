@@ -37,25 +37,25 @@ export default function WeatherMain({ currentWeather: current }) {
       ]}
     >
       <Pressable
-        style={{
-          height:
-            Platform.OS === "web"
-              ? wide
-                ? 210
-                : 180
-              : PixelRatio.getPixelSizeForLayoutSize(wide ? 145 : 80),
-          maxHeight: wide && 205,
-        }}
-        // onPress={() => {
-        //   !wide &&
-        //     setBottomSheet(
-        //       <WeatherDetails
-        //         {...{ weather: current }}
-        //         forcast={futureWeather.forecastday}
-        //         isBottomSheet
-        //       />
-        //     );
-        // }}
+      // style={{
+      //   height:
+      //     Platform.OS === "web"
+      //       ? wide
+      //         ? 210
+      //         : 180
+      //       : PixelRatio.getPixelSizeForLayoutSize(wide ? 145 : 80),
+      //   maxHeight: wide && 205,
+      // }}
+      // onPress={() => {
+      //   !wide &&
+      //     setBottomSheet(
+      //       <WeatherDetails
+      //         {...{ weather: current }}
+      //         forcast={futureWeather.forecastday}
+      //         isBottomSheet
+      //       />
+      //     );
+      // }}
       >
         <WeatherIcon
           code={condition?.code}
@@ -69,7 +69,7 @@ export default function WeatherMain({ currentWeather: current }) {
       </Pressable>
       <View
         style={{
-          height: 160,
+          // height: 160,
           justifyContent: "flex-end",
         }}
       >

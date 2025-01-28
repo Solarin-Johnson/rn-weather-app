@@ -152,17 +152,6 @@ export const Screen = memo(
       };
     });
 
-    const headerAnimatedStyle = useAnimatedStyle(() => {
-      return {
-        // backgroundColor:
-        //   scrollY.value > 0
-        //     ? wide
-        //       ? themeColors.bgFade
-        //       : themeColors.bg
-        //     : "transparent",
-      };
-    });
-
     const onRefresh = useCallback(async () => {
       setRefreshing(true);
       try {
@@ -189,7 +178,6 @@ export const Screen = memo(
                 <Header
                   title={title}
                   header={header}
-                  headerAnimatedStyle={headerAnimatedStyle}
                   headerTitleAnimatedStyle={headerTitleAnimatedStyle}
                 />
               )}
@@ -257,7 +245,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     width: "100%",
     // maxHeight: height,
-    maxWidth: wide ? 550 : "auto",
+    maxWidth: wide ? 550 : 520,
     alignSelf: "center",
   }),
   scrollViewContainer: {

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -25,22 +25,42 @@ import { useUser } from "../../context/UserContext";
 import { Image, ImageBackground } from "expo-image";
 import { Maximize2, Minimize2 } from "lucide-react-native";
 import generalStyles from "../../styles/styles";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 const WebBanner = () => {
   const { width, height } = useWindowDimensions();
   const { themeColors, fullScreen, setFullScreen } = useTheme();
-  const { currentWeather: current, currentWeatherLoc } = useWeather();
+  const animatedWidth = useSharedValue(
+    fullScreen ? width : width - calculateClamp(width, 340, "42%", 620)
+  );
+
+  useEffect(() => {
+    animatedWidth.value = withSpring(
+      fullScreen ? width : width - calculateClamp(width, 340, "42%", 620),
+      { damping: 15, stiffness: 100 }
+    );
+  }, [fullScreen]);
+
+  useEffect(() => {
+    animatedWidth.value = fullScreen
+      ? width
+      : width - calculateClamp(width, 340, "42%", 620);
+  }, [width]);
+
+  const fullScreenTransition = useAnimatedStyle(() => {
+    return {
+      width: animatedWidth.value,
+    };
+  });
 
   const ToggleIcon = fullScreen ? Minimize2 : Maximize2;
 
   return (
-    <View
-      style={{
-        width: fullScreen
-          ? "100%"
-          : width - calculateClamp(width, 340, "42%", 620),
-      }}
-    >
+    <Animated.View style={fullScreenTransition}>
       <ScrollView
         contentContainerStyle={{
           height: "100%",
@@ -83,7 +103,7 @@ const WebBanner = () => {
           <ToggleIcon size={20} />
         </AdaptiveElement>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -100,7 +120,7 @@ const BannerLantern = () => {
     >
       <Image
         style={{
-          width: calculateClamp(width, 200, "25%", 480),
+          width: calculateClamp(width, 200, "26%", 480),
           aspectRatio: 1,
         }}
         source={require("../../assets/hot-air-balloon.png")}
@@ -135,10 +155,10 @@ const BannerDetails = () => {
       }}
     >
       <DynamicText
-        clamp={[54, "6%", 130]}
+        clamp={[54, "6.5%", 130]}
         styles={{
           textAlign: "center",
-          marginBottom: -calculateClamp(width, 0, "1.1%", 28),
+          marginBottom: -calculateClamp(width, 0, "1.3%", 28),
         }}
         style={{ ...config }}
       >
@@ -160,11 +180,15 @@ const BannerDetails = () => {
         config={config}
       />
       <BannerDetailsCard
-        topText={getWeatherIcon({
-          code: currentWeather?.condition?.code,
-          size: calculateClamp(width, 30, "3%", 40),
-          strokeWidth: 1.8,
-        })}
+        topText={
+          <AdaptiveElement style={config}>
+            {getWeatherIcon({
+              code: currentWeather?.condition?.code,
+              size: calculateClamp(width, 30, "3%", 40),
+              strokeWidth: 1.8,
+            })}
+          </AdaptiveElement>
+        }
         bottomText={currentWeather?.condition?.text}
         style={{
           marginLeft: calculateClamp(width, 10, "1%", 20),
@@ -186,10 +210,10 @@ const BannerDetailsCard = ({ topText, bottomText, style, config }) => {
         style,
       ]}
     >
-      <DynamicText clamp={[20, "2.4%", 42]} style={(styles.text, config)}>
+      <DynamicText clamp={[20, "2.8%", 42]} style={(styles.text, config)}>
         {topText}
       </DynamicText>
-      <DynamicText clamp={[15, "1%", 20]} style={(styles.bottomText, config)}>
+      <DynamicText clamp={[15, "1.1%", 20]} style={(styles.bottomText, config)}>
         {bottomText}
       </DynamicText>
     </View>
