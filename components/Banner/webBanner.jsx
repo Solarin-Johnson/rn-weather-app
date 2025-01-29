@@ -98,6 +98,7 @@ const WebBanner = () => {
         onPress={() => {
           setFullScreen(!fullScreen);
         }}
+        hitSlop={10}
       >
         <AdaptiveElement>
           <ToggleIcon size={20} />
@@ -195,7 +196,7 @@ const BannerDetails = () => {
             marginLeft: calculateClamp(width, 10, "1%", 20),
             alignItems: "center",
           }}
-        config={config}
+          config={config}
         />
       )}
     </View>

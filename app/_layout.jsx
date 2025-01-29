@@ -86,6 +86,7 @@ const CustomTabs = () => {
       require("../assets/iconPacks/thunderstorms.png")
     ),
     icePellets: Asset.fromModule(require("../assets/iconPacks/icePellets.png")),
+    bg: Asset.fromModule(require("../assets/nature_day.webp")),
   };
 
   const preloadAssets = async () =>
@@ -103,7 +104,7 @@ const CustomTabs = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: themeColors.bg,
+        // backgroundColor: themeColors.bg,
       }}
     >
       <Stack

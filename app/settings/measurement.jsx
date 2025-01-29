@@ -47,7 +47,11 @@ export default function Measurement() {
             key={key}
             title={setting.label}
             titleIcon={preferenceIcons.measurement[key]}
-            backgroundColor={themeColors?.fg + "80"}
+            backgroundColor={
+              wide
+                ? themeColors?.fg + (theme === "light" ? "30" : "60")
+                : themeColors?.fg + (theme === "light" ? "" : "80")
+            }
             index={key}
             animateParent
           >

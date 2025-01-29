@@ -23,7 +23,9 @@ const Switch = memo(
     const [isEnabled, setIsEnabled] = useState(initialValue);
     const { leftIcon = null, rightIcon = null } = toggleComponent || {};
     const [switchWidth, setSwitchWidth] = useState(80);
-    const switchTransform = useSharedValue(initialValue ? switchWidth / 2 : 0);
+    const switchTransform = useSharedValue(
+      initialValue ? switchWidth / 2 - 2 : -1
+    );
 
     const onLayout = (event) => {
       const { width } = event.nativeEvent.layout;
@@ -47,7 +49,7 @@ const Switch = memo(
 
     useEffect(() => {
       switchTransform.value = withSpring(
-        initialValue ? switchWidth / 2 : 0,
+        initialValue ? switchWidth / 2 - 2 : -1,
         config
       );
     }, [isEnabled]);

@@ -14,6 +14,9 @@ import { router, useNavigation } from "expo-router";
 import generalStyles from "../styles/styles";
 import { ArrowLeft, Trash2 } from "lucide-react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
+import { ImageBackground } from "expo-image";
+import { getBrightness } from "../functions";
+import ImageBg from "./ImageBg";
 
 const ModalContent = ({
   title,
@@ -92,108 +95,120 @@ const ModalContent = ({
   const ModalContainer = Platform.OS !== "web" ? KeyboardAvoidingView : View;
 
   return (
-    <ModalContainer
-      behavior="padding"
-      contentContainerStyle={{
-        flex: 1,
-      }}
-      style={{
-        flex: 1,
-        backgroundColor: themeColors?.bg,
-      }}
-      keyboardVerticalOffset={80}
-    >
-      <ScrollView
-        contentContainerStyle={[
-          styles.container,
-          {
-            minHeight: "100%",
-          },
-        ]}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+    <ImageBg>
+      <ModalContainer
+        behavior="padding"
+        contentContainerStyle={{
+          flex: 1,
+        }}
+        style={{
+          flex: 1,
+        }}
+        keyboardVerticalOffset={80}
       >
-        <View
-          style={[
-            styles.wrapper,
-            wide && styles.centerCard,
+        <ScrollView
+          contentContainerStyle={[
+            styles.container,
             {
-              borderColor: wide ? themeColors?.text + "25" : "",
-              flex: !wide && 1,
+              minHeight: "100%",
             },
           ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          {wide && (
-            <View
-              style={[
-                styles.header,
-                {
-                  width: "100%",
-                  justifyContent: "center",
-                },
-              ]}
-            >
-              <Pressable
-                onPress={() => {
-                  router.back();
-                }}
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  zIndex: 1,
-                }}
-              >
-                <ArrowLeft color={themeColors?.text} />
-              </Pressable>
-              <ThemeText styles={{ fontSize: 21, textAlign: "center" }}>
-                {title}
-              </ThemeText>
-            </View>
-          )}
           <View
             style={[
-              styles.content,
+              styles.wrapper,
+              wide && styles.centerCard,
               {
+                borderColor: wide ? themeColors?.text + "20" : "",
+                borderBottomWidth: 0,
+                shadowColor: "#000000",
+                shadowOffset: { width: 0, height: wide ? 3 : 0 },
+                shadowOpacity: wide ? 0.2 : 0,
+                shadowRadius: wide ? 10 : 0,
                 flex: !wide && 1,
-                paddingHorizontal: !wide,
+                backgroundColor: wide
+                  ? themeColors?.bgFade + "90"
+                  : themeColors?.bg,
+                backdropFilter: wide ? "blur(20px)" : "none",
               },
             ]}
           >
-            {!noInput && (
-              <View style={!wide && styles.form}>{renderInputs()}</View>
+            {wide && (
+              <View
+                style={[
+                  styles.header,
+                  {
+                    width: "100%",
+                    justifyContent: "center",
+                  },
+                ]}
+              >
+                <Pressable
+                  onPress={() => {
+                    router.back();
+                  }}
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    zIndex: 1,
+                  }}
+                >
+                  <ArrowLeft color={themeColors?.text} />
+                </Pressable>
+                <ThemeText styles={{ fontSize: 21, textAlign: "center" }}>
+                  {title}
+                </ThemeText>
+              </View>
             )}
-            {children}
-          </View>
-          {!noBtn && (
             <View
               style={[
-                styles.buttonContainer,
+                styles.content,
                 {
-                  borderColor: wide ? "transparent" : themeColors?.text + "20",
-                  padding: wide ? 0 : 20,
+                  flex: !wide && 1,
+                  paddingHorizontal: !wide,
                 },
               ]}
             >
-              {renderButton("Cancel", onClose, [
-                styles.cancelButton,
-                {
-                  backgroundColor:
-                    themeColors?.text + (theme === "light" ? "15" : "de"),
-                },
-              ])}
-              {renderButton(
-                submitButtonText,
-                handleSubmit,
-                {},
-                {
-                  color: themeColors?.bg,
-                }
+              {!noInput && (
+                <View style={!wide && styles.form}>{renderInputs()}</View>
               )}
+              {children}
             </View>
-          )}
-        </View>
-      </ScrollView>
-    </ModalContainer>
+            {!noBtn && (
+              <View
+                style={[
+                  styles.buttonContainer,
+                  {
+                    borderColor: wide
+                      ? "transparent"
+                      : themeColors?.text + "20",
+                    padding: wide ? 0 : 20,
+                  },
+                ]}
+              >
+                {renderButton("Cancel", onClose, [
+                  styles.cancelButton,
+                  {
+                    backgroundColor:
+                      themeColors?.text + (theme === "light" ? "15" : "de"),
+                  },
+                ])}
+                {renderButton(
+                  submitButtonText,
+                  handleSubmit,
+                  {},
+                  {
+                    color: themeColors?.bg,
+                  }
+                )}
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </ModalContainer>
+    </ImageBg>
   );
 };
 

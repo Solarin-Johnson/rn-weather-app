@@ -81,7 +81,6 @@ async function registerForPushNotificationsAsync() {
           projectId,
         })
       ).data;
-      console.log(pushTokenString);
       return pushTokenString;
     } catch (e) {
       handleRegistrationError(`${e}`);
@@ -108,9 +107,7 @@ export const NotificationProvider = ({ children }) => {
       });
 
     responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+      Notifications.addNotificationResponseReceivedListener((response) => {});
 
     return () => {
       notificationListener.current &&
@@ -121,8 +118,6 @@ export const NotificationProvider = ({ children }) => {
         Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-
-  console.log("Token", expoPushToken);
 
   const sendNotification = async (title, body, data) => {
     if (Platform.OS === "android") {

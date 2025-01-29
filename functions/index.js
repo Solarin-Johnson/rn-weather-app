@@ -537,11 +537,27 @@ export const getHours = (input) => {
   return date.getHours();
 };
 
-export const getBrightness = (hour) => {
-  if (hour >= 18) return 0.35;
-  if (hour <= 6) return 0.35;
-  if (hour > 6 && hour < 10) return Math.min(0.7 + (hour - 6) * 0.175, 1); // morning transition
-  if (hour > 16 && hour < 18) return Math.max(1 - (hour - 16) * 0.1, 0.35); // evening transition
+export function getBrightness(hour) {
+  // Key points: [time, brightness]
+  const keyPoints = [
+    [0, 0.3], // Midnight
+    [6, 0.6], // Sunrise
+    [12, 1.0], // Noon
+    [16, 1.0], // Noon
+    [20, 0.6], // Sunset
+    [24, 0.3], // Midnight (next day)
+  ];
 
-  return 1; // daytime
-};
+  hour = hour % 24; // Ensure hour is within 0-24 range
+
+  // Find the segment where hour lies
+  const i = keyPoints.findIndex(
+    ([t], idx) => t <= hour && hour < (keyPoints[idx + 1]?.[0] ?? 24)
+  );
+  const [t1, b1] = keyPoints[i];
+  const [t2, b2] = keyPoints[i + 1] || keyPoints[0];
+
+  // Cosine interpolation
+  const fraction = (hour - t1) / (t2 - t1);
+  return b1 + ((b2 - b1) * (1 - Math.cos(Math.PI * fraction))) / 2;
+}

@@ -44,7 +44,6 @@ const UserProvider = ({ children }) => {
         accuracy: Location.Accuracy.High,
       });
 
-      console.log(location);
 
       // Reverse geocode to get address
 
@@ -111,7 +110,6 @@ const UserProvider = ({ children }) => {
     let isSubscribed = true;
     if (isSubscribed) {
       storeData("preferences", JSON.stringify(preferences));
-      console.log("Preferences stored");
     }
     return () => {
       isSubscribed = false;

@@ -97,8 +97,6 @@ const CommonDetails = ({ weather }) => {
     true
   );
 
-  console.log(measurement.precipitationUnit);
-
   return (
     <>
       <View style={styles.cluster}>

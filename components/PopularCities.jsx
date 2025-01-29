@@ -11,6 +11,7 @@ import {
   Dimensions,
   Platform,
   useWindowDimensions,
+  PixelRatio,
 } from "react-native";
 import { TouchableNativeFeedback, TouchableOpacity } from "react-native";
 import { useTheme } from "../context/ThemeContext";
@@ -152,12 +153,19 @@ const LoaderCard = (props) => {
           key={index}
           speed={2}
           width={"100%"}
-          height={94}
+          height={PixelRatio.roundToNearestPixel(95)}
           backgroundColor={themeColors.fg + (wide ? "40" : "")}
           foregroundColor={themeColors.bg + "10"}
           {...props}
         >
-          <Rect x="0" y="0" rx="12" ry="12" width="100%" height={80} />
+          <Rect
+            x="0"
+            y="0"
+            rx="12"
+            ry="12"
+            width="100%"
+            height={PixelRatio.getPixelSizeForLayoutSize(52)}
+          />
         </ContentLoader>
       ))}
     </>

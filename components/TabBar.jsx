@@ -24,7 +24,11 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
   const wide = width > 760;
   const maskColor = wide ? themeColors?.bgFade : themeColors?.bg;
   const colorStops = wide
-    ? ["transparent", maskColor + "70", maskColor]
+    ? [
+        "transparent",
+        maskColor + (Platform.OS === "web" ? "60" : "ab"),
+        maskColor,
+      ]
     : ["transparent", maskColor, maskColor];
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -38,7 +42,11 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
   const TabBottomGradient = Platform.OS !== "ios" ? LinearGradient : View;
 
   return (
-    <TabBottomGradient ref={ref} colors={colorStops} style={styles.container}>
+    <TabBottomGradient
+      ref={ref}
+      colors={colorStops}
+      style={[styles.container, { minWidth: Math.min(width, 280) }]}
+    >
       <Animated.View
         key={theme}
         entering={FadeIn.duration(500)}
@@ -112,7 +120,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     width: "100%",
     flex: 1,
-    minWidth: Math.min(Dimensions.get("window").width, 400),
   },
   tabBlur: {
     alignSelf: "center",

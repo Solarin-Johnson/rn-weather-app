@@ -30,7 +30,6 @@ export default forwardRef(function SearchResult({ callback }, ref) {
         setFutureWeather(data.forecast);
         setCurrentWeather(data.current);
         setCurrentWeatherLoc(data.location);
-        console.log("Search Weather data fetched:");
       })
       .catch((error) => console.error("Error fetching future weather:", error));
   };

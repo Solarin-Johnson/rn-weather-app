@@ -18,7 +18,7 @@ const CloudBg = () => {
       style={[
         styles.container,
         {
-          top: -1 * (width > 500 ? calculateClamp(width, 20, "8%", 70) : 20),
+          top: -1 * (width > 500 ? calculateClamp(width, 20, "6%", 20) : 20),
         },
       ]}
     >
@@ -26,7 +26,7 @@ const CloudBg = () => {
         style={{
           flex: 1,
           width: "98%",
-          maxWidth: 520,
+          maxWidth: 500,
         }}
       >
         <BgCloud />

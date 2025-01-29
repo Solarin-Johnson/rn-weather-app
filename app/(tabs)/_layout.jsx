@@ -46,6 +46,7 @@ import { useWeather } from "../../context/WeatherContext";
 import { getBrightness, getHours } from "../../functions";
 import { ImageBackground } from "expo-image";
 import React from "react";
+import ImageBg from "../../components/ImageBg";
 
 const AnimatedScreen = ({ children, style }) => {
   return (
@@ -72,7 +73,6 @@ export default function TabLayout() {
   const { setSearchQuery } = useSearch();
   const hour = parseInt(getHours(currentWeatherLoc.localtime));
 
-  const src = require("../../assets/nature_day.webp");
 
   const config = {
     size: 28,
@@ -98,20 +98,7 @@ export default function TabLayout() {
 
   if (location !== "denied") {
     return (
-      <ImageBackground
-        source={wide ? src : ""}
-        contentFit="fill"
-        contentPosition="left top"
-        style={{
-          flex: 1,
-          height: Platform.OS === "web" && height,
-          overflow: "hidden",
-          backgroundColor: themeColors?.bg,
-        }}
-        imageStyle={{
-          filter: `contrast(1.2) brightness(${getBrightness(hour)})`,
-        }}
-      >
+      <ImageBg>
         <View
           style={[
             {
@@ -176,7 +163,7 @@ export default function TabLayout() {
           </Tabs>
           {bottomSheet && <BottomSheetContent />}
         </View>
-      </ImageBackground>
+      </ImageBg>
     );
   }
 }

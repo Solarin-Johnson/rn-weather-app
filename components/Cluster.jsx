@@ -50,7 +50,7 @@ const Cluster = ({
         style={{
           flexDirection: "row",
           alignItems: "center",
-          opacity: 0.65,
+          opacity: 0.7,
         }}
       >
         {title && (

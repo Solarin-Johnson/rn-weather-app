@@ -32,7 +32,7 @@ export default function WeatherMini({
         absolute={absolute}
         code={condition?.code}
         isDay={current?.is_day}
-        size={calculateClamp(width, 50, "16%", _styles?.icon || 70)}
+        size={calculateClamp(width, 50, "16%", _styles?.icon || 65)}
         // style={{ filter: Platform.OS !== "ios" ? "blur(0.51px)" : "" }}
       />
       <ThemeText
