@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import generalStyles from "../styles/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { calculateClamp } from "../hooks/useClamp";
 
 export function ThemeView({ children, styles }) {
   const { themeColors } = useTheme();
@@ -20,25 +21,9 @@ export function ThemeView({ children, styles }) {
 }
 
 export function ThemeScreen({ children }) {
-  const { themeColors, fullscreen } = useTheme();
+  const { themeColors, wide, fullscreen } = useTheme();
   const { width } = useWindowDimensions();
-  const wide = width > 760;
   const screenRef = useRef(null);
-  const [layoutWidth, setLayoutWidth] = useState(0);
-
-  useEffect(() => {
-    let mounted = true;
-    if (screenRef.current) {
-      screenRef.current.measure((x, y, width) => {
-        if (mounted) {
-          setLayoutWidth(width);
-        }
-      });
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [fullscreen]);
 
   return (
     <View
@@ -48,7 +33,7 @@ export function ThemeScreen({ children }) {
         {
           backgroundColor: wide ? themeColors?.bgFade + "90" : themeColors?.bg,
           backdropFilter: wide ? "blur(20px)" : "none",
-          minWidth: Math.min(550, layoutWidth),
+          minWidth: Math.min(550, calculateClamp(width, 340, "42%", 620)),
         },
       ]}
     >

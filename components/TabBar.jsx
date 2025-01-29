@@ -5,6 +5,7 @@ import {
   Pressable,
   useWindowDimensions,
   Platform,
+  Dimensions,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { BlurView } from "expo-blur";
@@ -110,6 +111,8 @@ const styles = StyleSheet.create({
     bottom: "0",
     paddingTop: 50,
     width: "100%",
+    flex: 1,
+    minWidth: Math.min(Dimensions.get("window").width, 300),
   },
   tabBlur: {
     alignSelf: "center",

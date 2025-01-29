@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     width: "100%",
-    maxWidth: 500,
+    maxWidth: 460,
     alignSelf: "center",
     flexDirection: "row",
   },
