@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     width: "100%",
     flex: 1,
-    minWidth: Math.min(Dimensions.get("window").width, 300),
+    minWidth: Math.min(Dimensions.get("window").width, 400),
   },
   tabBlur: {
     alignSelf: "center",
