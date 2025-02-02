@@ -5,17 +5,21 @@ import axios from "axios";
 export const weatherApiKey =
   localWeatherApiKey || Constants.expoConfig.extra.WEATHER_API_KEY;
 
+const weatherApi = axios.create({
+  baseURL: "https://api.weatherapi.com/v1",
+  params: {
+    key: process.env.EXPO_PUBLIC_WEATHER_API_KEY,
+  },
+});
+
 export const getCurrentWeather = async (lat, lon) => {
   try {
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/current.json`,
-      {
-        params: {
-          key: weatherApiKey,
-          q: `${lat},${lon}`,
-        },
-      }
-    );
+    const response = await weatherApi.get(`/current.json`, {
+      params: {
+        key: weatherApiKey,
+        q: `${lat},${lon}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching weather data:", error);
@@ -25,16 +29,13 @@ export const getCurrentWeather = async (lat, lon) => {
 
 export const searchCurrentWeather = async (q) => {
   try {
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/current.json`,
-      {
-        params: {
-          key: weatherApiKey,
-          q: q,
-          aqi: "yes",
-        },
-      }
-    );
+    const response = await weatherApi.get(`/current.json`, {
+      params: {
+        key: weatherApiKey,
+        q: q,
+        aqi: "yes",
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching weather data:", error);
@@ -44,16 +45,13 @@ export const searchCurrentWeather = async (q) => {
 
 export const getFutureWeather = async (lat, lon, days = 3) => {
   try {
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/forecast.json`,
-      {
-        params: {
-          key: weatherApiKey,
-          q: `${lat},${lon}`,
-          days: days,
-        },
-      }
-    );
+    const response = await weatherApi.get(`/forecast.json`, {
+      params: {
+        key: weatherApiKey,
+        q: `${lat},${lon}`,
+        days: days,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching future weather data:", error);
@@ -63,15 +61,12 @@ export const getFutureWeather = async (lat, lon, days = 3) => {
 
 export const getLocation = async ({ latitude, longitude }) => {
   try {
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/current.json`,
-      {
-        params: {
-          key: weatherApiKey,
-          q: `${latitude},${longitude}`,
-        },
-      }
-    );
+    const response = await weatherApi.get(`/current.json`, {
+      params: {
+        key: weatherApiKey,
+        q: `${latitude},${longitude}`,
+      },
+    });
     // console.log(response.data.location);
 
     return response.data.location;
@@ -127,15 +122,12 @@ export function toEpoch(datetime) {
 
 export const searchAutoComplete = async (query) => {
   try {
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/search.json`,
-      {
-        params: {
-          key: weatherApiKey,
-          q: query,
-        },
-      }
-    );
+    const response = await weatherApi.get(`/search.json`, {
+      params: {
+        key: weatherApiKey,
+        q: query,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching weather data:", error);
@@ -145,15 +137,12 @@ export const searchAutoComplete = async (query) => {
 
 export const SearchWeather = async (query) => {
   try {
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/current.json`,
-      {
-        params: {
-          key: weatherApiKey,
-          q: query,
-        },
-      }
-    );
+    const response = await weatherApi.get(`/current.json`, {
+      params: {
+        key: weatherApiKey,
+        q: query,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching weather data:", error);
@@ -163,16 +152,13 @@ export const SearchWeather = async (query) => {
 
 export const searchFutureWeather = async (q, days = 3) => {
   try {
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/forecast.json`,
-      {
-        params: {
-          key: weatherApiKey,
-          q: q,
-          days: days,
-        },
-      }
-    );
+    const response = await weatherApi.get(`/forecast.json`, {
+      params: {
+        key: weatherApiKey,
+        q: q,
+        days: days,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching future weather data:", error);

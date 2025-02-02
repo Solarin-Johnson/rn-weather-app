@@ -49,7 +49,7 @@ export const MyTabBar = forwardRef(({ children }, ref) => {
     >
       <Animated.View
         key={theme}
-        entering={FadeIn.duration(500)}
+        entering={Platform.OS !== "web" && FadeIn.duration(500)}
         style={[animatedStyle]}
       >
         <BlurView
