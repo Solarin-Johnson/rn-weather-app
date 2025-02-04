@@ -90,7 +90,7 @@ const ModalContent = memo(
             styles.button,
             {
               backgroundColor: themeColors.primary,
-              height: wide ? 50 : 45,
+              height: wide ? 48 : 45,
             },
             additionalStyle,
             pressed && generalStyles.buttonPressed,
