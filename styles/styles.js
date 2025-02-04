@@ -72,7 +72,7 @@ const generalStyles = StyleSheet.create({
     opacity: 0.85,
   },
   buttonPressed: {
-    opacity: Platform.OS === "web" ? 0.7 : 1,
+    opacity: 0.4,
   },
 });
 

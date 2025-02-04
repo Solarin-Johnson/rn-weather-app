@@ -18,7 +18,7 @@ const ImageBg = memo(({ children, style }) => {
       source={wide ? src : ""}
       contentFit="fill"
       contentPosition="left top"
-      transition={Platform.OS === "web" && 180}
+      // transition={Platform.OS === "web" && 180}
       style={[
         {
           flex: 1,

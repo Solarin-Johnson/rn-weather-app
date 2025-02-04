@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { memo, useEffect, useRef, useState, useCallback } from "react";
 import {
   View,
   TextInput,
@@ -7,183 +7,185 @@ import {
   Text,
   ScrollView,
   Platform,
+  TouchableWithoutFeedback,
+  useWindowDimensions,
+  Keyboard,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { AdaptiveElement, ThemeText } from "./ThemeComponents";
-import { router, useNavigation } from "expo-router";
+import { router } from "expo-router";
 import generalStyles from "../styles/styles";
-import { ArrowLeft, Trash2 } from "lucide-react-native";
+import { ArrowLeft } from "lucide-react-native";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  SlideInDown,
+} from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
-import { ImageBackground } from "expo-image";
-import { getBrightness } from "../functions";
-import ImageBg from "./ImageBg";
 
-const ModalContent = ({
-  title,
-  onSubmit,
-  onClose,
-  submitButtonText = "Submit",
-  cancelButtonText = "Cancel",
-  initialFormData = {},
-  noInput,
-  noBtn,
-  children,
-}) => {
-  const [formData, setFormData] = useState(initialFormData);
-  const { theme, themeColors, wide } = useTheme();
-  const navigation = useNavigation();
+const ModalContent = memo(
+  ({
+    title,
+    onSubmit,
+    onClose,
+    submitButtonText = "Submit",
+    cancelButtonText = "Cancel",
+    initialFormData = {},
+    noInput,
+    noBtn,
+    children,
+  }) => {
+    const [formData, setFormData] = useState(initialFormData);
+    const { themeColors, wide } = useTheme();
+    const { height } = useWindowDimensions();
+    const insets = useSafeAreaInsets();
 
-  const handleSubmit = () => {
-    onSubmit(formData);
-    setFormData(initialFormData);
-  };
+    const handleSubmit = useCallback(() => {
+      onSubmit(formData);
+      setFormData(initialFormData);
+    }, [formData, onSubmit, initialFormData]);
 
-  const handleInputChange = (key, value) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
-  };
+    const handleInputChange = useCallback((key, value) => {
+      setFormData((prev) => ({ ...prev, [key]: value }));
+    }, []);
 
-  const renderInputs = () =>
-    Object.entries(initialFormData).map(([key, value], index) => (
-      <View key={index} style={styles.inputField}>
-        <ThemeText
-          styles={{
-            fontSize: 18,
-            textTransform: "capitalize",
-          }}
-        >
-          {key}
-        </ThemeText>
-        <AdaptiveElement>
-          <TextInput
-            style={[
-              styles.input,
-              {
-                borderColor: themeColors?.text + "40",
-              },
-            ]}
-            placeholderTextColor={themeColors?.text + "80"}
-            placeholder={`Enter ${key}`}
-            value={formData[key]}
-            onChangeText={(text) => handleInputChange(key, text)}
-            autoFocus={index === 0}
-          />
-        </AdaptiveElement>
-      </View>
-    ));
+    const renderInputs = useCallback(
+      () =>
+        Object.entries(initialFormData).map(([key, value], index) => {
+          const inputRef = useRef(null);
 
-  const renderButton = (
-    label,
-    onPress,
-    additionalStyle = {},
-    textStyle = {}
-  ) => (
-    <Pressable
-      style={({ pressed }) => [
-        styles.button,
-        {
-          backgroundColor: themeColors?.primary,
-        },
-        additionalStyle,
-        pressed && generalStyles.buttonPressed,
-      ]}
-      onPress={onPress}
-    >
-      <Text style={[styles.buttonText, textStyle]}>{label}</Text>
-    </Pressable>
-  );
+          useEffect(() => {
+            if (index === 0 && inputRef.current) {
+              setTimeout(() => inputRef.current.focus(), 0);
+            }
+          }, [index]);
 
-  const ModalContainer = Platform.OS !== "web" ? KeyboardAvoidingView : View;
+          return (
+            <View key={key} style={styles.inputField}>
+              <ThemeText style={styles.label}>{key}</ThemeText>
+              <AdaptiveElement>
+                <TextInput
+                  ref={inputRef}
+                  style={[
+                    styles.input,
+                    { borderColor: `${themeColors.text}40` },
+                  ]}
+                  placeholderTextColor={`${themeColors.text}80`}
+                  placeholder={`Enter ${key}`}
+                  value={formData[key]}
+                  onChangeText={(text) => handleInputChange(key, text)}
+                />
+              </AdaptiveElement>
+            </View>
+          );
+        }),
+      [initialFormData, formData, handleInputChange, themeColors]
+    );
 
-  return (
-    <ImageBg>
-      <ModalContainer
-        behavior="padding"
-        contentContainerStyle={{
-          flex: 1,
-        }}
-        style={{
-          flex: 1,
-        }}
-        keyboardVerticalOffset={80}
-      >
-        <ScrollView
-          contentContainerStyle={[
-            styles.container,
+    const renderButton = useCallback(
+      (label, onPress, additionalStyle = {}, textStyle = {}) => (
+        <Pressable
+          style={({ pressed }) => [
+            styles.button,
             {
-              minHeight: "100%",
+              backgroundColor: themeColors.primary,
+              height: wide ? 50 : 45,
+            },
+            additionalStyle,
+            pressed && generalStyles.buttonPressed,
+          ]}
+          onPress={onPress}
+        >
+          <Text style={[styles.buttonText, textStyle]}>{label}</Text>
+        </Pressable>
+      ),
+      [themeColors]
+    );
+
+    const isWeb = Platform.OS === "web";
+    const ModalContainer = isWeb ? Animated.View : KeyboardAvoidingView;
+    const Wrapper = ScrollView;
+
+    const animatedProps = {
+      entering: isWeb && wide ? FadeInDown : SlideInDown.duration(250),
+    };
+
+    const wrapperProps = isWeb
+      ? { style: styles.content, keyboardShouldPersistTaps: "handled" }
+      : { style: styles.content };
+
+    const Overlay = () => (
+      <TouchableWithoutFeedback onPress={router.back}>
+        <View style={styles.overlay} />
+      </TouchableWithoutFeedback>
+    );
+
+    return (
+      <ModalContainer
+        entering={FadeIn.duration(100)}
+        behavior={isWeb ? undefined : "padding"}
+        style={[
+          styles.modalContainer,
+          {
+            paddingTop: insets.top + 4,
+            backgroundColor: isWeb
+              ? `${themeColors.bg}50`
+              : wide
+                ? `${themeColors.bg}99`
+                : `#00000060`,
+            justifyContent: wide ? "center" : isWeb ? "flex-end" : "flex-end",
+          },
+        ]}
+      >
+        <Overlay />
+
+        <View
+          style={[
+            !isWeb && styles.container,
+            {
+              justifyContent: wide ? "center" : isWeb ? "flex-end" : "flex-end",
             },
           ]}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
         >
-          <View
+          <Overlay />
+          <Animated.View
             style={[
               styles.wrapper,
-              wide && styles.centerCard,
+              wide ? styles.centerCard : styles.sheetCard,
               {
-                borderColor: wide ? themeColors?.text + "20" : "",
-                borderBottomWidth: 0,
-                shadowColor: "#000000",
-                shadowOffset: { width: 0, height: wide ? 3 : 0 },
-                shadowOpacity: wide ? 0.2 : 0,
-                shadowRadius: wide ? 10 : 0,
-                flex: !wide && 1,
+                borderColor: wide ? `${themeColors.text}20` : "transparent",
                 backgroundColor: wide
-                  ? themeColors?.bgFade + "90"
-                  : themeColors?.bg,
-                backdropFilter: wide ? "blur(20px)" : "none",
+                  ? `${themeColors.bgFade}${isWeb ? "de" : "ef"}`
+                  : themeColors.fg,
+                maxHeight: height - (isWeb && wide ? 100 : 0),
               },
             ]}
+            {...animatedProps}
           >
-            {wide && (
-              <View
-                style={[
-                  styles.header,
-                  {
-                    width: "100%",
-                    justifyContent: "center",
-                  },
-                ]}
-              >
-                <Pressable
-                  onPress={() => {
-                    router.back();
-                  }}
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    zIndex: 1,
-                  }}
-                >
-                  <ArrowLeft color={themeColors?.text} />
-                </Pressable>
-                <ThemeText styles={{ fontSize: 21, textAlign: "center" }}>
-                  {title}
-                </ThemeText>
-              </View>
-            )}
-            <View
-              style={[
-                styles.content,
-                {
-                  flex: !wide && 1,
-                  paddingHorizontal: !wide,
-                },
-              ]}
+            <View style={styles.header}>
+              <Pressable onPress={router.back} style={styles.backButton(wide)}>
+                <ArrowLeft color={themeColors.text} />
+              </Pressable>
+              <ThemeText style={styles.title}>{title}</ThemeText>
+            </View>
+
+            <Wrapper
+              {...wrapperProps}
+              contentContainerStyle={{ gap: 6, paddingVertical: 16 }}
             >
               {!noInput && (
                 <View style={!wide && styles.form}>{renderInputs()}</View>
               )}
               {children}
-            </View>
+            </Wrapper>
+
             {!noBtn && (
               <View
                 style={[
                   styles.buttonContainer,
                   {
-                    borderColor: wide
-                      ? "transparent"
-                      : themeColors?.text + "20",
+                    borderColor: wide ? "transparent" : `${themeColors.text}20`,
                     padding: wide ? 0 : 20,
                   },
                 ]}
@@ -191,30 +193,31 @@ const ModalContent = ({
                 {renderButton("Cancel", onClose, [
                   styles.cancelButton,
                   {
-                    backgroundColor:
-                      themeColors?.text + (theme === "light" ? "15" : "de"),
+                    backgroundColor: `${themeColors.text}${themeColors.theme === "light" ? "15" : "de"}`,
                   },
                 ])}
                 {renderButton(
                   submitButtonText,
                   handleSubmit,
                   {},
-                  {
-                    color: themeColors?.bg,
-                  }
+                  { color: themeColors.bg }
                 )}
               </View>
             )}
-          </View>
-        </ScrollView>
+          </Animated.View>
+        </View>
       </ModalContainer>
-    </ImageBg>
-  );
-};
+    );
+  }
+);
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    height: "100%",
+    backdropFilter: "blur(12px)",
+  },
   container: {
-    justifyContent: "center",
+    alignContent: "center",
   },
   input: {
     borderWidth: 1,
@@ -223,45 +226,62 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 17,
   },
+  label: {
+    fontSize: 18,
+    textTransform: "capitalize",
+  },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 16,
     borderTopWidth: 1,
     width: "100%",
-    marginTop: 16,
   },
   button: {
-    height: 46,
     minWidth: 50,
     justifyContent: "center",
     borderRadius: 7,
     flex: 1,
   },
   buttonText: {
-    color: "#000000",
     textAlign: "center",
     fontSize: 16,
     fontWeight: "500",
   },
   header: {
-    marginBottom: 24,
+    margin: 10,
+    width: "100%",
+    justifyContent: "flex-end",
+    marginBottom: 16,
   },
-  cancelButton: {},
+  backButton: (wide) => ({
+    position: "absolute",
+    left: wide ? 0 : 16,
+    zIndex: 1,
+  }),
+  title: {
+    fontSize: 21,
+    textAlign: "center",
+  },
   wrapper: {
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
+    gap: 10,
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
+    elevation: 2,
+    shadowColor: "#00000060",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 24,
   },
   content: {
-    flex: 1,
     width: "100%",
-    gap: 16,
   },
   form: {
-    flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    height: "100%",
   },
   centerCard: {
     borderWidth: 1,
@@ -270,9 +290,21 @@ const styles = StyleSheet.create({
     margin: 54,
     padding: 30,
     borderRadius: 14,
+    elevation: 10,
+    shadowColor: "#00000050",
+  },
+  sheetCard: {
+    paddingTop: 16,
   },
   inputField: {
     gap: 9,
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
 

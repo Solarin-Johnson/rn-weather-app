@@ -73,7 +73,6 @@ export default function TabLayout() {
   const { setSearchQuery } = useSearch();
   const hour = parseInt(getHours(currentWeatherLoc.localtime));
 
-
   const config = {
     size: 28,
     strokeWidth: 1.9,

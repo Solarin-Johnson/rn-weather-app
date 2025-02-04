@@ -46,7 +46,7 @@ export default function Tab() {
   const [refreshingLocation, setRefreshingLocation] = useState(false);
 
   const handleClusterPress = (route) => {
-    router.push(`/settings/${route}`);
+    router.push(`/${route}`);
   };
 
   const refreshLocation = async () => {
@@ -101,7 +101,12 @@ export default function Tab() {
   ];
 
   return (
-    <Screen title={"Profile"} alwaysShowHeader refresh={Platform.OS === "web"}>
+    <Screen
+      title={"Profile"}
+      alwaysShowHeader
+      refresh={Platform.OS === "web"}
+      reRender={false}
+    >
       <View
         style={[
           generalStyles.screen,

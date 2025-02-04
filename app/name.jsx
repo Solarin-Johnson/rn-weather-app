@@ -7,8 +7,8 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation, useRouter } from "expo-router";
-import ModalContent from "../../components/ModalContent";
-import { useUser } from "../../context/UserContext";
+import ModalContent from "../components/ModalContent";
+import { useUser } from "../context/UserContext";
 
 export default function EditName() {
   const { user, setUser } = useUser();

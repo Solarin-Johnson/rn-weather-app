@@ -56,7 +56,7 @@ const Cluster = ({
         {title && (
           <ThemeText
             styles={{
-              fontSize: 19,
+              fontSize: 18,
             }}
           >
             {title}
@@ -94,24 +94,24 @@ const Cluster = ({
   );
 };
 
-export const ClusterChild = ({ children, onPress }) => {
-  const { themeColors } = useTheme();
+export const ClusterChild = ({ children, onPress, ripple }) => {
+  const { themeColors, wide } = useTheme();
   return (
     <Pressable
       style={({ pressed, hovered }) => [
         {
-          flex: 1,
+          // flex: 1,
           paddingHorizontal: 14,
           paddingVertical: 16,
           backgroundColor: hovered
-            ? themeColors?.textFade + "07"
+            ? themeColors?.textFade + (wide ? "08" : "15")
             : "transparent",
         },
         pressed && generalStyles.buttonPressed,
       ]}
-      android_ripple={{
-        color: themeColors?.textFade + "25",
-      }}
+      // android_ripple={{
+      //   color: themeColors?.textFade + "25",
+      // }}
       onPress={onPress}
     >
       {children}
@@ -129,7 +129,7 @@ export const ClusterItem = ({
   radio,
 }) => {
   return (
-    <ClusterChild onPress={onPress}>
+    <ClusterChild onPress={onPress} isRadio={radio}>
       <View style={styles.item}>
         {Icon && (
           <View

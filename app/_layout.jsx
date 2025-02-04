@@ -1,4 +1,4 @@
-import { Stack, useRouter } from "expo-router/stack";
+import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { UserProvider } from "@/context/UserContext";
@@ -15,6 +15,8 @@ import { NotificationProvider } from "../context/NotificationContext";
 import * as SplashScreen from "expo-splash-screen";
 import { Asset } from "expo-asset";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import React from "react";
+import EditName from "./name";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -39,23 +41,25 @@ export default function Layout() {
   }
 
   return (
-    <KeyboardProvider>
-      <SafeAreaProvider>
-        <NotificationProvider>
-          <ThemeProvider>
-            <UserProvider>
-              <WeatherProvider>
-                <SearchProvider>
-                  <BottomSheetProvider>
-                    <CustomTabs />
-                  </BottomSheetProvider>
-                </SearchProvider>
-              </WeatherProvider>
-            </UserProvider>
-          </ThemeProvider>
-        </NotificationProvider>
-      </SafeAreaProvider>
-    </KeyboardProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <KeyboardProvider>
+        <SafeAreaProvider>
+          <NotificationProvider>
+            <ThemeProvider>
+              <UserProvider>
+                <WeatherProvider>
+                  <SearchProvider>
+                    <BottomSheetProvider>
+                      <CustomTabs />
+                    </BottomSheetProvider>
+                  </SearchProvider>
+                </WeatherProvider>
+              </UserProvider>
+            </ThemeProvider>
+          </NotificationProvider>
+        </SafeAreaProvider>
+      </KeyboardProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -69,7 +73,7 @@ SplashScreen.setOptions({
 });
 
 const CustomTabs = () => {
-  const { themeColors } = useTheme();
+  const { themeColors, wide } = useTheme();
 
   const icons = {
     clear: Asset.fromModule(require("../assets/iconPacks/clear.png")),
@@ -100,6 +104,15 @@ const CustomTabs = () => {
     });
   }, [themeColors, preloadAssets]);
 
+  const isWeb = Platform.OS === "web";
+  const isTransparent = isWeb || !wide;
+
+  const sheetOptionsConfig = {
+    presentation: "transparentModal",
+    animation: "fade",
+    sheetAllowedDetents: wide ? [1.0] : [0.55, 1.0],
+  };
+
   return (
     <View
       style={{
@@ -114,11 +127,25 @@ const CustomTabs = () => {
       >
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
-          name="settings"
+          name="display"
           options={{
-            title: "Settings",
-            presentation: Platform.OS === "ios" ? "modal" : "transparentModal",
-            animation: "fade_from_bottom",
+            title: "Display",
+            ...sheetOptionsConfig,
+          }}
+        />
+        <Stack.Screen
+          name="measurement"
+          options={{
+            title: "Measurement",
+            ...sheetOptionsConfig,
+          }}
+        />
+        <Stack.Screen
+          name="name"
+          options={{
+            title: "Change Name",
+            ...sheetOptionsConfig,
+            // sheetAllowedDetents: [0.3, 1],
           }}
         />
       </Stack>
