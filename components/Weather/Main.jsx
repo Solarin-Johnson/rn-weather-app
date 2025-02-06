@@ -123,7 +123,7 @@ export default function WeatherMain({ currentWeather: current }) {
 export function WeatherSearchMain({ currentWeather: current }) {
   const { width } = useWindowDimensions();
   const { themeColors } = useTheme();
-  const { preferences } = useUser();
+  const { measurement } = useUser();
   const { condition } = current || {};
   const { setBottomSheet } = useBottomSheet();
   const wide = width > 760;
@@ -145,7 +145,7 @@ export function WeatherSearchMain({ currentWeather: current }) {
               textAlign: "center",
             }}
           >
-            {current?.temp_c.toFixed(0)}
+            {calculateUnits(current?.temp_c, measurement.temperatureUnit)}
             <Text style={{ color: themeColors.primary }}>°</Text>
           </ThemeText>
         </View>

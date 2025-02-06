@@ -345,11 +345,11 @@ export const preferenceList = {
 
 export const calculateUnits = (value, targetUnit, includeUnit = false) => {
   if (!value) return value;
-  let result = +parseFloat(value).toFixed(1);
+  let result = +parseFloat(value).toFixed(0);
 
   // Temperature conversions
   if (targetUnit === "Fahrenheit") {
-    result = +((value * 9) / 5 + 32).toFixed(1);
+    result = +((value * 9) / 5 + 32).toFixed(0);
     return includeUnit ? `${result}°F` : result;
   }
   if (targetUnit === "Celsius") {
@@ -358,11 +358,11 @@ export const calculateUnits = (value, targetUnit, includeUnit = false) => {
 
   // Wind Speed conversions
   if (targetUnit === "mph") {
-    result = +(value * 0.621371).toFixed(1);
+    result = +(value * 0.621371).toFixed(0);
     return includeUnit ? `${result} mph` : result;
   }
   if (targetUnit === "m/s") {
-    result = +(value * 0.277778).toFixed(1);
+    result = +(value * 0.277778).toFixed(0);
     return includeUnit ? `${result} m/s` : result;
   }
   if (targetUnit === "km/h") {

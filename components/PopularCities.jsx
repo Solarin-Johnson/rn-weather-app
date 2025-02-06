@@ -153,19 +153,12 @@ const LoaderCard = (props) => {
           key={index}
           speed={2}
           width={"100%"}
-          height={PixelRatio.roundToNearestPixel(95)}
+          height={100}
           backgroundColor={themeColors.fg + (wide ? "40" : "")}
           foregroundColor={themeColors.bg + "10"}
           {...props}
         >
-          <Rect
-            x="0"
-            y="0"
-            rx="12"
-            ry="12"
-            width="100%"
-            height={PixelRatio.getPixelSizeForLayoutSize(52)}
-          />
+          <Rect x="0" y="0" rx="12" ry="12" width="100%" height={80} />
         </ContentLoader>
       ))}
     </>

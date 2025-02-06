@@ -97,7 +97,9 @@ const ModalContent = memo(
           ]}
           onPress={onPress}
         >
-          <Text style={[styles.buttonText, textStyle]}>{label}</Text>
+          <ThemeText inv style={[styles.buttonText, textStyle]}>
+            {label}
+          </ThemeText>
         </Pressable>
       ),
       [themeColors]
@@ -108,7 +110,12 @@ const ModalContent = memo(
     const Wrapper = ScrollView;
 
     const animatedProps = {
-      entering: isWeb && wide ? FadeInDown : SlideInDown.duration(250),
+      entering:
+        isWeb && wide
+          ? FadeInDown
+          : isWeb
+            ? SlideInDown.duration(250)
+            : SlideInDown.duration(350),
     };
 
     const wrapperProps = isWeb
@@ -123,89 +130,68 @@ const ModalContent = memo(
 
     return (
       <ModalContainer
-        entering={FadeIn.duration(100)}
+        entering={FadeIn.duration(50)}
         behavior={isWeb ? undefined : "padding"}
         style={[
           styles.modalContainer,
           {
             paddingTop: insets.top + 4,
-            backgroundColor: isWeb
-              ? `${themeColors.bg}50`
-              : wide
-                ? `${themeColors.bg}99`
-                : `#00000060`,
-            justifyContent: wide ? "center" : isWeb ? "flex-end" : "flex-end",
+            backgroundColor: wide ? `${themeColors.bg}99` : `#00000060`,
+            justifyContent: wide ? "center" : "flex-end",
           },
         ]}
       >
         <Overlay />
-
-        <View
+        <Animated.View
           style={[
-            !isWeb && styles.container,
+            styles.wrapper,
+            wide ? styles.centerCard : styles.sheetCard,
             {
-              justifyContent: wide ? "center" : isWeb ? "flex-end" : "flex-end",
+              borderColor: wide ? `${themeColors.text}20` : "transparent",
+              backgroundColor: wide ? themeColors.bgFade : themeColors.fg,
+              maxHeight: height - (isWeb && wide ? 100 : 0),
             },
           ]}
+          {...animatedProps}
         >
-          <Overlay />
-          <Animated.View
-            style={[
-              styles.wrapper,
-              wide ? styles.centerCard : styles.sheetCard,
-              {
-                borderColor: wide ? `${themeColors.text}20` : "transparent",
-                backgroundColor: wide
-                  ? `${themeColors.bgFade}${isWeb ? "de" : "ef"}`
-                  : themeColors.fg,
-                maxHeight: height - (isWeb && wide ? 100 : 0),
-              },
-            ]}
-            {...animatedProps}
-          >
-            <View style={styles.header}>
-              <Pressable onPress={router.back} style={styles.backButton(wide)}>
-                <ArrowLeft color={themeColors.text} />
-              </Pressable>
-              <ThemeText style={styles.title}>{title}</ThemeText>
-            </View>
+          <View style={styles.header}>
+            <Pressable onPress={router.back} style={styles.backButton(wide)}>
+              <ArrowLeft color={themeColors.text} />
+            </Pressable>
+            <ThemeText style={styles.title}>{title}</ThemeText>
+          </View>
 
-            <Wrapper
-              {...wrapperProps}
-              contentContainerStyle={{ gap: 6, paddingVertical: 16 }}
-            >
-              {!noInput && (
-                <View style={!wide && styles.form}>{renderInputs()}</View>
-              )}
-              {children}
-            </Wrapper>
-
-            {!noBtn && (
-              <View
-                style={[
-                  styles.buttonContainer,
-                  {
-                    borderColor: wide ? "transparent" : `${themeColors.text}20`,
-                    padding: wide ? 0 : 20,
-                  },
-                ]}
-              >
-                {renderButton("Cancel", onClose, [
-                  styles.cancelButton,
-                  {
-                    backgroundColor: `${themeColors.text}${themeColors.theme === "light" ? "15" : "de"}`,
-                  },
-                ])}
-                {renderButton(
-                  submitButtonText,
-                  handleSubmit,
-                  {},
-                  { color: themeColors.bg }
-                )}
-              </View>
+          <Wrapper {...wrapperProps}>
+            {!noInput && (
+              <View style={!wide && styles.form}>{renderInputs()}</View>
             )}
-          </Animated.View>
-        </View>
+            {children}
+          </Wrapper>
+
+          {!noBtn && (
+            <View
+              style={[
+                styles.buttonContainer,
+                {
+                  padding: wide ? 0 : 20,
+                  borderTopWidth: wide ? 0 : 1,
+                  marginTop: wide ? 6 : 12,
+                  borderColor: `${themeColors.text}20`,
+                },
+              ]}
+            >
+              {renderButton(
+                "Cancel",
+                onClose,
+                {
+                  backgroundColor: themeColors?.textFade + "90",
+                },
+                { color: "#ffffff" }
+              )}
+              {renderButton(submitButtonText, handleSubmit)}
+            </View>
+          )}
+        </Animated.View>
       </ModalContainer>
     );
   }
@@ -214,7 +200,7 @@ const ModalContent = memo(
 const styles = StyleSheet.create({
   modalContainer: {
     height: "100%",
-    backdropFilter: "blur(12px)",
+    backdropFilter: "blur(24px)",
   },
   container: {
     alignContent: "center",
@@ -234,7 +220,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 16,
-    borderTopWidth: 1,
     width: "100%",
   },
   button: {

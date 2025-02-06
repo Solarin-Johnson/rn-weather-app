@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     width: "100%",
     // maxHeight: height,
-    maxWidth: 500,
+    maxWidth: wide && 500,
     alignSelf: "center",
   }),
   scrollViewContainer: {

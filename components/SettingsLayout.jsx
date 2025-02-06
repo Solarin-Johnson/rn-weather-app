@@ -29,6 +29,7 @@ export default function SettingsLayout({ settingType }) {
           paddingHorizontal: wide || 16,
           gap: 48,
           paddingVertical: isWeb && 21,
+          paddingBottom: 16,
         }}
       >
         {Object.entries(config).map(([key, setting]) => (
@@ -38,7 +39,7 @@ export default function SettingsLayout({ settingType }) {
             titleIcon={preferenceIcons[settingType][key]}
             backgroundColor={
               isWeb
-                ? themeColors?.bg + (theme === "light" ? "70" : "70")
+                ? themeColors?.bg + (theme === "light" ? "" : "ea")
                 : wide
                   ? themeColors?.bg + "af"
                   : themeColors?.bg + (theme === "light" ? "cd" : "80")
